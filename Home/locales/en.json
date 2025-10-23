@@ -1,0 +1,5 @@
+{
+  "greeting": "Hello",
+  "welcome": "Welcome to GrowNet",
+  "description": "A minimal UI ported to React + TypeScript"
+}

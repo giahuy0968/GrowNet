@@ -1,0 +1,104 @@
+import React from 'react'
+import '../styles/ChatInfo.css'
+
+interface ChatInfoProps {
+  chatName: string | null
+}
+
+export default function ChatInfo({ chatName }: ChatInfoProps) {
+  if (!chatName) return null
+
+  return (
+    <div className="chat-info">
+      <div className="info-header">
+        <h3>THÔNG TIN HỘI THOẠI</h3>
+      </div>
+
+      <div className="user-profile">
+        <img src="/avatar-tran.jpg" alt={chatName} className="profile-avatar" />
+        <h4>{chatName}</h4>
+        <p className="status">🟢 Đang hoạt động</p>
+      </div>
+
+      <div className="profile-actions">
+        <button className="action-btn">
+          <span>👤</span>
+          <span>Tìm hiểu bản</span>
+        </button>
+        <button className="action-btn">
+          <span>🔍</span>
+          <span>Tìm kiếm tin nhắn</span>
+        </button>
+        <button className="action-btn">
+          <span>🎨</span>
+          <span>Giao diện thoại</span>
+        </button>
+      </div>
+
+      <div className="media-section">
+        <h4>Ảnh/Video</h4>
+        <div className="media-grid">
+          <div className="media-item"></div>
+          <div className="media-item"></div>
+          <div className="media-item"></div>
+          <div className="media-item"></div>
+        </div>
+        <button className="view-all">Xem tất cả</button>
+      </div>
+
+      <div className="files-section">
+        <h4>File</h4>
+        <div className="file-list">
+          <div className="file-item">
+            <span className="file-icon">📄</span>
+            <div className="file-info">
+              <div className="file-name">GrowNet.docx</div>
+              <div className="file-meta">1.23 MB 📋</div>
+            </div>
+            <span className="file-date">04/10/2025</span>
+          </div>
+          <div className="file-item">
+            <span className="file-icon">📄</span>
+            <div className="file-info">
+              <div className="file-name">GrowNet_UI11.docx</div>
+              <div className="file-meta">19.65 KB 📋</div>
+            </div>
+            <span className="file-date">03/10/2025</span>
+          </div>
+        </div>
+        <button className="view-all">Xem tất cả</button>
+      </div>
+
+      <div className="links-section">
+        <h4>Link</h4>
+        <div className="link-list">
+          <div className="link-item">
+            <span className="link-icon">🔗</span>
+            <div className="link-info">
+              <div className="link-title">Meet</div>
+              <div className="link-url">meet.google.com</div>
+            </div>
+            <span className="link-date">10/10</span>
+          </div>
+          <div className="link-item">
+            <span className="link-icon">🔗</span>
+            <div className="link-info">
+              <div className="link-title">Meet</div>
+              <div className="link-url">meet.google.com</div>
+            </div>
+            <span className="link-date">09/10</span>
+          </div>
+          <div className="link-item">
+            <span className="link-icon">🔗</span>
+            <div className="link-info">
+              <div className="link-title">Gửi hàng</div>
+              <div className="link-url">test.vn</div>
+            </div>
+            <span className="link-date">07/10</span>
+          </div>
+        </div>
+        <button className="view-all">Xem tất cả</button>
+      </div>
+    </div>
+  )
+}

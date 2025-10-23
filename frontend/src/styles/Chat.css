@@ -1,0 +1,25 @@
+/* Chat Page Layout Styles */
+.chat-layout {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 320px 1fr 300px;
+  background: #f8fafc;
+}
+
+@media (max-width: 1280px) {
+  .chat-layout {
+    grid-template-columns: 280px 1fr;
+  }
+  .chat-info {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .chat-layout {
+    grid-template-columns: 1fr;
+  }
+  .chat-sidebar {
+    display: none;
+  }
+}

@@ -1,0 +1,165 @@
+/* Chat Info Sidebar Component Styles */
+.chat-info {
+  background: white;
+  border-left: 1px solid #e2e8f0;
+  overflow-y: auto;
+  padding: 24px 16px;
+}
+
+.info-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.user-profile {
+  text-align: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.user-profile h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.user-profile .status {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: none;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #475569;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.action-btn:hover {
+  background: #f1f5f9;
+}
+
+.media-section,
+.files-section,
+.links-section {
+  margin-bottom: 24px;
+}
+
+.media-section h4,
+.files-section h4,
+.links-section h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 12px 0;
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.media-item {
+  aspect-ratio: 1;
+  background: #f1f5f9;
+  border-radius: 6px;
+}
+
+.file-list,
+.link-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.file-item,
+.link-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.file-icon,
+.link-icon {
+  font-size: 20px;
+}
+
+.file-info,
+.link-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-name,
+.link-title {
+  font-weight: 500;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-meta,
+.link-url {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.file-date,
+.link-date {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.view-all {
+  width: 100%;
+  padding: 8px;
+  background: none;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  color: #3b82f6;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-all:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}

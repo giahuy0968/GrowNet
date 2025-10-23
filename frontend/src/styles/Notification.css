@@ -1,0 +1,144 @@
+/* Notification Component Styles */
+.notification-panel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.notification-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  text-align: center;
+}
+
+.notification-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.notification-tabs {
+  display: flex;
+  border-bottom: 1px solid #f1f5f9;
+  background: #f8fafc;
+}
+
+.notification-tabs button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.notification-tabs button.active {
+  color: #3b82f6;
+  background: white;
+  border-bottom-color: #3b82f6;
+}
+
+.notification-list {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.notification-section {
+  padding: 16px 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px 12px;
+}
+
+.notification-section h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  margin: 0;
+}
+
+.link-btn {
+  font-size: 12px;
+  color: #3b82f6;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 24px;
+  transition: background 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.notification-item:hover {
+  background: #f8fafc;
+}
+
+.unread-dot {
+  color: #ef4444;
+  font-size: 20px;
+  line-height: 1;
+  position: absolute;
+  left: 8px;
+  top: 12px;
+}
+
+.notif-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.notif-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-content p {
+  font-size: 14px;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+  line-height: 1.5;
+}
+
+.notif-content strong {
+  font-weight: 600;
+}
+
+.notif-time {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.notif-action {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.notif-action:hover {
+  opacity: 1;
+}
