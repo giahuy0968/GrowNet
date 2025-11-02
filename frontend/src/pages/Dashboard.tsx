@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar'
 import ProfileCard from '../components/ProfileCard'
 import Calendar from '../components/Calendar'
 import FilterModal from '../components/FilterModal'
+import Header from '../components/Header'
 import '../styles/Dashboard.css'
 
 export default function Dashboard() {
@@ -10,23 +11,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-layout">
-      <header className="dashboard-header">
-        <div className="header-logo">
-          <img src="/logo.svg" alt="GrowNet" />
-          <span>GrowNet</span>
-        </div>
-        <div className="header-search">
-          <input type="text" placeholder="Tìm mentor, kỹ năng hoặc lĩnh vực..." />
-          <button className="search-btn">🔍</button>
-        </div>
-        <div className="header-actions">
-          <button className="icon-btn">💬</button>
-          <button className="icon-btn">🔔</button>
-          <div className="user-avatar">
-            <img src="/user-avatar.jpg" alt="User" />
-          </div>
-        </div>
-      </header>
+      <Header onOpenFilter={() => setShowFilterModal(true)} />
 
       <div className="dashboard-content">
         <Sidebar onOpenFilter={() => setShowFilterModal(true)} />

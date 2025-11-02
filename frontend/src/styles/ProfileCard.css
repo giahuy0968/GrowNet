@@ -1,14 +1,23 @@
 /* Profile Card Component Styles */
 .profile-card {
+  position: relative;
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 0px;
+}
+
+.profile-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .profile-header {
-  height: 200px;
+  height: 150px;
   overflow: hidden;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .profile-bg {
@@ -19,13 +28,16 @@
 
 .profile-body {
   padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .profile-info h2 {
   font-size: 24px;
   font-weight: 700;
   color: #1e293b;
-  margin: 0 0 8px 0;
+  margin: 0;
 }
 
 .profile-role {
@@ -74,24 +86,30 @@
 
 .profile-actions {
   display: flex;
-  justify-content: center;
-  gap: 16px;
-  padding: 20px 24px;
-  border-top: 1px solid #f1f5f9;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 320px; 
+  margin: 24px auto 0;
+  background: transparent;
 }
 
+
 .btn-action {
-  width: 56px;
-  height: 56px;
+  min-width: 120px;
+  height: 44px;
   border: none;
-  border-radius: 50%;
+  border-radius: 999px;
   font-size: 24px;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 .btn-action:hover {
-  transform: scale(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
 
 .btn-cancel {
@@ -100,6 +118,7 @@
 }
 
 .btn-accept {
-  background: #dcfce7;
-  color: #16a34a;
+  background: #6FC3E4;
+  color: #fff;
+  border: 1px solid #fee2e2;
 }
