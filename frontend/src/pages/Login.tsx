@@ -28,12 +28,12 @@ export default function Login() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-logo">
-          <img src="/logo.svg" alt="GrowNet" />
+          <img src="/logo.png" alt="GrowNet" />
         </div>
-        
+
         <h1 className="auth-title">Đăng nhập</h1>
         <p className="auth-subtitle">Kết nối cùng mentor/mentee bạn tin tưởng</p>
-        
+
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label>Email</label>
