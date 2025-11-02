@@ -101,7 +101,7 @@ export default function Register() {
           </div>
 
           <button type="submit" className="btn-auth">
-            Đăng nhập
+            Đăng ký
           </button>
 
           <div className="divider">

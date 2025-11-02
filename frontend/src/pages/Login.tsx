@@ -28,7 +28,7 @@ export default function Login() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-logo">
-          <img src="/logo.svg" alt="GrowNet" />
+          <img src="/GrowNet_icon.png" alt="GrowNet" />
         </div>
         
         <h1 className="auth-title">Đăng nhập</h1>
