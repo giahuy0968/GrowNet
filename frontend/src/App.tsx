@@ -6,6 +6,9 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import Chat from './pages/Chat'
+import MainLayout from './MainLayout'
+import Settings from "./pages/Settings";
+
 
 export default function App() {
   return (
@@ -15,8 +18,12 @@ export default function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/profile-setup" element={<ProfileSetup />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/chat" element={<Chat />} />
+      {/*Layout có Header cố định */}
+      <Route element={<MainLayout />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
     </Routes>
   )
 }

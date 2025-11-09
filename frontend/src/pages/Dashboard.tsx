@@ -3,16 +3,12 @@ import Sidebar from '../components/Sidebar'
 import ProfileCard from '../components/ProfileCard'
 import Calendar from '../components/Calendar'
 import FilterModal from '../components/FilterModal'
-import Header from '../components/Header'
 import '../styles/Dashboard.css'
 
 export default function Dashboard() {
   const [showFilterModal, setShowFilterModal] = useState(false)
-
   return (
     <div className="dashboard-layout">
-      <Header onOpenFilter={() => setShowFilterModal(true)} />
-
       <div className="dashboard-content">
         <Sidebar onOpenFilter={() => setShowFilterModal(true)} />
         

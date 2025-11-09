@@ -19,7 +19,7 @@ export default function ChatSidebar({ selectedChat, onSelectChat }: ChatSidebarP
   return (
     <div className="chat-sidebar">
       <div className="chat-sidebar-header">
-        <input type="text" placeholder="Tìm kiếm chuyện..." className="search-input" />
+        <input type="text" placeholder="Tìm kiếm cuộc trò chuyện..." className="search-input" />
       </div>
 
       <div className="chat-tabs">

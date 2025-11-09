@@ -6,7 +6,6 @@
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-bottom: 0px;
 }
 
 .profile-card:hover {
@@ -85,13 +84,14 @@
 }
 
 .profile-actions {
-  display: flex;
-  justify-content: space-between;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center;
   align-items: center;
+  gap: 128px !important;
   width: 100%;
-  max-width: 320px; 
-  margin: 24px auto 0;
-  background: transparent;
+  padding: 16px 24px 24px;
+  box-sizing: border-box;
 }
 
 

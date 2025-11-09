@@ -53,13 +53,15 @@
 
 .notification-section {
   padding: 16px 0;
+  margin: 0;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 24px 12px;
+  padding: 0 24px 12px 0px;
+  box-sizing: border-box;
 }
 
 .notification-section h3 {
@@ -67,6 +69,7 @@
   font-weight: 700;
   color: #64748b;
   margin: 0;
+  padding-left: 24px;
 }
 
 .link-btn {
@@ -142,3 +145,34 @@
 .notif-action:hover {
   opacity: 1;
 }
+/* thêm từ đây */
+.notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  z-index: 999;
+}
+
+.notification-wrapper {
+  margin-top: 80px;
+  margin-right: 40px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 380px;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(40px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
