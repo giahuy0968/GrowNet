@@ -2,15 +2,15 @@
 .charts-outer-container {
     padding: 2rem;
     background-color: #f5f5f5;
-    min-height: 100vh;
+    min-height: 5vh;
 }
 
 /* Dashboard grid container */
 .charts-dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(100px, 0.6fr));
     gap: 2rem;
-    max-width: 1400px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
@@ -18,8 +18,8 @@
 .chart-card {
     background-color: white;
     border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.15rem;
+    box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -37,17 +37,33 @@
     text-align: center;
 }
 
+/* One-line horizontal row for charts */
+.charts-row {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 /* Chart wrapper để center chart */
 .chart-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+.chart-wrapper>* {
+    max-width: 100%;
+    height: auto !important;
 }
 
 /* Responsive design */
 @media (max-width: 1200px) {
     .charts-dashboard-grid {
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     }
 }
 
@@ -63,5 +79,19 @@
 
     .chart-card {
         padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .charts-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .charts-outer-container {
+        padding: 0.5rem;
+    }
+
+    .chart-card {
+        padding: 0.75rem;
     }
 }

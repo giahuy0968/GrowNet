@@ -22,7 +22,7 @@ export default function Header({ onOpenFilter }: HeaderProps) {
   const handleToggleDropdown = () => {
     setShowDropdown(prev => !prev)
   }
- 
+
   // Đóng dropdown khi click ra ngoài
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -70,7 +70,7 @@ export default function Header({ onOpenFilter }: HeaderProps) {
 
         <button className="icon-btn" onClick={handleToggleNotification}>🔔</button>
         <div className="user-avatar" ref={dropdownRef}>
-          <img src="/user_avt.png" alt="User" onClick={handleToggleDropdown}/>
+          <img src="/user_avt.png" alt="User" onClick={handleToggleDropdown} />
           {showDropdown && (
             <div className="dropdown-menu">
               <button onClick={() => handleSelect('profile')}>👤 Thông tin cá nhân</button>

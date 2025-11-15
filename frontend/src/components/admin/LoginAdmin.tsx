@@ -4,7 +4,7 @@
 // =============================================
 
 import React, { useState } from 'react';
-import '../../styles/Auth.css';
+import '../../styles/AdminLogin.css';
 import { useAdminAuth } from '../contexts/AdminAuthContext';
 
 // ============ CONSTANTS ============
@@ -58,7 +58,7 @@ export default function LoginAdmin() {
                     <img src="/GrowNet_icon.png" alt="GrowNet" />
                 </div>
 
-                <h1 className="auth-title">Đăng nhập Admin</h1>
+                <h1 className="auth-title">GrownNet Admin</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="password">Mật khẩu</label>
@@ -81,9 +81,6 @@ export default function LoginAdmin() {
                         {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
                     </button>
 
-                    <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#666', textAlign: 'center' }}>
-                        Demo: Mật khẩu là "123456"
-                    </p>
                 </form>
             </div>
         </div>

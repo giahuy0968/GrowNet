@@ -13,7 +13,6 @@ import {
     useTheme,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import "../../styles/admin/Chart.css";
 
 // ============ TYPES ============
 
@@ -116,7 +115,7 @@ export default function Tables() {
         {
             field: "id",
             headerName: "ID",
-            width: 150,
+            width: 130,
             headerAlign: "center",
             align: "center"
         },

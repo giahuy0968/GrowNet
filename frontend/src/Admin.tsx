@@ -8,7 +8,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './components/admin/Charts';
 import Tables from './components/admin/Tables';
 import TagsManagement from './components/admin/TagsManagement';
-import HeaderAdmin from './components/admin/Header';
+import HeaderAdmin from './components/admin/HeaderAdmin';
 import LoginAdmin from './components/admin/LoginAdmin';
 import { AdminAuthProvider } from './components/contexts/AdminAuthContext';
 import { ProtectedAdminRoute, AdminPublicRoute } from './components/admin/ProtectedAdminRouter';
@@ -44,7 +44,6 @@ export default function AdminRoutes() {
                         </ProtectedAdminRoute>
                     }
                 />
-
                 {/* Catch all - redirect về login */}
                 <Route path="*" element={<Navigate to="login" replace />} />
             </Routes>

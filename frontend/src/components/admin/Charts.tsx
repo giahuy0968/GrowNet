@@ -8,6 +8,7 @@ import { Typography } from '@mui/material';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { BarChart } from '@mui/x-charts/BarChart';
+import '../../styles/admin/Chart.css';
 
 // ============ CONSTANTS ============
 
@@ -17,10 +18,10 @@ const LEGEND_CONFIG = {
     direction: 'horizontal' as const,
 };
 
-// Kích thước chuẩn cho charts
+// Kích thước chuẩn cho charts (giảm xuống để gọn hơn trên một hàng)
 const CHART_SIZE = {
-    width: 500,
-    height: 400,
+    width: 360,
+    height: 280,
 };
 
 // Dữ liệu cho biểu đồ Mentor/Mentee
@@ -53,84 +54,94 @@ const SEARCH_BY_FIELD_DATA = [
 
 export default function Dashboard() {
     return (
-        <div className="container">
-            {/* Biểu đồ 1: Tỷ lệ vai trò Mentor/Mentee */}
-            <div className="dashboard-container">
-                <Typography variant="h6" className="typechartcontainer">
-                    Tỷ lệ vai trò Mentor/Mentee
-                </Typography>
-                <PieChart
-                    series={[
-                        {
-                            data: ROLE_DISTRIBUTION_DATA,
-                            innerRadius: 90,
-                        },
-                    ]}
-                    width={CHART_SIZE.width}
-                    height={CHART_SIZE.height}
-                    slotProps={{ legend: LEGEND_CONFIG }}
-                />
-            </div>
+        <div className="charts-outer-container">
+            <div className="charts-row">
+                {/* Biểu đồ 1: Tỷ lệ vai trò Mentor/Mentee */}
+                <div className="chart-card">
+                    <Typography variant="h6" className="chart-title">
+                        Tỷ lệ vai trò Mentor/Mentee
+                    </Typography>
+                    <div className="chart-wrapper">
+                        <PieChart
+                            series={[
+                                {
+                                    data: ROLE_DISTRIBUTION_DATA,
+                                    innerRadius: 90,
+                                },
+                            ]}
+                            width={CHART_SIZE.width}
+                            height={CHART_SIZE.height}
+                            slotProps={{ legend: LEGEND_CONFIG }}
+                        />
+                    </div>
+                </div>
 
-            {/* Biểu đồ 2: Tăng trưởng người dùng mới */}
-            <div className="dashboard-container">
-                <Typography variant="h6" className="typechartcontainer">
-                    Tăng trưởng người dùng mới
-                </Typography>
-                <LineChart
-                    xAxis={[{ data: USER_GROWTH_DATA.xAxis }]}
-                    series={[
-                        {
-                            data: USER_GROWTH_DATA.series,
-                            label: 'Người dùng',
-                        },
-                    ]}
-                    width={CHART_SIZE.width}
-                    height={CHART_SIZE.height}
-                    slotProps={{ legend: LEGEND_CONFIG }}
-                />
-            </div>
+                {/* Biểu đồ 2: Tăng trưởng người dùng mới */}
+                <div className="chart-card">
+                    <Typography variant="h6" className="chart-title">
+                        Tăng trưởng người dùng mới
+                    </Typography>
+                    <div className="chart-wrapper">
+                        <LineChart
+                            xAxis={[{ data: USER_GROWTH_DATA.xAxis }]}
+                            series={[
+                                {
+                                    data: USER_GROWTH_DATA.series,
+                                    label: 'Người dùng',
+                                },
+                            ]}
+                            width={CHART_SIZE.width}
+                            height={CHART_SIZE.height}
+                            slotProps={{ legend: LEGEND_CONFIG }}
+                        />
+                    </div>
+                </div>
 
-            {/* Biểu đồ 3: Tỷ lệ phân bổ theo lĩnh vực */}
-            <div className="dashboard-container">
-                <Typography variant="h6" className="typechartcontainer">
-                    Tỷ lệ phân bổ theo lĩnh vực
-                </Typography>
-                <BarChart
-                    xAxis={[
-                        {
-                            data: FIELD_DISTRIBUTION_DATA.categories,
-                            scaleType: 'band',
-                        },
-                    ]}
-                    series={[
-                        {
-                            data: FIELD_DISTRIBUTION_DATA.values,
-                            label: 'Tỷ lệ %',
-                        },
-                    ]}
-                    width={CHART_SIZE.width}
-                    height={CHART_SIZE.height}
-                    slotProps={{ legend: LEGEND_CONFIG }}
-                />
-            </div>
+                {/* Biểu đồ 3: Tỷ lệ phân bổ theo lĩnh vực */}
+                <div className="chart-card">
+                    <Typography variant="h6" className="chart-title">
+                        Tỷ lệ phân bổ theo lĩnh vực
+                    </Typography>
+                    <div className="chart-wrapper">
+                        <BarChart
+                            xAxis={[
+                                {
+                                    data: FIELD_DISTRIBUTION_DATA.categories,
+                                    scaleType: 'band',
+                                },
+                            ]}
+                            series={[
+                                {
+                                    data: FIELD_DISTRIBUTION_DATA.values,
+                                    label: 'Tỷ lệ %',
+                                },
+                            ]}
+                            width={CHART_SIZE.width}
+                            height={CHART_SIZE.height}
+                            slotProps={{ legend: LEGEND_CONFIG }}
+                        />
+                    </div>
+                </div>
 
-            {/* Biểu đồ 4: Tỷ lệ tìm kiếm theo lĩnh vực */}
-            <div className="dashboard-container">
-                <Typography variant="h6" className="typechartcontainer">
-                    Tỷ lệ tìm kiếm theo lĩnh vực
-                </Typography>
-                <PieChart
-                    series={[
-                        {
-                            data: SEARCH_BY_FIELD_DATA,
-                            innerRadius: 90,
-                        },
-                    ]}
-                    width={CHART_SIZE.width}
-                    height={CHART_SIZE.height}
-                    slotProps={{ legend: LEGEND_CONFIG }}
-                />
+                {/* Biểu đồ 4: Tỷ lệ tìm kiếm theo lĩnh vực */}
+                <div className="chart-card">
+                    <Typography variant="h6" className="chart-title">
+                        Tỷ lệ tìm kiếm theo lĩnh vực
+                    </Typography>
+                    <div className="chart-wrapper">
+                        <PieChart
+                            series={[
+                                {
+                                    data: SEARCH_BY_FIELD_DATA,
+                                    innerRadius: 90,
+                                },
+                            ]}
+                            width={CHART_SIZE.width}
+                            height={CHART_SIZE.height}
+                            slotProps={{ legend: LEGEND_CONFIG }}
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );

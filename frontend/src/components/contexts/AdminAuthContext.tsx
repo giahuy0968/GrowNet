@@ -19,6 +19,7 @@ interface AdminAuthContextType {
     login: (password: string) => Promise<void>;
     logout: () => void;
     isAuthenticated: boolean;
+    loading: boolean;
 }
 
 // ============ CONTEXT ============
@@ -34,6 +35,7 @@ const SECRET_KEY = '123456'; // TODO: Thay bằng API thực tế
 
 export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
     const [admin, setAdmin] = useState<AdminUser | null>(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     // Khôi phục session từ localStorage khi app khởi động
@@ -42,14 +44,11 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
         if (savedAdmin) {
             try {
                 const adminData = JSON.parse(savedAdmin) as AdminUser;
-                // Kiểm tra session còn hạn (24 giờ)
                 const sessionAge = Date.now() - adminData.loginTime;
-                const maxSessionAge = 24 * 60 * 60 * 1000; // 24 giờ
-
+                const maxSessionAge = 24 * 60 * 60 * 1000;
                 if (sessionAge < maxSessionAge) {
                     setAdmin(adminData);
                 } else {
-                    // Session hết hạn
                     localStorage.removeItem(ADMIN_STORAGE_KEY);
                 }
             } catch (error) {
@@ -57,6 +56,7 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
                 localStorage.removeItem(ADMIN_STORAGE_KEY);
             }
         }
+        setLoading(false);
     }, []);
 
     /**
@@ -99,11 +99,12 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
         navigate('/admin/login');
     };
 
-    const value = {
+    const value: AdminAuthContextType = {
         admin,
         login,
         logout,
         isAuthenticated: !!admin,
+        loading,
     };
 
     return (

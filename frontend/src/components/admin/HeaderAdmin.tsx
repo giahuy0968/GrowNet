@@ -5,6 +5,7 @@
 
 import React from 'react';
 import '../../styles/Header.css';
+import { useAdminAuth } from '../contexts/AdminAuthContext';
 
 // ============ TYPES ============
 
@@ -16,24 +17,20 @@ interface HeaderProps {
 // ============ COMPONENT ============
 
 export default function HeaderAdmin({ onOpenFilter }: HeaderProps) {
+    const { logout, admin } = useAdminAuth();
+
     return (
         <header className="dashboard-header">
-            {/* Logo và tên ứng dụng */}
             <div className="header-logo">
                 <img src="/GrowNet_icon.png" alt="GrowNet" />
-                <span>GrowNet</span>
+                <span>GrowNet Admin</span>
             </div>
-
-            {/* Các nút hành động */}
             <div className="header-actions">
-                <button className="icon-btn" aria-label="Messages">
-                    💬
-                </button>
-                <button className="icon-btn" aria-label="Notifications">
-                    🔔
-                </button>
-                <div className="user-avatar">
-                    <img src="/user-avatar.jpg" alt="User Avatar" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span style={{ fontSize: 14, color: '#475569' }}></span>
+                    <button type="button" className='logoutAdmin-btn' onClick={logout} title="Đăng xuất">
+                        Đăng xuất
+                    </button>
                 </div>
             </div>
         </header>

@@ -7,11 +7,14 @@ interface ProtectedAdminRouteProps {
 }
 
 export function ProtectedAdminRoute({ children }: ProtectedAdminRouteProps) {
-    const { isAuthenticated } = useAdminAuth();
+    const { isAuthenticated, loading } = useAdminAuth();
     const location = useLocation();
 
+    if (loading) {
+        return <div style={{ padding: '2rem', textAlign: 'center' }}>Đang kiểm tra phiên...</div>;
+    }
+
     if (!isAuthenticated) {
-        // Chưa đăng nhập → redirect về login
         return <Navigate to="/admin/login" state={{ from: location }} replace />;
     }
 
@@ -19,10 +22,13 @@ export function ProtectedAdminRoute({ children }: ProtectedAdminRouteProps) {
 }
 
 export function AdminPublicRoute({ children }: ProtectedAdminRouteProps) {
-    const { isAuthenticated } = useAdminAuth();
+    const { isAuthenticated, loading } = useAdminAuth();
+
+    if (loading) {
+        return <div style={{ padding: '2rem', textAlign: 'center' }}>Đang tải...</div>;
+    }
 
     if (isAuthenticated) {
-        // Đã đăng nhập → redirect về dashboard
         return <Navigate to="/admin/dashboard" replace />;
     }
     return <>{children}</>;

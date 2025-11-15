@@ -29,6 +29,8 @@ export default function App() {
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/advanced-settings" element={<AdvancedSettings />} />
       </Route>
+      {/* Admin Routes */}
+      <Route path="/admin/*" element={<AdminRoutes />} />
     </Routes>
   )
 }
