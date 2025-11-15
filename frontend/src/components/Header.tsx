@@ -70,7 +70,7 @@ export default function Header({ onOpenFilter }: HeaderProps) {
 
         <button className="icon-btn" onClick={handleToggleNotification}>🔔</button>
         <div className="user-avatar" ref={dropdownRef}>
-          <img src="/user-avatar.jpg" alt="User" onClick={handleToggleDropdown}/>
+          <img src="/user_avt.png" alt="User" onClick={handleToggleDropdown}/>
           {showDropdown && (
             <div className="dropdown-menu">
               <button onClick={() => handleSelect('profile')}>👤 Thông tin cá nhân</button>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Settings.css";
 
 interface SettingsProps {
@@ -12,6 +13,7 @@ export default function Settings({
   userName = "Nguyễn Thị Minh Anh",
   userAvatar = "/user_avt.png",
 }: SettingsProps) {
+  const navigate = useNavigate();
   return (
     <div className="settings-page">
       <div className="settings-card">
@@ -38,7 +40,7 @@ export default function Settings({
             <span>Chỉnh sửa hồ sơ</span>
             <span className="arrow">›</span>
           </div>
-          <div className="settings-item">
+          <div className="settings-item" onClick={() => navigate("/change-password")} style={{ cursor: "pointer" }}>
             <span>Đổi mật khẩu</span>
             <span className="arrow">›</span>
           </div>
@@ -47,7 +49,7 @@ export default function Settings({
         {/* Community Section */}
         <div className="settings-section">
           <h4>CHUNG & CỘNG ĐỒNG</h4>
-          <div className="settings-item">
+          <div className="settings-item" onClick={() => navigate("/advanced-settings")} style={{ cursor: "pointer" }}>
             <span>Cài đặt Nâng cao</span>
             <span className="arrow">›</span>
           </div>
