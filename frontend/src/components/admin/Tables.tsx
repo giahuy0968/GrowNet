@@ -13,7 +13,7 @@ import {
     useTheme,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import "../../styles/admin/TablesStyle.css";
+import "../../styles/admin/Chart.css";
 
 // ============ TYPES ============
 

@@ -8,7 +8,6 @@ import { Typography } from '@mui/material';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { BarChart } from '@mui/x-charts/BarChart';
-import '../../styles/admin/Chartstyle.css';
 
 // ============ CONSTANTS ============
 

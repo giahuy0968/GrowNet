@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import AdminRoutes from './admin/AdminRoutes'
+import AdminRoutes from './Admin'
 import Welcome from './pages/Welcome'
 import ProfileSetup from './pages/ProfileSetup'
 import Login from './pages/Login'
@@ -19,8 +19,6 @@ export default function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/profile-setup" element={<ProfileSetup />} />
-      {/* Admin area */}
-      <Route path="/admin/*" element={<AdminRoutes />} />
       {/*Layout có Header cố định */}
       <Route element={<MainLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />

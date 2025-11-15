@@ -4,19 +4,18 @@
 // =============================================
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../../styles/Auth.css';
+import { useAdminAuth } from '../contexts/AdminAuthContext';
 
 // ============ CONSTANTS ============
 
-// Mật khẩu demo (CHỈ DÙNG CHO DEMO - Production cần thay bằng API thực)
-const SECRET_KEY = '123456';
+// Sử dụng login từ context (SECRET_KEY kiểm tra ở context)
 
 // ============ COMPONENT ============
 
 export default function LoginAdmin() {
     // ============ HOOKS ============
-    const navigate = useNavigate();
+    const { login } = useAdminAuth();
 
     // ============ STATE ============
     const [password, setPassword] = useState('');
@@ -42,17 +41,10 @@ export default function LoginAdmin() {
         setError('');
 
         try {
-            // TODO: Thay bằng API call thực tế
-            // const response = await fetch('/api/admin/login', { ... });
-
-            if (password === SECRET_KEY) {
-                // Đăng nhập thành công
-                navigate('/admin/dashboard');
-            } else {
-                setError('Mật khẩu không đúng. Vui lòng thử lại.');
-            }
-        } catch (err) {
-            setError('Đã xảy ra lỗi. Vui lòng thử lại.');
+            await login(password);
+            // Thành công: login() đã điều hướng sang dashboard
+        } catch (err: any) {
+            setError(err.message || 'Đã xảy ra lỗi. Vui lòng thử lại.');
         } finally {
             setLoading(false);
         }
