@@ -54,7 +54,6 @@ export default function LoginAdmin() {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-logo">
-                    <img src="/logo.png" alt="GrowNet" />
                     <img src="/GrowNet_icon.png" alt="GrowNet" />
                 </div>
 
