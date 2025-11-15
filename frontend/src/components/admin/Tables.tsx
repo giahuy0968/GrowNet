@@ -254,7 +254,7 @@ export default function Tables() {
                     gap: 1,
                 }}
             >
-                Danh sách Tài khoản (Xử lý vi phạm & Xóa)
+                Danh sách Tài khoản
             </Typography>
 
             {/* Bộ lọc */}
