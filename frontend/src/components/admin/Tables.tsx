@@ -13,6 +13,7 @@ import {
     useTheme,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import '../../styles/admin/Tables.css';
 
 // ============ TYPES ============
 
@@ -148,23 +149,11 @@ export default function Tables() {
             align: "center",
             renderCell: ({ value }) => {
                 const status = value as string;
-                const color = STATUS_COLORS[status] || "#333";
-                return (
-                    <Box
-                        sx={{
-                            px: 1.5,
-                            py: 0.5,
-                            bgcolor: `${color}22`,
-                            color,
-                            fontWeight: 600,
-                            fontSize: "0.85rem",
-                            textAlign: "center",
-                            width: "100%",
-                        }}
-                    >
-                        {status}
-                    </Box>
-                );
+                const statusClass =
+                    status === 'Hoạt động' ? 'status-active' :
+                        status === 'Cảnh cáo' ? 'status-warning' :
+                            status === 'Đã khóa' ? 'status-locked' : '';
+                return <div className={`status-chip ${statusClass}`}>{status}</div>;
             },
         },
         {
@@ -184,12 +173,7 @@ export default function Tables() {
             renderCell: ({ row }) => {
                 const user = row as User;
                 return (
-                    <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        gap={1}
-                    >
+                    <div className="user-action-buttons">
                         <Button
                             variant="contained"
                             color={user.status === "Đã khóa" ? "success" : "warning"}
@@ -208,7 +192,7 @@ export default function Tables() {
                         >
                             Xóa vĩnh viễn
                         </Button>
-                    </Box>
+                    </div>
                 );
             },
         },
@@ -235,36 +219,19 @@ export default function Tables() {
 
     // ============ RENDER ============
     return (
-        <Box
-            sx={{
-                p: 3,
-                borderRadius: 2,
-                bgcolor: "#fff",
-                boxShadow: "0 6px 12px rgba(0,0,0,0.05)",
-            }}
-        >
-            <Typography
-                variant="h6"
-                sx={{
-                    mb: 2,
-                    fontWeight: 600,
-                    color: theme.palette.primary.main,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                }}
-            >
+        <div className="user-table-container">
+            <Typography variant="h6" className="user-table-title" style={{ color: theme.palette.primary.main }}>
                 Danh sách Tài khoản
             </Typography>
 
             {/* Bộ lọc */}
-            <Box display="flex" gap={3} mb={1} flexWrap="wrap" alignItems="center">
+            <div className="user-table-filters">
                 <TextField
                     size="small"
                     placeholder="🔍 Tìm kiếm theo Tên, Email, ID..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    sx={{ width: 280 }}
+                    className="filter-search"
                 />
                 <TextField
                     select
@@ -272,7 +239,7 @@ export default function Tables() {
                     size="small"
                     value={filterRole}
                     onChange={(e) => setFilterRole(e.target.value)}
-                    sx={{ width: 150 }}
+                    className="filter-role"
                 >
                     <MenuItem value="">Tất cả</MenuItem>
                     {ROLES.map((r) => (
@@ -287,7 +254,7 @@ export default function Tables() {
                     size="small"
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
-                    sx={{ width: 150 }}
+                    className="filter-status"
                 >
                     <MenuItem value="">Tất cả</MenuItem>
                     {STATUSES.map((s) => (
@@ -302,7 +269,7 @@ export default function Tables() {
                     size="small"
                     value={reportCount}
                     onChange={(e) => setReportCount(e.target.value)}
-                    sx={{ width: 160 }}
+                    className="filter-reports"
                 >
                     {REPORT_OPTIONS.map((opt) => (
                         <MenuItem key={opt.value} value={opt.value}>
@@ -310,41 +277,10 @@ export default function Tables() {
                         </MenuItem>
                     ))}
                 </TextField>
-            </Box>
+            </div>
 
             {/* BẢNG DỮ LIỆU */}
-            <Box
-                sx={{
-                    height: 380,
-                    width: "100%",
-                    maxWidth: 1671,
-                    margin: "o auto",
-                    overflowX: "auto",
-                    border: "none",
-                    "& .MuiDataGrid-root": {
-                        fontSize: "0.9rem",
-                        borderRadius: 0,
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: theme.palette.grey[200],
-                        borderRight: "1px solid black",
-                    },
-
-                    "& .MuiDataGrid-cell": {
-                        border: "1px solid black",
-                        padding: "0 !important",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        textAlign: "center",
-                    },
-                    "& .MuiDataGrid-columnHeader:last-of-type, & .MuiDataGrid-cell:last-of-type":
-                    {
-                        borderBottom: "none", // bỏ kẻ phải ở cột cuối
-                    },
-
-                }}
-            >
+            <div className="user-table-grid" style={{ ['--table-header-bg' as any]: theme.palette.grey[200] }}>
                 <DataGrid
                     rows={filteredRows}
                     columns={columns}
@@ -355,7 +291,7 @@ export default function Tables() {
                     disableRowSelectionOnClick
                     disableColumnResize
                 />
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 }
