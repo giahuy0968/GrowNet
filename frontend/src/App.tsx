@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard'
 import Chat from './pages/Chat'
 import MainLayout from './MainLayout'
 import Settings from "./pages/Settings";
+import ChangePassword from "./pages/ChangePassword";
+import AdvancedSettings from './pages/AdvancedSettings';
 
 
 export default function App() {
@@ -23,6 +25,8 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/advanced-settings" element={<AdvancedSettings />} />
       </Route>
     </Routes>
   )

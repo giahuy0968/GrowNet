@@ -2,8 +2,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: calc(100vh - 78px);
   background: #f3f6fa;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .settings-card {
