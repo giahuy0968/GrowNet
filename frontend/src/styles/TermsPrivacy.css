@@ -1,0 +1,82 @@
+/* Background */
+.tp-container {
+  width: 100%;
+  min-height: 60vh;
+  background: #f8faff;
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+}
+
+/* White box */
+.tp-card {
+  width: 700px;
+  background: white;
+  border-radius: 18px;
+  padding: 28px 32px;
+  box-shadow: 0px 2px 14px rgba(0, 0, 0, 0.08);
+  height: auto;
+}
+
+/* Header row: back + title */
+.tp-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+/* Back button */
+.tp-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  color: #1d4ed8;
+
+  transition: 0.2s;
+}
+
+.tp-back-btn:hover {
+  background: #f1f1f1;
+}
+
+/* Title left aligned */
+.tp-title {
+  font-size: 20px;
+  font-weight: 650;
+  color: #1d4ed8;
+}
+
+/* Section */
+.tp-section {
+  margin-bottom: 24px;
+}
+
+.tp-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1d4ed8;
+  margin-bottom: 8px;
+}
+
+.tp-text {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.tp-list {
+  margin-left: 20px;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.6;
+}

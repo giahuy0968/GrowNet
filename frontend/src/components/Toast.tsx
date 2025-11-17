@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Toast.css";
 
 type ToastProps = {
   open: boolean;
   message: string;
   onOpenChange?: (open: boolean) => void;
-  duration?: number; // ms, mặc định 5000
+  duration?: number; // mặc định 5000 ms
   position?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
 };
 
@@ -16,21 +16,40 @@ export default function Toast({
   duration = 5000,
   position = "top-right",
 }: ToastProps) {
+  const [isVisible, setIsVisible] = useState(open);
+
   useEffect(() => {
-    if (!open) return;
-    const id = window.setTimeout(() => onOpenChange?.(false), duration);
-    return () => window.clearTimeout(id);
+    if (open) {
+      setIsVisible(true);
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+        setTimeout(() => onOpenChange?.(false), 300); // đợi animation out
+      }, duration);
+      return () => clearTimeout(timer);
+    } else {
+      setIsVisible(false);
+    }
   }, [open, duration, onOpenChange]);
 
-  if (!open) return null;
+  if (!isVisible) return null;
 
   return (
-    <div className={`toast toast-${position}`} role="status" aria-live="polite">
+    <div className={`toast toast-${position} toast-enter`} role="status">
       <span>{message}</span>
+
+      {/* Progress bar */}
+      <div
+        className="toast-progress"
+        style={{ animationDuration: `${duration}ms` }}
+      />
+
       <button
         className="toast-close"
         aria-label="Đóng thông báo"
-        onClick={() => onOpenChange?.(false)}
+        onClick={() => {
+          setIsVisible(false);
+          setTimeout(() => onOpenChange?.(false), 300);
+        }}
       >
         ✕
       </button>

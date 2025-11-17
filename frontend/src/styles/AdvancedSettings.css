@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 40px;
+  padding-top: 20px;
 }
 
 /* Main Card */
@@ -17,14 +17,42 @@
   padding: 32px;
   box-shadow: 0px 2px 14px rgba(0, 0, 0, 0.08);
 }
+.advanced-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;             
+  margin-bottom: 24px;
+}
 
+/* Nút Back */
+.back-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #1976d2;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  color: #125a9c;
+  transform: translateX(-2px);
+}
 /* Title */
 .advanced-title {
+  margin: 0;
+  padding: 0;
   font-size: 20px;
   font-weight: bold;
   color: #1976d2;
-  margin-bottom: 24px;
+  line-height: 1;
+
 }
+
 
 /* Section title */
 .section-title {

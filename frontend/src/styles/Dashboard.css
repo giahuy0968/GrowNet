@@ -1,6 +1,6 @@
 /* Dashboard Layout Styles */
 .dashboard-layout {
-  min-height: calc(100vh - 75px);
+  min-height: 80vh;
   background: #f8fafc;
 }
 

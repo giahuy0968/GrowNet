@@ -1,15 +1,39 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import "../styles/AdvancedSettings.css";
+import Toast from "../components/Toast";
 
 export default function AdvancedSettings() {
+  const navigate = useNavigate()
   const [range, setRange] = useState(50);
   const [autoMatch, setAutoMatch] = useState(true);
   const [invisibleMode, setInvisibleMode] = useState(false);
+  const [open, setOpen] = useState(false);
+  const handleSave = () => {
+    console.log("Settings saved:", {
+      range,
+      autoMatch,
+      invisibleMode
+    });
+    setOpen(true);
+  };
+
 
   return (
     <div className="advanced-container">
+      <Toast
+        open={open}
+        onOpenChange={setOpen}
+        message="Đã lưu cài đặt"
+        duration={5000}
+        position="top-right"
+      />
+
       <div className="advanced-card">
-        <h2 className="advanced-title">Cài Đặt Nâng Cao</h2>
+        <div className="advanced-header">
+          <button className="back-btn" onClick={() => navigate(-1)}>←</button>
+          <h2 className="advanced-title">Cài Đặt Nâng Cao</h2>
+        </div>
 
         {/* Matchmaking Range */}
         <div className="section">
@@ -81,7 +105,7 @@ export default function AdvancedSettings() {
           </div>
         </div>
 
-        <button className="save-btn">LƯU CÀI ĐẶT</button>
+        <button className="save-btn" onClick={handleSave}>LƯU CÀI ĐẶT</button>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import MainLayout from './MainLayout'
 import Settings from "./pages/Settings";
 import ChangePassword from "./pages/ChangePassword";
 import AdvancedSettings from './pages/AdvancedSettings';
+import TermsPrivacy from './pages/TermsPrivacy';
 
 
 export default function App() {
@@ -28,6 +29,8 @@ export default function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/advanced-settings" element={<AdvancedSettings />} />
+        <Route path="/terms-privacy" element={<TermsPrivacy />} />
+
       </Route>
       {/* Admin Routes */}
       <Route path="/admin/*" element={<AdminRoutes />} />
