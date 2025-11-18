@@ -53,7 +53,7 @@ export default function Settings({
             <span>Cài đặt Nâng cao</span>
             <span className="arrow">›</span>
           </div>
-          <div className="settings-item">
+          <div className="settings-item" onClick={() => navigate("/terms-privacy")} style={{ cursor: "pointer" }}>
             <span>Điều khoản & Quyền riêng tư</span>
             <span className="arrow">›</span>
           </div>

@@ -36,7 +36,7 @@ export default function ChangePassword() {
       />
       <div className="change-password-card">
         <div className="card-header">
-          <button className="back-btn" onClick={() => navigate(-1)}>◀️</button>
+          <button className="back-btn" onClick={() => navigate(-1)}>←</button>
           <h2 className="title">Đổi Mật Khẩu</h2>
         </div>
 

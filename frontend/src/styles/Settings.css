@@ -2,10 +2,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 78px);
+  min-height: 80vh;
   background: #f3f6fa;
   box-sizing: border-box;
-  overflow: hidden;
+  padding: 25px 16px;
 }
 
 .settings-card {

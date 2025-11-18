@@ -11,10 +11,8 @@ import MainLayout from './MainLayout'
 import Settings from "./pages/Settings";
 import ChangePassword from "./pages/ChangePassword";
 import AdvancedSettings from './pages/AdvancedSettings';
-import ProfileMenteeChange from './pages/ProfileMenteeChange'
-import Schedule from './pages/Schedule'
-import MentorProfile from './pages/MentorProfile'
-// import MentorProfileChange from './pages/MentorProfileChange'
+
+
 export default function App() {
   return (
     <Routes>
@@ -34,6 +32,8 @@ export default function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/advanced-settings" element={<AdvancedSettings />} />
+        <Route path="/terms-privacy" element={<TermsPrivacy />} />
+
       </Route>
       {/* Admin Routes */}
       <Route path="/admin/*" element={<AdminRoutes />} />
