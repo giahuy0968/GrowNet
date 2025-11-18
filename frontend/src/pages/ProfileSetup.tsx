@@ -32,7 +32,7 @@ export default function ProfileSetup() {
       <div className="profile-setup-card">
         <h1 className="profile-title">HOÀN THIỆN HỒ SƠ CỦA BAN</h1>
         <p className="profile-subtitle">Vui lòng điền thông tin cơ bản để GrowNet có thể kết nối bạn tốt hơn.</p>
-        
+
         <form onSubmit={handleSubmit} className="profile-form">
           <div className="form-group">
             <label>Họ và Tên</label>
@@ -58,7 +58,7 @@ export default function ProfileSetup() {
                 required
               />
             </div>
-            
+
             <div className="form-group">
               <label>Giới tính</label>
               <select
@@ -89,7 +89,7 @@ export default function ProfileSetup() {
                 <option value="mentee">Mentee</option>
               </select>
             </div>
-            
+
             <div className="form-group">
               <label>Nghề nghiệp/Chức danh</label>
               <input

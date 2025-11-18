@@ -1,0 +1,310 @@
+:root {
+    --primary: #2563eb;
+    --primary-600: #1d4ed8;
+    --muted: #64748b;
+    --border: #e5e7eb;
+    --card-bg: #ffffff;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ------------------------------
+   CONTAINER
+------------------------------ */
+.profile-setup-container {
+    min-height: calc(100vh - 72px);
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 40px 16px;
+}
+
+/* ------------------------------
+   CARD
+------------------------------ */
+.profile-setup-card {
+    width: 100%;
+    max-width: 1040px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+    animation: fadeIn 240ms ease-out;
+    line-height: 1.35;
+}
+
+@media (min-width: 640px) {
+    .profile-setup-card {
+        padding: 36px;
+        max-width: 980px;
+    }
+}
+
+/* ------------------------------
+   HEADER
+------------------------------ */
+.profile-title {
+    margin: 0 0 6px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e40af;
+    line-height: 1.2;
+}
+
+.profile-subtitle {
+    margin: 0 0 24px 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+/* ------------------------------
+   FORM LAYOUT
+------------------------------ */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: grid;
+    gap: 6px;
+
+    .form-row {
+        display: grid;
+        gap: 14px;
+    }
+
+    @media (min-width: 720px) {
+        .form-row {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    /* ------------------------------
+   INPUTS
+------------------------------ */
+
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        outline: none;
+        font-size: 15px;
+        background: #ffffff;
+        color: #0f172a;
+        transition: border-color 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #3b82f6;
+    }
+
+    /* ------------------------------
+   TEXTAREA
+------------------------------ */
+    textarea {
+        min-height: 96px;
+        resize: vertical;
+    }
+
+    /* ------------------------------
+   TAG INPUT
+------------------------------ */
+    .tag-input {
+        display: grid;
+        gap: 6px;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 10px;
+        background: #ffffff;
+    }
+
+    .tag-input>input {
+        border: none;
+        background: transparent;
+        padding: 6px 8px;
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #eef2ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .tag button {
+        display: inline-flex;
+        border: none;
+        background: transparent;
+        color: inherit;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 0 2px;
+    }
+
+    /* ------------------------------
+   EDUCATION ENTRY
+------------------------------ */
+    .education-entry {
+        display: grid;
+        gap: 8px;
+        padding: 10px;
+        margin-top: 8px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: #ffffff;
+        position: relative;
+    }
+
+    .education-entry::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 12px;
+        bottom: 12px;
+        width: 4px;
+        border-radius: 4px;
+        background: var(--primary);
+        opacity: 0.8;
+    }
+
+    .date-row {
+        display: grid;
+        gap: 8px;
+    }
+
+    @media (min-width: 900px) {
+        .date-row {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    /* ------------------------------
+   BUTTONS
+------------------------------ */
+    .btn-submit {
+        margin-top: 12px;
+        padding: 12px;
+        background: #22c55e;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-submit:hover {
+        background: #16a34a;
+        transform: translateY(-1px);
+    }
+
+    .btn-submit:active {
+        transform: translateY(1px);
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .btn-outline {
+        appearance: none;
+        border: 1px dashed #cbd5e1;
+        background: transparent;
+        color: var(--primary);
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 120ms ease, border-color 120ms ease;
+    }
+
+    .btn-dl {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        background-color: #ff0000;
+        color: #fff;
+        width: 100px;
+        border: none;
+        border-radius: 5px;
+        height: 30px;
+
+    }
+
+    .btn-dl:hover {
+        background-color: #cc0000;
+    }
+
+    /* ------------------------------
+   ERRORS
+------------------------------ */
+    .error-text {
+        color: #dc2626;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* ------------------------------
+   ACCESSIBILITY
+------------------------------ */
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    button:focus-visible {
+        outline: 2px solid rgba(59, 130, 246, 0.4);
+        outline-offset: 2px;
+    }
+
+    /* ------------------------------
+   ANIMATIONS
+------------------------------ */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(4px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ------------------------------
+   GIỚI HẠN CHIỀU RỘNG FORM
+------------------------------ */
+    .profile-form>.form-group>input,
+    .profile-form>.form-group>textarea,
+    .profile-form>.form-group>select,
+    .profile-form>.form-group>.tag-input {
+        max-width: 960px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

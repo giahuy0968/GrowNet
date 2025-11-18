@@ -10,7 +10,7 @@ interface SettingsProps {
 
 export default function Settings({
   onClose,
-  userName = "Nguyễn Thị Minh Anh",
+  userName = "Hà Anh Tứn",
   userAvatar = "/user_avt.png",
 }: SettingsProps) {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function Settings({
         {/* Account Section */}
         <div className="settings-section">
           <h4>TÀI KHOẢN</h4>
-          <div className="settings-item">
+          <div className="settings-item" onClick={() => navigate("/profile-change")} style={{ cursor: "pointer" }}>
             <span>Chỉnh sửa hồ sơ</span>
             <span className="arrow">›</span>
           </div>
