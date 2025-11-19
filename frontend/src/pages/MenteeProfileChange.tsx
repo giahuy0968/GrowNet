@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import '../styles/ProfileMenteeChange.css'
+import '../styles/MenteeProfileChange.css'
 
 type EducationEntry = {
     school: string
@@ -142,27 +142,39 @@ export default function ProfileSetup() {
     }
 
     return (
-        <div className="profile-setup-container">
-            <div className="profile-setup-card">
-                <h1 className="profile-title">HOÀN THIỆN HỒ SƠ CỦA BẠN</h1>
-                <p className="profile-subtitle">Vui lòng điền thông tin để GrowNet kết nối bạn tốt hơn.</p>
+        <div className="mpc-overlay">
+            <div className="mpc-modal">
 
-                <form onSubmit={handleSubmit} className="profile-form" noValidate>
-                    <div className="form-group">
+                {/* HEADER */}
+                <div className="mpc-header">
+                    <span className="mpc-title">Hoàn Thiện Hồ Sơ Cá Nhân</span>
+                    <button className="mpc-close" aria-label="Đóng" onClick={close}>×</button>
+                </div>
+
+                {/* BODY */}
+                <div className="mpc-body">
+
+                    {/* Avatar */}
+                    <div className="mpc-avatar-row">
+                        <div className="mpc-avatar">👤</div>
+                        <button type="button" className="btn-light">Đổi ảnh đại diện</button>
+                    </div>
+
+                    {/* Họ tên */}
+                    <div className="mpc-field">
                         <label>Họ và Tên</label>
                         <input
-                            type="text"
                             name="fullName"
                             value={formData.fullName}
                             onChange={handleChange}
-                            placeholder="Ví dụ: Nguyễn Văn A"
-                            required
+                            placeholder="Nguyễn Văn A"
                         />
                         {errors.fullName && <span className="error-text">{errors.fullName}</span>}
                     </div>
 
-                    <div className="form-row">
-                        <div className="form-group">
+                    {/* Ngày sinh + Giới tính */}
+                    <div className="mpc-grid2">
+                        <div className="mpc-field">
                             <label>Ngày sinh</label>
                             <input
                                 type="date"
@@ -172,13 +184,10 @@ export default function ProfileSetup() {
                             />
                             {errors.birthDate && <span className="error-text">{errors.birthDate}</span>}
                         </div>
-                        <div className="form-group">
+
+                        <div className="mpc-field">
                             <label>Giới tính</label>
-                            <select
-                                name="gender"
-                                value={formData.gender}
-                                onChange={handleChange}
-                            >
+                            <select name="gender" value={formData.gender} onChange={handleChange}>
                                 <option value="">Chọn</option>
                                 <option value="male">Nam</option>
                                 <option value="female">Nữ</option>
@@ -187,21 +196,21 @@ export default function ProfileSetup() {
                         </div>
                     </div>
 
-                    <div className="form-group">
+                    {/* Location */}
+                    <div className="mpc-field">
                         <label>Vị trí hiện tại</label>
                         <input
-                            type="text"
                             name="location"
                             value={formData.location}
                             onChange={handleChange}
-                            placeholder="Hà Nội, TP. HCM..."
+                            placeholder="Hà Nội, TP.HCM..."
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label>Chức danh / Định hướng</label>
+                    {/* Định hướng nghề nghiệp */}
+                    <div className="mpc-field">
+                        <label>Chức danh / Định hướng nghề nghiệp</label>
                         <input
-                            type="text"
                             name="professionOrientation"
                             value={formData.professionOrientation}
                             onChange={handleChange}
@@ -209,123 +218,140 @@ export default function ProfileSetup() {
                         />
                     </div>
 
-                    <div className="form-group">
+                    {/* Mục tiêu học tập */}
+                    <div className="mpc-field">
                         <label>Mục tiêu học tập</label>
                         <textarea
                             name="learningGoals"
                             value={formData.learningGoals}
                             onChange={handleChange}
-                            rows={3}
                             placeholder="Nắm vững React..."
+                            rows={3}
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label>Kỹ năng cần cải thiện (Enter hoặc , để thêm)</label>
-                        <div className="tag-input">
-                            <input
-                                type="text"
-                                onKeyDown={e => handleTagKeyDown(e, 'skillsList')}
-                                placeholder="Nhập và Enter..."
-                            />
-                            <div className="tag-list">
-                                {formData.skillsList.map((t, i) => (
-                                    <span key={i} className="tag">
-                                        {t}
-                                        <button type="button" onClick={() => removeTag('skillsList', i)}>×</button>
-                                    </span>
-                                ))}
-                            </div>
+                    {/* Kỹ năng cần cải thiện */}
+                    <div className="mpc-field">
+                        <label>Kỹ năng cần cải thiện (Enter để thêm)</label>
+
+                        <input
+                            onKeyDown={(e) => handleTagKeyDown(e, "skillsList")}
+                            placeholder="Nhập kỹ năng..."
+                        />
+
+                        <div className="mpc-chips">
+                            {formData.skillsList.map((t, i) => (
+                                <span key={i} className="chip">
+                                    {t}
+                                    <button type="button" onClick={() => removeTag("skillsList", i)}>×</button>
+                                </span>
+                            ))}
                         </div>
                     </div>
 
-                    <div className="form-group">
-                        <label>Lĩnh vực thế mạnh (Enter hoặc , để thêm)</label>
-                        <div className="tag-input">
-                            <input
-                                type="text"
-                                onKeyDown={e => handleTagKeyDown(e, 'expertiseList')}
-                                placeholder="Nhập và Enter..."
-                            />
-                            <div className="tag-list">
-                                {formData.expertiseList.map((t, i) => (
-                                    <span key={i} className="tag">
-                                        {t}
-                                        <button type="button" onClick={() => removeTag('expertiseList', i)}>×</button>
-                                    </span>
-                                ))}
-                            </div>
+                    {/* Lĩnh vực thế mạnh */}
+                    <div className="mpc-field">
+                        <label>Lĩnh vực thế mạnh (Enter để thêm)</label>
+
+                        <input
+                            onKeyDown={(e) => handleTagKeyDown(e, "expertiseList")}
+                            placeholder="Thiết kế UI, Backend..."
+                        />
+
+                        <div className="mpc-chips">
+                            {formData.expertiseList.map((t, i) => (
+                                <span key={i} className="chip">
+                                    {t}
+                                    <button type="button" onClick={() => removeTag("expertiseList", i)}>×</button>
+                                </span>
+                            ))}
                         </div>
                     </div>
 
-                    <div className="form-group">
+                    {/* Kinh nghiệm tóm tắt */}
+                    <div className="mpc-field">
                         <label>Kinh nghiệm</label>
                         <textarea
                             name="experience"
                             value={formData.experience}
                             onChange={handleChange}
                             rows={4}
-                            placeholder="1 năm Frontend tại Công ty X..."
+                            placeholder="1 năm Frontend tại công ty X..."
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label>Học vấn</label>
+                    {/* Học vấn – Card Group */}
+                    <div className="mpc-group-card">
+                        <div className="mpc-group-title">Học vấn</div>
+
                         {formData.educationEntries.map((edu, idx) => (
-                            <div key={idx} className="education-entry">
-                                <input
-                                    type="text"
-                                    placeholder="Trường"
-                                    value={edu.school}
-                                    onChange={e => handleEducationChange(idx, 'school', e.target.value)}
-                                    required
-                                />
-                                <select
-                                    value={edu.degree}
-                                    onChange={e => handleEducationChange(idx, 'degree', e.target.value)}
-                                    required
-                                >
-                                    <option value="">Bậc</option>
-                                    <option value="highschool">THPT</option>
-                                    <option value="bachelor">Cử nhân</option>
-                                    <option value="engineer">Kỹ sư</option>
-                                    <option value="master">Thạc sĩ</option>
-                                    <option value="phd">Tiến sĩ</option>
-                                    <option value="other">Khác</option>
-                                </select>
-                                <input
-                                    type="text"
-                                    placeholder="Chuyên ngành"
-                                    value={edu.major}
-                                    onChange={e => handleEducationChange(idx, 'major', e.target.value)}
-                                />
-                                <div className="date-row">
+                            <div className="mpc-exp-row" key={idx}>
+
+                                <div className="mpc-field">
+                                    <label>Trường</label>
                                     <input
-                                        type="text"
-                                        placeholder="Năm bắt đầu"
-                                        value={edu.startYear}
-                                        onChange={e => handleEducationChange(idx, 'startYear', e.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Năm kết thúc"
-                                        value={edu.endYear}
-                                        onChange={e => handleEducationChange(idx, 'endYear', e.target.value)}
+                                        value={edu.school}
+                                        onChange={(e) => handleEducationChange(idx, "school", e.target.value)}
                                     />
                                 </div>
-                                {educationErrors[idx] && <span className="error-text">{educationErrors[idx]}</span>}
-                                <button
-                                    type="button"
-                                    onClick={() => removeEducation(idx)}
-                                    className="btn-dl"
-                                >Xóa</button>
+
+                                <div className="mpc-field">
+                                    <label>Bậc học</label>
+                                    <select
+                                        value={edu.degree}
+                                        onChange={(e) => handleEducationChange(idx, "degree", e.target.value)}
+                                    >
+                                        <option value="">Chọn</option>
+                                        <option value="bachelor">Cử nhân</option>
+                                        <option value="engineer">Kỹ sư</option>
+                                        <option value="master">Thạc sĩ</option>
+                                        <option value="phd">Tiến sĩ</option>
+                                    </select>
+                                </div>
+
+                                <div className="mpc-field">
+                                    <label>Chuyên ngành</label>
+                                    <input
+                                        value={edu.major}
+                                        onChange={(e) => handleEducationChange(idx, "major", e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="mpc-grid2">
+                                    <div className="mpc-field">
+                                        <label>Bắt đầu</label>
+                                        <input
+                                            value={edu.startYear}
+                                            onChange={(e) => handleEducationChange(idx, "startYear", e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="mpc-field">
+                                        <label>Kết thúc</label>
+                                        <input
+                                            value={edu.endYear}
+                                            onChange={(e) => handleEducationChange(idx, "endYear", e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {educationErrors[idx] && (
+                                    <span className="error-text">{educationErrors[idx]}</span>
+                                )}
+
+                                <button type="button" className="btn-icon" onClick={() => removeEducation(idx)}>
+                                    🗑️
+                                </button>
                             </div>
                         ))}
-                        <button type="button" onClick={addEducation} className="btn-outline">+ Thêm học vấn</button>
+
+                        <button type="button" className="btn-outline" onClick={addEducation}>
+                            + Thêm học vấn
+                        </button>
                     </div>
 
-                    <div className="form-group">
-                        <label>Giới thiệu</label>
+                    {/* Giới thiệu */}
+                    <div className="mpc-field">
+                        <label>Giới thiệu bản thân</label>
                         <textarea
                             name="introduction"
                             value={formData.introduction}
@@ -333,29 +359,29 @@ export default function ProfileSetup() {
                             rows={4}
                             placeholder="Chia sẻ ngắn gọn..."
                         />
-                        {errors.introduction && <span className="error-text">{errors.introduction}</span>}
                     </div>
 
-                    <div className="form-group">
+                    {/* Vai trò */}
+                    <div className="mpc-field">
                         <label>Vai trò</label>
-                        <select
-                            name="role"
-                            value={formData.role}
-                            onChange={handleChange}
-                            required
-                        >
+                        <select name="role" value={formData.role} onChange={handleChange}>
                             <option value="">Chọn vai trò</option>
                             <option value="mentor">Mentor</option>
                             <option value="mentee">Mentee</option>
                         </select>
-                        {errors.role && <span className="error-text">{errors.role}</span>}
                     </div>
+                </div>
 
-                    <button type="submit" className="btn-submit">
+                {/* FOOTER */}
+                <div className="mpc-footer">
+                    <button type="button" className="btn-danger" onClick={close}>HỦY</button>
+                    <button type="submit" className="btn-success" onClick={handleSubmit}>
                         ✓ LƯU & BẮT ĐẦU
                     </button>
-                </form>
+                </div>
+
             </div>
         </div>
     )
+
 }

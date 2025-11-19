@@ -14,6 +14,10 @@ interface ReviewItem {
     content: string;
     stars: number;
 }
+interface WorkingFor {
+    role: string,
+    company: string,
+}
 
 const EXPERIENCES: ExperienceItem[] = [
     { role: 'Senior UX/UI Designer', company: 'CreativeLab', from: '2019', to: 'Hiện tại', current: true },
@@ -25,7 +29,9 @@ const REVIEWS: ReviewItem[] = [
     { author: 'Trần Văn C', stars: 5, content: 'Buổi học rất chi tiết và dễ hiểu. Anh Minh Anh đã giúp tôi sắp xếp lại portfolio một cách logic và chuyên nghiệp. Rất khuyến khích cho các bạn mới vào ngành!' },
     { author: 'Lê Thị D', stars: 5, content: 'Thời gian phản hồi nhanh chóng, kiến thức sâu rộng về Figma. Rất hài lòng với chất lượng buổi mentoring.' }
 ];
-
+const WORKING_FOR: WorkingFor[] = [
+    { role: 'UX/UI Designer', company: 'CreativeLab' },
+];
 const CORE_SKILLS = ['Figma', 'UX Research', 'UI Design', 'Teamwork', 'Prototyping', 'Mobile App Design'];
 
 export default function MentorProfile() {
@@ -44,16 +50,21 @@ export default function MentorProfile() {
                             <h1 className="mentor-name">Nguyễn Minh Anh</h1>
                             <p className="mentor-meta">Mentor • UX/UI Designer • TP.HCM</p>
                             <div className="action-row">
-                                <button className="btn-primary" type="button">🤝 Kết nối ngay</button>
+                                <button className="btn-primary" type="button" onClick={() => navigate('/chat')}>🤝 Kết nối ngay</button>
                                 <button className="btn-ghost" type="button" onClick={() => navigate('/schedule')}>📅 Đặt lịch</button>
+                                <button className="btn-mess" type="button" onClick={() => navigate('/chat')}>
+                                    <img src="/paper-plane.svg" alt="send" />
+                                </button>
                             </div>
                         </div>
                     </header>
                     <div className="profile-body-section">
                         <section className="section-block">
                             <h2 className="section-title">Giới thiệu</h2>
-                            <p className="intro-text">Tôi là một nhà thiết kế giao diện người dùng với 5 năm kinh nghiệm làm việc tại các startup công nghệ phát triển nhanh. Mục tiêu của tôi là giúp các mentee định hướng nghề nghiệp và phát triển tư duy thiết kế sản phẩm sáng tạo.</p>
-                            <p className="intro-text">Tôi đặc biệt quan tâm đến việc tạo ra các giải pháp thân thiện với người dùng và có khả năng mở rộng. Tôi có thể hỗ trợ bạn từ việc xây dựng portfolio, chuẩn bị phỏng vấn, đến việc giải quyết các thách thức thiết kế phức tạp.</p>
+                            <div className="intro-text">
+                                <p>Tôi là một nhà thiết kế giao diện người dùng với 5 năm kinh nghiệm làm việc tại các startup công nghệ phát triển nhanh. Mục tiêu của tôi là giúp các mentee định hướng nghề nghiệp và phát triển tư duy thiết kế sản phẩm sáng tạo.</p>
+                                <p>Tôi đặc biệt quan tâm đến việc tạo ra các giải pháp thân thiện với người dùng và có khả năng mở rộng. Tôi có thể hỗ trợ bạn từ việc xây dựng portfolio, chuẩn bị phỏng vấn, đến việc giải quyết các thách thức thiết kế phức tạp.</p>
+                            </div>
                         </section>
                         <section className="section-block">
                             <h2 className="section-title">Kinh nghiệm làm việc</h2>
@@ -65,6 +76,20 @@ export default function MentorProfile() {
                                             <p className="exp-role">{exp.role}</p>
                                             <p className="exp-company">{exp.company}</p>
                                             <p className="exp-range">{exp.from} - {exp.to}</p>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                        <section className="section-block">
+                            <h2 className="section-title">Công việc hiện tại</h2>
+                            <ul className="experience-timeline">
+                                {WORKING_FOR.map(exp => (
+                                    <li key={exp.role} className="exp-item">
+                                        <div />
+                                        <div className="working-for-content">
+                                            <p className="role">{exp.role}</p>
+                                            <p className="company-name">{exp.company}</p>
                                         </div>
                                     </li>
                                 ))}
@@ -139,6 +164,6 @@ export default function MentorProfile() {
 
                 </section>
             </div>
-        </div>
+        </div >
     );
 }

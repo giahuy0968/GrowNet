@@ -11,8 +11,12 @@ import MainLayout from './MainLayout'
 import Settings from "./pages/Settings";
 import ChangePassword from "./pages/ChangePassword";
 import AdvancedSettings from './pages/AdvancedSettings';
-
-
+import TermsPrivacy from './pages/TermsPrivacy';
+import ProfileMenteeChange from './pages/MenteeProfileChange';
+import Schedule from './pages/Schedule';
+import MentorProfile from './pages/MentorProfile';
+import MentorProfileChange from './pages/MentorProfileChange';
+import MenteeProfile from './pages/MenteeProfile';
 export default function App() {
   return (
     <Routes>
@@ -21,10 +25,11 @@ export default function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/profile-setup" element={<ProfileSetup />} />
+      <Route path="/mentee-profile" element={<MenteeProfile />} />
       <Route path="/profile-change" element={<ProfileMenteeChange />} />
       <Route path="/schedule" element={<Schedule />} />
       <Route path="/mentor-profile" element={<MentorProfile />} />
-      {/* <Route path="/mentorchange" element={<MentorProfileChange />} /> */}
+      <Route path="/mentorchange" element={<MentorProfileChange />} />
       {/*Layout có Header cố định */}
       <Route element={<MainLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
