@@ -88,7 +88,7 @@
   flex-direction: row !important;
   justify-content: center;
   align-items: center;
-  gap: 90px !important;
+  gap: 100px !important;
   width: 100%;
   padding: 16px 24px 24px;
   box-sizing: border-box;
@@ -105,6 +105,14 @@
   cursor: pointer;
   transition: all 0.25s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  /* center icon/text perfectly */
+  align-items: center;
+  /* vertical center */
+  justify-content: center;
+  /* horizontal center */
+  line-height: 1;
+  /* prevent glyph vertical offset */
 }
 
 .profile-card .btn-action:hover {
