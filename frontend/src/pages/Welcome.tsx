@@ -33,7 +33,7 @@ export default function Welcome() {
     <div className="welcome-container">
       <div className="welcome-card">
         <div className="welcome-icon">
-          <img src="/logo.svg" alt="GrowNet Logo" />
+          <img src="/GrowNet_icon.png" alt="GrowNet Logo" />
         </div>
         
         <h1 className="welcome-title">{content[step - 1].title}</h1>

@@ -15,7 +15,7 @@ export default function ChatInfo({ chatName }: ChatInfoProps) {
       </div>
 
       <div className="user-profile">
-        <img src="/avatar-tran.jpg" alt={chatName} className="profile-avatar" />
+        <img src="/user_avt.png" alt={chatName} className="profile-avatar" />
         <h4>{chatName}</h4>
         <p className="status">🟢 Đang hoạt động</p>
       </div>

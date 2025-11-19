@@ -1,0 +1,112 @@
+/* =============================================
+   User Management Tables Styles
+   ============================================= */
+:root {
+    --table-header-bg: #e0e0e0;
+}
+
+.user-table-container {
+    padding: 24px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+}
+
+.user-table-title {
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: #1976d2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+}
+
+.user-table-filters {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.user-table-filters .filter-search {
+    width: 280px;
+}
+
+.user-table-filters .filter-role {
+    width: 150px;
+}
+
+.user-table-filters .filter-status {
+    width: 150px;
+}
+
+.user-table-filters .filter-reports {
+    width: 160px;
+}
+
+.user-table-grid {
+    height: 380px;
+    width: 100%;
+    max-width: 1671px;
+    overflow-x: auto;
+    border: none;
+}
+
+/* DataGrid overrides */
+.user-table-grid .MuiDataGrid-root {
+    font-size: 0.9rem;
+    border-radius: 0;
+}
+
+.user-table-grid .MuiDataGrid-columnHeaders {
+    background-color: var(--table-header-bg);
+}
+
+.user-table-grid .MuiDataGrid-cell {
+    border: 1px solid #000;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.user-table-grid .MuiDataGrid-columnHeader:last-of-type,
+.user-table-grid .MuiDataGrid-cell:last-of-type {
+    border-bottom: none;
+}
+
+/* Status chip */
+.status-chip {
+    padding: 4px 6px;
+    font-weight: 600;
+    font-size: .85rem;
+    text-align: center;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.status-active {
+    background: #2e7d3222;
+    color: #2e7d32;
+}
+
+.status-warning {
+    background: #f57c0022;
+    color: #f57c00;
+}
+
+.status-locked {
+    background: #c6282822;
+    color: #c62828;
+}
+
+/* Action buttons layout */
+.user-action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}

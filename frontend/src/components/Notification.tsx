@@ -15,7 +15,7 @@ export default function Notification() {
       {
         avatar: '/avatar-system.jpg',
         name: 'Hệ thống GrowNet',
-        action: 'nhắc bạn cập nhật kỹ năng mới để tăng khả năng gọi ý mentor ✨',
+        action: 'nhắc bạn cập nhật kỹ năng mới để tăng khả năng gợi ý mentor ✨',
         time: '2 giờ trước'
       }
     ],

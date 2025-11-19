@@ -20,7 +20,7 @@ export default function ChatWindow({ chatName }: ChatWindowProps) {
     },
     {
       sender: 'me',
-      text: 'Chào bạn, chắc chắn rồi! Bạn đang ở giai đoạn của quá trình chuyển'
+      text: 'Chào bạn, chắc chắn rồi! Bạn đang ở giai đoạn của quá trình chuyển đổi?'
     },
     {
       sender: 'other',

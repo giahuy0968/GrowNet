@@ -1,14 +1,22 @@
 /* Profile Card Component Styles */
 .profile-card {
+  position: relative;
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .profile-header {
-  height: 200px;
+  height: 150px;
   overflow: hidden;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .profile-bg {
@@ -19,13 +27,16 @@
 
 .profile-body {
   padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .profile-info h2 {
   font-size: 24px;
   font-weight: 700;
   color: #1e293b;
-  margin: 0 0 8px 0;
+  margin: 0;
 }
 
 .profile-role {
@@ -73,33 +84,42 @@
 }
 
 .profile-actions {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   justify-content: center;
-  gap: 16px;
-  padding: 20px 24px;
-  border-top: 1px solid #f1f5f9;
+  align-items: center;
+  gap: 90px !important;
+  width: 100%;
+  padding: 16px 24px 24px;
+  box-sizing: border-box;
 }
 
-.btn-action {
-  width: 56px;
-  height: 56px;
+
+.profile-card .btn-action {
+  width: 180px;
+  height: 60px;
   border: none;
-  border-radius: 50%;
+  border-radius: 999px;
   font-size: 24px;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
-.btn-action:hover {
-  transform: scale(1.1);
+.profile-card .btn-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
 
-.btn-cancel {
+.profile-card .btn-cancel {
   background: #fee2e2;
   color: #dc2626;
+  border: 1px solid #fee2e2;
 }
 
-.btn-accept {
-  background: #dcfce7;
-  color: #16a34a;
+.profile-card .btn-accept {
+  background: #6FC3E4;
+  color: #fff;
+  border: 1px solid #6FC3E4;
 }

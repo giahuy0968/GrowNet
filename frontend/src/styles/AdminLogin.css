@@ -1,0 +1,160 @@
+/* =============================================
+   Admin Login Page Styles
+   Tối ưu riêng cho trang đăng nhập admin
+   ============================================= */
+
+/* Layout chính */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #eef5ff 0%, #d9e9ff 100%);
+    padding: 24px;
+}
+
+/* Thẻ card đăng nhập */
+.auth-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 44px 40px 40px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 12px 48px rgba(30, 64, 175, 0.16);
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.25), transparent 70%);
+    pointer-events: none;
+}
+
+/* Logo */
+.auth-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.auth-logo img:first-child {
+    width: 46px;
+    height: 46px;
+}
+
+.auth-logo img:last-child {
+    width: 58px;
+    height: 58px;
+}
+
+/* Tiêu đề */
+.auth-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1e3a8a;
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-bottom: 28px;
+}
+
+/* Nhóm form */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    padding: 14px 16px;
+    border: 1px solid #d5dee9;
+    background: #f8fbff;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    background: #ffffff;
+}
+
+/* Nút submit */
+.btn-auth {
+    width: 100%;
+    padding: 15px 18px;
+    background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    position: relative;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-auth:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
+}
+
+.btn-auth:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-auth:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Thông báo lỗi */
+.auth-error {
+    margin-top: -4px;
+    margin-bottom: 16px;
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    border: 1px solid #fca5a5;
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+    .auth-card {
+        padding: 36px 28px 32px;
+        border-radius: 18px;
+    }
+
+    .auth-title {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+
+    .form-group input {
+        font-size: 14px;
+    }
+
+    .btn-auth {
+        font-size: 15px;
+    }
+}

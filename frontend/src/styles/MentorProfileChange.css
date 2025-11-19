@@ -1,0 +1,419 @@
+/* Container tổng */
+.profile-setup-container {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    background-color: #f1f5f9;
+    /* nền nhạt */
+    min-height: 100vh;
+}
+
+/* Card form */
+.profile-setup-card {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Header form */
+.profile-setup-card h2 {
+    text-align: center;
+    font-size: 28px;
+    color: #1877F2;
+    /* màu xanh Facebook */
+    margin-bottom: 20px;
+}
+
+/* Form elements chung */
+.profile-setup-card label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #334155;
+}
+
+.profile-setup-card input,
+.profile-setup-card select,
+.profile-setup-card textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.2s;
+}
+
+.profile-setup-card input:focus,
+.profile-setup-card select:focus,
+.profile-setup-card textarea:focus {
+    border-color: #1877F2;
+}
+
+/* Textarea */
+.profile-setup-card textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Error message */
+.profile-setup-card span {
+    color: #dc2626;
+    /* đỏ */
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+/* Buttons */
+.profile-setup-card button {
+    background-color: #1877F2;
+    color: #ffffff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.profile-setup-card button:hover {
+    background-color: #0f5ed7;
+}
+
+/* Skills tag container */
+.profile-setup-card div>div span {
+    display: inline-flex;
+    align-items: center;
+    background-color: #eef2ff;
+    color: #3730a3;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin: 4px 4px 0 0;
+    font-size: 13px;
+}
+
+.profile-setup-card div>div span button {
+    background: none;
+    border: none;
+    margin-left: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #3730a3;
+}
+
+/* Thêm / xóa exp button */
+.profile-setup-card div button[type="button"] {
+    background-color: #e5e7eb;
+    color: #334155;
+    margin-top: 6px;
+}
+
+.profile-setup-card div button[type="button"]:hover {
+    background-color: #d1d5db;
+}
+
+/* ========== Modal-style classes used by MentorProfileChange.tsx ========== */
+.mpc-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 1000;
+}
+
+.mpc-modal {
+    width: 100%;
+    max-width: 920px;
+    max-height: 90vh;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .18);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.mpc-header {
+    background: #2563eb;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+}
+
+.mpc-title {
+    font-weight: 700;
+    letter-spacing: .3px;
+}
+
+.mpc-close {
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.mpc-close:hover {
+    color: #e2e8f0;
+}
+
+.mpc-body {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: auto;
+}
+
+.mpc-avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mpc-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #eef2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #374151;
+}
+
+.btn-light {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-light:hover {
+    background: #e5e7eb;
+}
+
+.mpc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mpc-field label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 14px;
+}
+
+.mpc-field input,
+.mpc-field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 14px;
+    color: #111827;
+    transition: border-color .15s ease;
+}
+
+.mpc-field input::placeholder,
+.mpc-field textarea::placeholder {
+    color: #9ca3af;
+}
+
+.mpc-field input:focus,
+.mpc-field textarea:focus {
+    border-color: #1d4ed8;
+    outline: none;
+}
+
+.mpc-grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 720px) {
+    .mpc-grid2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.mpc-grid3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+}
+
+@media (max-width: 720px) {
+    .mpc-grid3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.mpc-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chip {
+    background: #eef2ff;
+    color: #3730a3;
+    padding: 6px 10px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.chip button {
+    border: 0;
+    background: transparent;
+    color: #6b7280;
+    cursor: pointer;
+    font-size: 14px;
+    padding-left: 6px;
+}
+
+.chip button:hover {
+    color: #111827;
+}
+
+.mpc-group-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 14px;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mpc-group-title {
+    font-weight: 700;
+    color: #111827;
+}
+
+.mpc-exp-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #fff;
+    border: 1px dashed #e5e7eb;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.mpc-exp-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 6px;
+}
+
+.btn-icon {
+    border: 1px solid #ef4444;
+    background: #fff;
+    color: #ef4444;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.btn-icon:hover {
+    background: #fee2e2;
+}
+
+.mpc-actions-line {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.btn-outline {
+    border: 1px solid #6366f1;
+    color: #4f46e5;
+    background: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-outline:hover {
+    background: #eef2ff;
+}
+
+.fee-field .fee-input {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.fee-field .fee-input span {
+    color: #374151;
+    font-weight: 600;
+}
+
+.mpc-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 12px 18px 18px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.btn-danger {
+    border: 1px solid #ef4444;
+    background: #fff;
+    color: #ef4444;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.btn-danger:hover {
+    background: #fef2f2;
+}
+
+.btn-success {
+    border: 0;
+    background: #10b981;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+.mpc-modal :focus-visible {
+    outline: 2px solid rgba(59, 130, 246, .5);
+    outline-offset: 2px;
+}
