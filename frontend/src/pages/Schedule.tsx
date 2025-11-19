@@ -27,6 +27,27 @@ export default function Schedule() {
         setSelectedSlot(slot.label)
     }
 
+    // Helpers
+    const to24h = (slot: string) => {
+        const m = slot.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i)
+        if (!m) return { start: slot, end: slot }
+        let h = parseInt(m[1], 10)
+        const min = m[2]
+        const ap = m[3].toUpperCase()
+        if (ap === 'PM' && h !== 12) h += 12
+        if (ap === 'AM' && h === 12) h = 0
+        const startH = h.toString().padStart(2, '0')
+        const start = `${startH}:${min}`
+        const endDate = new Date(2000, 0, 1, h, parseInt(min, 10))
+        endDate.setMinutes(endDate.getMinutes() + 60)
+        const end = `${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}`
+        return { start, end }
+    }
+
+    const { start, end } = to24h(selectedSlot)
+    const dayLabel = selectedDay ? selectedDay.toString().padStart(2, '0') : '--'
+    const monthLabel = '10'
+
     return (
         <div className="schedule-layout-page">
             <div className="schedule-shell-card booking-wrapper">
@@ -118,10 +139,19 @@ export default function Schedule() {
                         <div className="modal-card">
                             <h3 id="confirm-title" className="modal-title">Xác nhận lịch hẹn</h3>
                             <div className="modal-body">
-                                <p><strong>Ngày:</strong> {selectedDay}/10/2025</p>
-                                <p><strong>Khung giờ:</strong> {selectedSlot}</p>
-                                <p><strong>Hình thức:</strong> {online ? 'Online' : 'Offline'}</p>
-                                {purpose && <p><strong>Mục đích:</strong> {purpose}</p>}
+                                <div>
+                                    <div className="confirm-preview-title">Lịch trình ngày {dayLabel}/{monthLabel}</div>
+                                    <div className="event-list">
+                                        <div className="event-row">
+                                            <div className="event-time">{start} - {end}</div>
+                                            <div className="event-title">Gặp Mentor Nguyễn A</div>
+                                            <span className="status-badge badge-pending">Đang chờ</span>
+                                        </div>
+                                    </div>
+                                    <div className="event-meta">
+                                        Hình thức: {online ? 'Online' : 'Offline'}{purpose ? ` • Mục đích: ${purpose}` : ''}
+                                    </div>
+                                </div>
                             </div>
                             <div className="modal-actions">
                                 <button type="button" className="btn-cancel" onClick={() => setConfirmOpen(false)}>Hủy</button>

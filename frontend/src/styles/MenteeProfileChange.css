@@ -7,7 +7,6 @@
     --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 }
 
-/* Container */
 .profile-setup-container {
     min-height: calc(100vh - 72px);
     background: #f1f5f9;
@@ -18,7 +17,6 @@
     box-sizing: border-box;
 }
 
-/* Card */
 .profile-setup-card {
     width: 100%;
     max-width: 980px;
@@ -37,7 +35,6 @@
     }
 }
 
-/* Header */
 .profile-title {
     margin: 0 0 6px;
     font-size: 20px;
@@ -51,7 +48,6 @@
     font-size: 13px;
 }
 
-/* Form layout */
 .profile-form {
     display: flex;
     flex-direction: column;
@@ -70,7 +66,6 @@
     }
 }
 
-/* Inputs */
 input[type="text"],
 input[type="date"],
 select,
@@ -98,7 +93,6 @@ textarea {
     resize: vertical;
 }
 
-/* Tags */
 .tag-input {
     display: grid;
     gap: 6px;
@@ -148,7 +142,6 @@ textarea {
     color: #111827;
 }
 
-/* Education/Experience entry */
 .education-entry,
 .mpc-exp-row {
     display: flex;
@@ -173,7 +166,6 @@ textarea {
     opacity: .8;
 }
 
-/* Grid helpers */
 .mpc-grid2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -195,7 +187,6 @@ textarea {
     }
 }
 
-/* Buttons */
 button {
     cursor: pointer;
     font-weight: 600;
@@ -205,6 +196,7 @@ button {
 
 .btn-submit,
 .btn-success {
+    width: 150px;
     background: #22c55e;
     color: #fff;
     border: none;
@@ -227,14 +219,21 @@ button {
     background: #eef2ff;
 }
 
-.btn-danger,
-.btn-icon {
-    border: 1px solid #ef4444;
-    background: #fff;
-    color: #ef4444;
+.btn-danger {
+    width: 100px;
+
 }
 
-.btn-danger:hover,
+.btn-icon {
+    border: 1px solid #ef4444;
+    width: 100px;
+    background: #ff0000ce;
+    border-radius: 8px;
+    margin-left: auto;
+    color: white;
+    cursor: pointer;
+}
+
 .btn-icon:hover {
     background: #fee2e2;
 }
@@ -249,11 +248,10 @@ button {
     background: #e5e7eb;
 }
 
-/* Modal */
 .mpc-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(17, 24, 39, .45);
+    background: white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -307,6 +305,28 @@ button {
     overflow: auto;
 }
 
+.mpc-avatar-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.mpc-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    border: 2px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
+}
+
 .mpc-field {
     display: flex;
     flex-direction: column;
@@ -337,7 +357,6 @@ button {
     outline: none;
 }
 
-/* Footer */
 .mpc-footer {
     display: flex;
     justify-content: flex-end;
@@ -346,20 +365,17 @@ button {
     border-top: 1px solid #f1f5f9;
 }
 
-/* Errors */
 .error-text {
     color: #dc2626;
     font-size: 12px;
     font-weight: 600;
 }
 
-/* Accessibility */
 :focus-visible {
     outline: 2px solid rgba(59, 130, 246, .4);
     outline-offset: 2px;
 }
 
-/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;

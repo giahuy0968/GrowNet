@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Notification from '../components/Notification'
 import '../styles/Header.css'
 
+
 interface HeaderProps {
   onOpenFilter?: () => void
 }
@@ -73,7 +74,7 @@ export default function Header({ onOpenFilter }: HeaderProps) {
           <img src="/user_avt.png" alt="User" onClick={handleToggleDropdown} />
           {showDropdown && (
             <div className="dropdown-menu">
-              <button onClick={() => handleSelect('profile')}>👤 Thông tin cá nhân</button>
+              <button onClick={() => navigate("/mentee-profile")}>👤 Thông tin cá nhân</button>
               <button onClick={() => handleSelect('settings')}>⚙️ Cài đặt</button>
               <button onClick={() => handleSelect('logout')}>🔙 Đăng xuất</button>
             </div>

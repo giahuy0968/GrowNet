@@ -88,16 +88,16 @@
   flex-direction: row !important;
   justify-content: center;
   align-items: center;
-  gap: 128px !important;
+  gap: 90px !important;
   width: 100%;
   padding: 16px 24px 24px;
   box-sizing: border-box;
 }
 
 
-.btn-action {
-  min-width: 120px;
-  height: 44px;
+.profile-card .btn-action {
+  width: 180px;
+  height: 60px;
   border: none;
   border-radius: 999px;
   font-size: 24px;
@@ -107,18 +107,19 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
-.btn-action:hover {
+.profile-card .btn-action:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
 
-.btn-cancel {
+.profile-card .btn-cancel {
   background: #fee2e2;
   color: #dc2626;
+  border: 1px solid #fee2e2;
 }
 
-.btn-accept {
+.profile-card .btn-accept {
   background: #6FC3E4;
   color: #fff;
-  border: 1px solid #fee2e2;
+  border: 1px solid #6FC3E4;
 }

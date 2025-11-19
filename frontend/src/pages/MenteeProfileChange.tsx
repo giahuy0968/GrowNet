@@ -18,7 +18,6 @@ type FormData = {
     introduction: string
     birthDate: string
     gender: string
-    role: string
     educationEntries: EducationEntry[]
     skillsList: string[]
     expertiseList: string[]
@@ -26,7 +25,6 @@ type FormData = {
 
 export default function ProfileSetup() {
     const navigate = useNavigate()
-
     const [formData, setFormData] = useState<FormData>({
         fullName: '',
         location: '',
@@ -36,11 +34,19 @@ export default function ProfileSetup() {
         introduction: '',
         birthDate: '',
         gender: '',
-        role: '',
         educationEntries: [],
         skillsList: [],
         expertiseList: []
     })
+
+    // Đóng modal: quay về trang trước hoặc dashboard nếu không có history
+    const close = () => {
+        if (window.history.length > 1) {
+            navigate(-1)
+        } else {
+            navigate('/dashboard')
+        }
+    }
 
     const [errors, setErrors] = useState<Record<string, string>>({})
     const [educationErrors, setEducationErrors] = useState<string[]>([])
@@ -114,7 +120,6 @@ export default function ProfileSetup() {
     const validate = () => {
         const newErrors: Record<string, string> = {}
         if (!formData.fullName.trim()) newErrors.fullName = 'Bắt buộc'
-        if (!formData.role) newErrors.role = 'Bắt buộc'
         if (formData.birthDate) {
             const d = new Date(formData.birthDate)
             if (d > new Date()) newErrors.birthDate = 'Ngày không hợp lệ'
@@ -147,7 +152,7 @@ export default function ProfileSetup() {
 
                 {/* HEADER */}
                 <div className="mpc-header">
-                    <span className="mpc-title">Hoàn Thiện Hồ Sơ Cá Nhân</span>
+                    <span className="mpc-title">Chỉnh sửa hồ sơ </span>
                     <button className="mpc-close" aria-label="Đóng" onClick={close}>×</button>
                 </div>
 
@@ -339,13 +344,13 @@ export default function ProfileSetup() {
                                 )}
 
                                 <button type="button" className="btn-icon" onClick={() => removeEducation(idx)}>
-                                    🗑️
+                                    Xóa
                                 </button>
                             </div>
                         ))}
 
                         <button type="button" className="btn-outline" onClick={addEducation}>
-                            + Thêm học vấn
+                            + Thêm
                         </button>
                     </div>
 
@@ -361,22 +366,13 @@ export default function ProfileSetup() {
                         />
                     </div>
 
-                    {/* Vai trò */}
-                    <div className="mpc-field">
-                        <label>Vai trò</label>
-                        <select name="role" value={formData.role} onChange={handleChange}>
-                            <option value="">Chọn vai trò</option>
-                            <option value="mentor">Mentor</option>
-                            <option value="mentee">Mentee</option>
-                        </select>
-                    </div>
                 </div>
 
                 {/* FOOTER */}
                 <div className="mpc-footer">
                     <button type="button" className="btn-danger" onClick={close}>HỦY</button>
                     <button type="submit" className="btn-success" onClick={handleSubmit}>
-                        ✓ LƯU & BẮT ĐẦU
+                        LƯU
                     </button>
                 </div>
 

@@ -1,101 +1,121 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import '../styles/FilterModal.css'
 
 interface FilterModalProps {
   onClose: () => void
+  onApply?: (filters: { role: string; fields: string[]; skills: string[]; locations: string[] }) => void
 }
 
-export default function FilterModal({ onClose }: FilterModalProps) {
+export default function FilterModal({ onClose, onApply }: FilterModalProps) {
   const [role, setRole] = useState('Mentor')
   const [fields, setFields] = useState<string[]>(['Công Nghệ'])
   const [skills, setSkills] = useState<string[]>(['Project Management'])
   const [locations, setLocations] = useState<string[]>(['TP. Hồ Chí Minh'])
 
+  const dialogRef = useRef<HTMLDivElement | null>(null)
+
   const toggleItem = (item: string, list: string[], setter: (val: string[]) => void) => {
-    if (list.includes(item)) {
-      setter(list.filter(i => i !== item))
-    } else {
-      setter([...list, item])
-    }
+    if (list.includes(item)) setter(list.filter(i => i !== item))
+    else setter([...list, item])
   }
+
+  const handleApply = () => {
+    onApply?.({ role, fields, skills, locations })
+    onClose()
+  }
+
+  // Close on Escape & simple initial focus
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    // focus first button
+    const firstBtn = dialogRef.current?.querySelector('button') as HTMLButtonElement | null
+    firstBtn?.focus()
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="filter-modal-title"
+        onClick={(e) => e.stopPropagation()}
+        ref={dialogRef}
+      >
         <div className="modal-header">
-          <h2>Bộ lọc nâng cao</h2>
-          <button className="modal-close" onClick={onClose}>✕</button>
+          <h2 id="filter-modal-title">Bộ lọc nâng cao</h2>
+          <button type="button" className="modal-close" aria-label="Đóng" onClick={onClose}>✕</button>
         </div>
 
         <div className="modal-body">
           <div className="filter-section">
             <h3>Vai trò</h3>
-            <div className="button-group">
-              <button 
+            <div className="button-group" role="group" aria-label="Chọn vai trò">
+              <button
+                type="button"
                 className={role === 'Mentor' ? 'active' : ''}
+                aria-pressed={role === 'Mentor'}
                 onClick={() => setRole('Mentor')}
-              >
-                Mentor
-              </button>
-              <button 
+              >Mentor</button>
+              <button
+                type="button"
                 className={role === 'Mentee' ? 'active' : ''}
+                aria-pressed={role === 'Mentee'}
                 onClick={() => setRole('Mentee')}
-              >
-                Mentee
-              </button>
+              >Mentee</button>
             </div>
           </div>
 
           <div className="filter-section">
             <h3>Lĩnh vực</h3>
-            <div className="button-group multi">
+            <div className="button-group multi" role="group" aria-label="Chọn lĩnh vực">
               {['Công Nghệ', 'Thiết kế', 'Kinh doanh', 'Marketing', 'Dữ liệu'].map(field => (
-                <button 
+                <button
                   key={field}
+                  type="button"
                   className={fields.includes(field) ? 'active' : ''}
+                  aria-pressed={fields.includes(field)}
                   onClick={() => toggleItem(field, fields, setFields)}
-                >
-                  {field}
-                </button>
+                >{field}</button>
               ))}
             </div>
           </div>
 
           <div className="filter-section">
             <h3>Kỹ năng</h3>
-            <div className="button-group multi">
+            <div className="button-group multi" role="group" aria-label="Chọn kỹ năng">
               {['JavaScript', 'Python', 'UX/UI', 'Project Management', 'Public Speaking'].map(skill => (
-                <button 
+                <button
                   key={skill}
+                  type="button"
                   className={skills.includes(skill) ? 'active' : ''}
+                  aria-pressed={skills.includes(skill)}
                   onClick={() => toggleItem(skill, skills, setSkills)}
-                >
-                  {skill}
-                </button>
+                >{skill}</button>
               ))}
             </div>
           </div>
 
           <div className="filter-section">
             <h3>Khu vực</h3>
-            <div className="button-group multi">
+            <div className="button-group multi" role="group" aria-label="Chọn khu vực">
               {['TP. Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'Online'].map(location => (
-                <button 
+                <button
                   key={location}
+                  type="button"
                   className={locations.includes(location) ? 'active' : ''}
+                  aria-pressed={locations.includes(location)}
                   onClick={() => toggleItem(location, locations, setLocations)}
-                >
-                  {location}
-                </button>
+                >{location}</button>
               ))}
             </div>
           </div>
         </div>
 
         <div className="modal-footer">
-          <button className="btn-apply" onClick={onClose}>
-            Áp dụng bộ lọc
-          </button>
+          <button type="button" className="btn-apply" onClick={handleApply}>Áp dụng bộ lọc</button>
         </div>
       </div>
     </div>

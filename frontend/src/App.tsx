@@ -24,13 +24,7 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/welcome" element={<Welcome />} />
-      <Route path="/profile-setup" element={<ProfileSetup />} />
-      <Route path="/mentee-profile" element={<MenteeProfile />} />
-      <Route path="/profile-change" element={<ProfileMenteeChange />} />
-      <Route path="/schedule" element={<Schedule />} />
-      <Route path="/mentor-profile" element={<MentorProfile />} />
-      <Route path="/mentorchange" element={<MentorProfileChange />} />
-      {/*Layout có Header cố định */}
+      {/* Các trang dùng chung Header qua MainLayout */}
       <Route element={<MainLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
@@ -38,7 +32,12 @@ export default function App() {
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/advanced-settings" element={<AdvancedSettings />} />
         <Route path="/terms-privacy" element={<TermsPrivacy />} />
-
+        <Route path="/profile-setup" element={<ProfileSetup />} />
+        <Route path="/mentee-profile" element={<MenteeProfile />} />
+        <Route path="/mentor-profile" element={<MentorProfile />} />
+        <Route path="/schedule" element={<Schedule />} />
+        <Route path="/profile-change" element={<ProfileMenteeChange />} />
+        <Route path="/mentorchange" element={<MentorProfileChange />} />
       </Route>
       {/* Admin Routes */}
       <Route path="/admin/*" element={<AdminRoutes />} />
