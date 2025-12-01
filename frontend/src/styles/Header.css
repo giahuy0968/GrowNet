@@ -42,14 +42,17 @@
 
 .search-btn {
   padding: 10px 16px;
-  background: #3b82f6;
+  background: #ffffff2c;
   color: white;
-  border: none;
+  border: solid 1px #e2e8f0;
   border-radius: 8px;
   cursor: pointer;
 }
 
-
+.search-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
 
 .header-actions {
   display: flex;

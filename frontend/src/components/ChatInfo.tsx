@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../styles/ChatInfo.css'
 
 interface ChatInfoProps {
@@ -8,6 +8,22 @@ interface ChatInfoProps {
 export default function ChatInfo({ chatName }: ChatInfoProps) {
   if (!chatName) return null
 
+  const [settingsOpen, setSettingsOpen] = useState(false)
+
+  const handleDeleteHistory = () => {
+    // TODO: integrate real delete logic
+    // eslint-disable-next-line no-console
+    console.log('Delete chat history triggered for', chatName)
+    setSettingsOpen(false)
+  }
+
+  const handleReport = () => {
+    // TODO: integrate real report logic
+    // eslint-disable-next-line no-console
+    console.log('Report chat triggered for', chatName)
+    setSettingsOpen(false)
+  }
+
   return (
     <div className="chat-info">
       <div className="info-header">
@@ -15,9 +31,31 @@ export default function ChatInfo({ chatName }: ChatInfoProps) {
       </div>
 
       <div className="user-profile">
+        <button
+          type="button"
+          className="settings-btn"
+          aria-label="Cài đặt hội thoại"
+          onClick={() => setSettingsOpen(o => !o)}
+        >⚙️</button>
         <img src="/user_avt.png" alt={chatName} className="profile-avatar" />
         <h4>{chatName}</h4>
         <p className="status">🟢 Đang hoạt động</p>
+        {settingsOpen && (
+          <div className="settings-menu" role="menu" aria-label="Tùy chọn cài đặt">
+            <button
+              type="button"
+              className="settings-item danger"
+              role="menuitem"
+              onClick={handleDeleteHistory}
+            >Xóa lịch sử trò chuyện</button>
+            <button
+              type="button"
+              className="settings-item warn"
+              role="menuitem"
+              onClick={handleReport}
+            >Báo cáo</button>
+          </div>
+        )}
       </div>
 
       <div className="profile-actions">

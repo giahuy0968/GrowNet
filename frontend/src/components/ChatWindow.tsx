@@ -66,8 +66,8 @@ export default function ChatWindow({ chatName }: ChatWindowProps) {
 
       <div className="messages-container">
         {messages.map((msg, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className={`message ${msg.isSystem ? 'system-message' : msg.sender === 'me' ? 'sent' : 'received'}`}
           >
             {!msg.isSystem && msg.sender === 'other' && (
@@ -82,22 +82,15 @@ export default function ChatWindow({ chatName }: ChatWindowProps) {
 
       <div className="chat-input-container">
         <button className="icon-btn">📎</button>
-        <input 
-          type="text" 
-          placeholder="Nhập tin nhắn..." 
+        <input
+          type="text"
+          placeholder="Nhập tin nhắn..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSend()}
         />
         <button className="icon-btn">📝</button>
         <button className="send-btn" onClick={handleSend}>➤</button>
-      </div>
-
-      <div className="chat-footer">
-        <button className="icon-btn">📅</button>
-        <span>Xóa lịch sử trò chuyện</span>
-        <button className="icon-btn warning">⚠️</button>
-        <span className="warning-text">Báo cáo</span>
       </div>
     </div>
   )
