@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../styles/ChatWindow.css'
 
 interface ChatWindowProps {
@@ -7,6 +8,7 @@ interface ChatWindowProps {
 
 export default function ChatWindow({ chatName }: ChatWindowProps) {
   const [message, setMessage] = useState('')
+  const navigate = useNavigate()
 
   const messages = [
     {
@@ -58,7 +60,11 @@ export default function ChatWindow({ chatName }: ChatWindowProps) {
           </div>
         </div>
         <div className="chat-actions">
-          <button className="icon-btn">📞</button>
+          <button
+            className="icon-btn"
+            aria-label="Gọi điện"
+            onClick={() => chatName && navigate(`/call/${encodeURIComponent(chatName)}`)}
+          >📞</button>
           <button className="icon-btn">🔍</button>
           <button className="icon-btn">⋮</button>
         </div>
