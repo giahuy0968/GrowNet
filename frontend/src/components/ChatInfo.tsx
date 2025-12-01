@@ -22,17 +22,24 @@ export default function ChatInfo({ chatName }: ChatInfoProps) {
 
       <div className="profile-actions">
         <button className="action-btn">
-          <span>👤</span>
-          <span>Tìm hiểu bản</span>
+          <div>
+            <span>👤</span>
+          </div>
+          <span>Xem trang cá nhân</span>
         </button>
         <button className="action-btn">
-          <span>🔍</span>
+          <div>
+            <span>🔍</span>
+          </div>
           <span>Tìm kiếm tin nhắn</span>
         </button>
         <button className="action-btn">
-          <span>🎨</span>
+          <div>
+            <span>🎨</span>
+          </div>
           <span>Giao diện thoại</span>
         </button>
+
       </div>
 
       <div className="media-section">

@@ -11,7 +11,7 @@ export default function ChangePassword() {
     newPassword: '',
     confirmPassword: ''
   })
-  
+
   const [open, setOpen] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +27,7 @@ export default function ChangePassword() {
 
   return (
     <div className="change-password-container">
-        <Toast
+      <Toast
         open={open}
         onOpenChange={setOpen}
         message="Đã cập nhật thông tin"
@@ -72,7 +72,7 @@ export default function ChangePassword() {
           />
 
           <button type="submit" className="btn-confirm">
-            XÁC NHẬN ĐỔI MẬT KHẨU
+            Cập nhật mật khẩu
           </button>
         </form>
       </div>

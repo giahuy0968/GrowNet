@@ -1,7 +1,7 @@
-/* Profile Card Component Styles */
+/* === Profile Card Component === */
 .profile-card {
   position: relative;
-  background: white;
+  background: #fff;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -13,6 +13,7 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
+/* Header */
 .profile-header {
   height: 150px;
   overflow: hidden;
@@ -25,6 +26,7 @@
   object-fit: cover;
 }
 
+/* Body */
 .profile-body {
   padding: 24px;
   display: flex;
@@ -32,17 +34,18 @@
   gap: 8px;
 }
 
+/* Text */
 .profile-info h2 {
+  margin: 0;
   font-size: 24px;
   font-weight: 700;
   color: #1e293b;
-  margin: 0;
 }
 
 .profile-role {
+  margin-bottom: 16px;
   font-size: 15px;
   color: #64748b;
-  margin-bottom: 16px;
 }
 
 .profile-tags {
@@ -53,19 +56,20 @@
 }
 
 .profile-description h3 {
+  margin: 0 0 12px;
   font-size: 16px;
   font-weight: 600;
   color: #1e293b;
-  margin: 0 0 12px 0;
 }
 
 .profile-description p {
+  margin-bottom: 16px;
   font-size: 14px;
   color: #475569;
   line-height: 1.6;
-  margin-bottom: 16px;
 }
 
+/* Read More Button */
 .btn-read-more {
   padding: 8px 16px;
   background: none;
@@ -83,36 +87,32 @@
   border-color: #3b82f6;
 }
 
+/* Action Buttons Container */
 .profile-actions {
-  display: flex !important;
-  flex-direction: row !important;
+  width: 100%;
+  padding: 16px 24px 24px;
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 100px !important;
-  width: 100%;
-  padding: 16px 24px 24px;
   box-sizing: border-box;
 }
 
-
+/* Action Buttons */
 .profile-card .btn-action {
   width: 180px;
   height: 60px;
   border: none;
-  border-radius: 999px;
+  border-radius: 100px;
   font-size: 24px;
   font-weight: 600;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
   transition: all 0.25s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-  display: flex;
-  /* center icon/text perfectly */
-  align-items: center;
-  /* vertical center */
-  justify-content: center;
-  /* horizontal center */
-  line-height: 1;
-  /* prevent glyph vertical offset */
 }
 
 .profile-card .btn-action:hover {
@@ -120,6 +120,7 @@
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
 
+/* Specific Buttons */
 .profile-card .btn-cancel {
   background: #fee2e2;
   color: #dc2626;
@@ -127,7 +128,8 @@
 }
 
 .profile-card .btn-accept {
-  background: #6FC3E4;
+  background: #6fc3e4;
   color: #fff;
-  border: 1px solid #6FC3E4;
+  border: 1px solid #6fc3e4;
+  margin-top: 12px;
 }

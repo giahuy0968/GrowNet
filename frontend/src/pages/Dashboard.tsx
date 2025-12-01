@@ -11,7 +11,7 @@ export default function Dashboard() {
     <div className="dashboard-layout">
       <div className="dashboard-content">
         <Sidebar onOpenFilter={() => setShowFilterModal(true)} />
-        
+
         <main className="main-content">
           <ProfileCard />
         </main>

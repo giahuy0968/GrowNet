@@ -36,20 +36,18 @@ export default function Sidebar({ onOpenFilter }: SidebarProps) {
             <button className={selectedLocation === 'Khác' ? 'active' : ''}>Khác...</button>
           </div>
         </div>
-
         <div className="filter-group">
           <h4>Kinh nghiệm (Năm)</h4>
-          <input 
-            type="range" 
-            min="0" 
-            max="10" 
+          <input
+            type="range"
+            min="0"
+            max="10"
             value={experienceYears}
             onChange={(e) => setExperienceYears(Number(e.target.value))}
             className="experience-slider"
           />
           <span className="experience-value">{experienceYears}+</span>
         </div>
-
         <div className="filter-group">
           <h4>Trạng thái</h4>
           <button className="status-btn active">
