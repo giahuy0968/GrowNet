@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 import '../styles/Auth.css'
 
 export default function Login() {
   const navigate = useNavigate()
+  const { login } = useAuth()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     remember: false
   })
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
@@ -16,12 +20,22 @@ export default function Login() {
       ...formData,
       [e.target.name]: value
     })
+    setError(null)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Handle login
-    navigate('/dashboard')
+    setLoading(true)
+    setError(null)
+    
+    try {
+      await login(formData.email, formData.password)
+      navigate('/dashboard')
+    } catch (err: any) {
+      setError(err.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -33,6 +47,19 @@ export default function Login() {
 
         <h1 className="auth-title">Đăng nhập</h1>
         <p className="auth-subtitle">Kết nối cùng mentor/mentee bạn tin tưởng</p>
+
+        {error && (
+          <div style={{ 
+            padding: '12px', 
+            backgroundColor: '#fee', 
+            color: '#c33', 
+            borderRadius: '8px', 
+            marginBottom: '16px',
+            textAlign: 'center'
+          }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
@@ -72,8 +99,8 @@ export default function Login() {
             <Link to="/forgot-password" className="link-forgot">Quên mật khẩu?</Link>
           </div>
 
-          <button type="submit" className="btn-auth">
-            Đăng nhập
+          <button type="submit" className="btn-auth" disabled={loading}>
+            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
           </button>
 
           <div className="divider">

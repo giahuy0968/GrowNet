@@ -1,32 +1,60 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 import '../styles/Auth.css'
 
 export default function Register() {
   const navigate = useNavigate()
+  const { register } = useAuth()
   const [formData, setFormData] = useState({
+    username: '',
+    fullName: '',
     email: '',
     password: '',
     confirmPassword: '',
     role: '',
     captcha: ''
   })
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
+    setError(null)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
     if (formData.password !== formData.confirmPassword) {
-      alert('Mật khẩu không khớp!')
+      setError('Mật khẩu không khớp!')
       return
     }
-    // TODO: Handle registration
-    navigate('/welcome')
+
+    if (formData.password.length < 6) {
+      setError('Mật khẩu phải có ít nhất 6 ký tự!')
+      return
+    }
+
+    if (!formData.username || !formData.fullName) {
+      setError('Vui lòng điền đầy đủ thông tin!')
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+    
+    try {
+      await register(formData.username, formData.email, formData.password, formData.fullName)
+      navigate('/welcome')
+    } catch (err: any) {
+      setError(err.message || 'Đăng ký thất bại. Vui lòng thử lại.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -34,7 +62,45 @@ export default function Register() {
       <div className="auth-card register-card">
         <h1 className="auth-title">Đăng ký</h1>
         
+        {error && (
+          <div style={{ 
+            padding: '12px', 
+            backgroundColor: '#fee', 
+            color: '#c33', 
+            borderRadius: '8px', 
+            marginBottom: '16px',
+            textAlign: 'center'
+          }}>
+            {error}
+          </div>
+        )}
+        
         <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Tên đăng nhập</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              minLength={3}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Họ và tên</label>
+            <input
+              type="text"
+              name="fullName"
+              placeholder="Nguyễn Văn A"
+              value={formData.fullName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
           <div className="form-group">
             <label>Email</label>
             <input
@@ -100,8 +166,8 @@ export default function Register() {
             </div>
           </div>
 
-          <button type="submit" className="btn-auth">
-            Đăng ký
+          <button type="submit" className="btn-auth" disabled={loading}>
+            {loading ? 'Đang đăng ký...' : 'Đăng ký'}
           </button>
 
           <div className="divider">

@@ -1,6 +1,8 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from './contexts/AuthContext'
+import { SocketProvider } from './contexts/SocketContext'
 import App from './App'
 import './styles.css'
 
@@ -10,7 +12,11 @@ if (rootElement) {
   createRoot(rootElement).render(
     <React.StrictMode>
       <BrowserRouter>
-        <App />
+        <AuthProvider>
+          <SocketProvider>
+            <App />
+          </SocketProvider>
+        </AuthProvider>
       </BrowserRouter>
     </React.StrictMode>
   )
