@@ -1,226 +1,145 @@
 import express, { Request, Response, NextFunction } from 'express'
 import path from 'path'
 import fs from 'fs'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
+import cors from 'cors'
 import mongoose from 'mongoose'
-import 'dotenv/config'
-import UserModel from './User'
+import { env } from './config/env'
+import { connectMongo, disconnectMongo } from './db/mongoose'
+import usersRouter from './routes/users'
+import messagesRouter from './routes/messages'
+import authRouter from './routes/auth'
 
-const app = express()
-const port = process.env.PORT || 4000
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_for_development'
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/grownet_db'
+async function start() {
+  await connectMongo(env.mongoUri)
 
-// ----------------------------------------------------
-// 1. KẾT NỐI MONGODB
-// ----------------------------------------------------
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('✅ MongoDB kết nối thành công!'))
-  .catch(err => {
-    console.error('❌ LỖI KẾT NỐI MONGODB:', err.message)
-    process.exit(1)
+  const app = express()
+
+  // CORS Configuration - ĐÃ SỬA
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:4000',
+    'http://localhost:5173', // Vite dev server
+    'http://localhost:8080', // Vue dev server
+  ]
+
+  app.use(cors({
+    origin: (origin, callback) => {  // ✅ ĐÚNG: origin, callback
+      // Cho phép requests không có origin (như mobile apps, curl, postman)
+      if (!origin) return callback(null, true)
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true)
+      }
+
+      // Trong development, có thể log để debug
+      if (env.nodeEnv === 'development') {
+        console.log('CORS blocked origin:', origin)
+      }
+
+      return callback(new Error('Not allowed by CORS'))
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    optionsSuccessStatus: 200,
+    maxAge: 600 // Cache preflight 10 phút
+  }))
+
+  app.use(express.json())
+
+  // Routes
+  app.get('/api/health', (_req, res) => res.json({ status: 'ok' }))
+  app.use('/api/auth', authRouter)
+  app.use('/api/users', usersRouter)
+  app.use('/api/messages', messagesRouter)
+
+  // Locales
+  app.get('/api/locales/en', (req, res) => {
+    const p = path.join(__dirname, '../../Home/locales/en.json')
+
+    if (fs.existsSync(p)) {
+      try {
+        const content = fs.readFileSync(p, 'utf8')
+        res.json(JSON.parse(content))
+      } catch (error) {
+        console.error('Error reading locale file:', error)
+        res.status(500).json({ error: 'invalid locale JSON' })
+      }
+    } else {
+      console.log('Locale file not found at:', p)
+      res.status(404).json({ error: 'locale not found' })
+    }
   })
 
-// ----------------------------------------------------
-// 2. CẤU HÌNH MIDDLEWARE
-// ----------------------------------------------------
-app.use(express.json()) // Cho phép ứng dụng đọc JSON body từ request
+  // Static files
+  const staticPath = path.join(__dirname, '../../Home/public')
+  console.log('Serving static files from:', staticPath)
+  app.use(express.static(staticPath))
 
-// ----------------------------------------------------
-// 3. MIDDLEWARE XÁC THỰC (AUTHENTICATION MIDDLEWARE)
-// ----------------------------------------------------
-
-// KHẮC PHỤC LỖI: Định nghĩa interface tùy chỉnh cho Request
-// Đây là nơi chúng ta thêm thuộc tính 'user' vào Request
-interface AuthenticatedRequest extends Request {
-  user?: { _id: string; email: string; role: 'mentor' | 'mentee' | 'admin' } 
-}
-
-/**
- * Middleware: Xác thực JWT từ header Authorization.
- */
-const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
-
-  if (token == null) {
-    return res.status(401).json({ error: 'Truy cập bị từ chối: Không tìm thấy Token' })
-  }
-
-  jwt.verify(token, JWT_SECRET, (err, userPayload) => {
-    if (err) {
-      return res.status(403).json({ error: 'Token không hợp lệ hoặc đã hết hạn' })
-    }
-    // Gán thông tin user (đã giải mã từ JWT) vào request
-    req.user = userPayload as { _id: string; email: string; role: 'mentor' | 'mentee' | 'admin' }
-    next()
+  // 404 Handler (thêm vào)
+  app.use('*', (req, res) => {
+    res.status(404).json({ error: 'Route not found' })
   })
-}
 
-/**
- * Middleware: Phân quyền (Authorization) dựa trên vai trò (Role).
- */
-const authorizeRole = (requiredRole: 'mentor' | 'mentee' | 'admin') => {
-  // KHẮC PHỤC LỖI: Đảm bảo middleware này nhận AuthenticatedRequest
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    if (!req.user) {
-      return res.status(401).json({ error: 'Bạn cần đăng nhập để thực hiện hành động này.' })
-    }
+  // Error Handler (thêm vào)
+  app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.error('Server error:', err.message)
+    res.status(500).json({
+      error: 'Internal server error',
+      ...(env.nodeEnv === 'development' && { details: err.message })
+    })
+  })
 
-    // Kiểm tra vai trò
-    if (req.user.role !== requiredRole && req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Bạn không có quyền truy cập tài nguyên này.' })
-    }
-    next()
-  }
-}
+  const server = app.listen(env.port, () =>
+    console.log(`Backend listening on http://localhost:${env.port}`)
+  )
 
-// ----------------------------------------------------
-// 4. ENDPOINT ĐĂNG KÝ (REGISTER) - KHÔNG CẦN AUTHENTICATEDREQUEST
-// ----------------------------------------------------
-app.post('/api/register', async (req, res) => {
-  const { email, password, role } = req.body
+  // Enhanced Graceful shutdown
+  const shutdown = async (signal?: string) => {
+    console.log(`\n${signal || 'Manual'} shutdown initiated...`)
 
-  if (!email || !password || !role) {
-    return res.status(400).json({ error: 'Vui lòng cung cấp đầy đủ Email, Mật khẩu và Vai trò.' })
-  }
-  
-  try {
-    const existingUser = await UserModel.findOne({ email: email })
-    if (existingUser) {
-      return res.status(409).json({ error: 'Email đã tồn tại.' })
-    }
-
-    const salt = await bcrypt.genSalt(10)
-    const passwordHash = await bcrypt.hash(password, salt)
-    
-    const newUser = new UserModel({
-      email,
-      passwordHash,
-      role: (role === 'mentor' || role === 'mentee') ? role : 'mentee', 
+    // Đóng server HTTP
+    server.close(() => {
+      console.log('HTTP server closed')
     })
 
-    await newUser.save()
+    // Timeout bắt buộc shutdown sau 10s
+    const forceShutdown = setTimeout(() => {
+      console.error('Forcing shutdown after timeout')
+      process.exit(1)
+    }, 10000)
 
-    res.status(201).json({ message: 'Đăng ký thành công.', userId: newUser._id })
-
-  } catch (error) {
-    console.error('Lỗi đăng ký:', error)
-    res.status(500).json({ error: 'Lỗi máy chủ trong quá trình đăng ký.' })
-  }
-})
-
-// ----------------------------------------------------
-// 5. ENDPOINT ĐĂNG NHẬP (LOGIN) - KHÔNG CẦN AUTHENTICATEDREQUEST
-// ----------------------------------------------------
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body
-
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Vui lòng cung cấp Email và Mật khẩu.' })
-  }
-
-  try {
-    const user = await UserModel.findOne({ email: email })
-    
-    if (!user) {
-      return res.status(401).json({ error: 'Sai Email hoặc Mật khẩu.' })
-    }
-
-    const isMatch = await bcrypt.compare(password, user.passwordHash)
-    if (!isMatch) {
-      return res.status(401).json({ error: 'Sai Email hoặc Mật khẩu.' })
-    }
-    
-    const tokenPayload = { 
-      _id: user._id.toString(), // Chuyển ObjectId sang string
-      email: user.email, 
-      role: user.role 
-    }
-
-    const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '1h' })
-
-    res.json({ 
-      token, 
-      role: user.role, 
-      message: 'Đăng nhập thành công',
-      userId: user._id
-    })
-  } catch (error) {
-    console.error('Lỗi đăng nhập:', error)
-    res.status(500).json({ error: 'Lỗi máy chủ trong quá trình đăng nhập.' })
-  }
-})
-
-
-// ----------------------------------------------------
-// 6. ENDPOINT BẢO MẬT VÀ PHÂN QUYỀN (PROTECTED ENDPOINTS)
-// ----------------------------------------------------
-
-// KHẮC PHỤC LỖI: Sử dụng AuthenticatedRequest cho tham số req
-app.get('/api/profile', authenticateToken, async (req: AuthenticatedRequest, res) => {
-  try {
-    const userDetails = await UserModel.findById(req.user?._id).select('-passwordHash') 
-    
-    if (!userDetails) {
-      return res.status(404).json({ error: 'Không tìm thấy hồ sơ người dùng.' })
-    }
-
-    res.json({
-      message: 'Truy cập hồ sơ thành công.',
-      user: req.user,
-      userDetails: userDetails,
-      data: 'Đây là dữ liệu hồ sơ cá nhân của bạn.'
-    })
-  } catch (error) {
-    console.error('Lỗi truy cập hồ sơ:', error)
-    res.status(500).json({ error: 'Lỗi máy chủ.' })
-  }
-})
-
-// KHẮC PHỤC LỖI: Sử dụng AuthenticatedRequest cho tham số req
-app.get('/api/mentor-data', authenticateToken, authorizeRole('mentor'), (req: AuthenticatedRequest, res) => {
-  res.json({
-    message: 'Truy cập dữ liệu Mentor thành công.',
-    user: req.user,
-    data: 'Danh sách các Mentee bạn đang hướng dẫn.'
-  })
-})
-
-// KHẮC PHỤC LỖI: Sử dụng AuthenticatedRequest cho tham số req
-app.get('/api/mentee-data', authenticateToken, authorizeRole('mentee'), (req: AuthenticatedRequest, res) => {
-  res.json({
-    message: 'Truy cập dữ liệu Mentee thành công.',
-    user: req.user,
-    data: 'Danh sách các Mentor bạn đang theo dõi.'
-  })
-})
-
-
-// ----------------------------------------------------
-// 7. CÁC ENDPOINT KHÁC
-// ----------------------------------------------------
-app.get('/api/health', (req, res) => res.json({ status: 'ok' }))
-
-app.get('/api/locales/en', (req, res) => {
-  const p = path.join(__dirname, '../../Home/locales/en.json')
-  if (fs.existsSync(p)) {
-    const raw = fs.readFileSync(p, 'utf8')
+    // Đóng MongoDB connection
     try {
-      const json = JSON.parse(raw)
-      res.json(json)
-    } catch (e) {
-      res.status(500).json({ error: 'invalid locale JSON' })
+      await disconnectMongo()
+      console.log('MongoDB connection closed')
+    } catch (error) {
+      console.error('Error closing MongoDB:', error)
     }
-  } else {
-    res.status(404).json({ error: 'locale not found' })
+
+    // Clear timeout và thoát
+    clearTimeout(forceShutdown)
+    console.log('Graceful shutdown complete')
+    process.exit(0)
   }
-})
 
-app.use(express.static(path.join(__dirname, '../../Home/public')))
+  // Signal handlers
+  process.on('SIGINT', () => shutdown('SIGINT'))
+  process.on('SIGTERM', () => shutdown('SIGTERM'))
 
-app.listen(port, () => {
-  console.log(`Backend listening on http://localhost:${port}`)
-  console.log(`JWT Secret: ${JWT_SECRET}`)
+  // Global error handlers
+  process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error)
+    shutdown('uncaughtException')
+  })
+
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason)
+    shutdown('unhandledRejection')
+  })
+}
+
+start().catch(err => {
+  console.error('Startup failed:', err)
+  process.exit(1)
 })
