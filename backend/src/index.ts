@@ -5,12 +5,15 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import { env } from './config/env'
 import { connectMongo, disconnectMongo } from './db/mongoose'
+import { connectMongoClient, disconnectMongoClient, pingUsers, Users, Profiles, Messages, Matches, Ratings, Swipes, Availability, Chats, Connections, Notifications, Posts } from './db/collections'
 import usersRouter from './routes/users'
 import messagesRouter from './routes/messages'
 import authRouter from './routes/auth'
 
 async function start() {
   await connectMongo(env.mongoUri)
+  await connectMongoClient(env.mongoUri)
+  await pingUsers()
 
   const app = express()
 
@@ -49,6 +52,62 @@ async function start() {
 
   // Routes
   app.get('/api/health', (_req, res) => res.json({ status: 'ok' }))
+  // DB check route
+  app.get('/api/db-check', async (_req, res) => {
+    try {
+      // Mongoose connection state
+      const mongooseState = mongoose.connection.readyState // 0=disconnected,1=connected,2=connecting,3=disconnecting
+
+      // Native client ping via Users collection count
+      let nativeOk = true
+      let sampleUserId: string | null = null
+      try {
+        const one = await Users().findOne({}, { projection: { _id: 1 } })
+        sampleUserId = one ? String(one._id) : null
+      } catch (e) {
+        nativeOk = false
+      }
+
+      res.json({
+        ok: mongooseState === 1 && nativeOk,
+        mongoose: { state: mongooseState },
+        native: { ok: nativeOk, sampleUserId }
+      })
+    } catch (err) {
+      res.status(500).json({ ok: false, error: (err as Error).message })
+    }
+  })
+
+  // Debug: list sample documents from collections
+  const debugCollections: Record<string, () => mongoose.mongo.Collection> = {
+    users: Users as any,
+    profiles: Profiles as any,
+    messages: Messages as any,
+    matches: Matches as any,
+    ratings: Ratings as any,
+    swipes: Swipes as any,
+    availability: Availability as any,
+    chats: Chats as any,
+    connections: Connections as any,
+    notifications: Notifications as any,
+    posts: Posts as any,
+  }
+
+  app.get('/api/debug/:collection', async (req, res) => {
+    const name = String(req.params.collection || '').toLowerCase()
+    const getter = debugCollections[name]
+    const limit = Number(req.query.limit ?? 5)
+    if (!getter) {
+      return res.status(400).json({ ok: false, error: 'unknown collection', allowed: Object.keys(debugCollections) })
+    }
+    try {
+      const col: any = getter()
+      const docs = await col.find({}).limit(Math.max(1, Math.min(limit, 50))).toArray()
+      res.json({ ok: true, count: docs.length, docs })
+    } catch (e) {
+      res.status(500).json({ ok: false, error: (e as Error).message })
+    }
+  })
   app.use('/api/auth', authRouter)
   app.use('/api/users', usersRouter)
   app.use('/api/messages', messagesRouter)
@@ -112,7 +171,8 @@ async function start() {
     // Đóng MongoDB connection
     try {
       await disconnectMongo()
-      console.log('MongoDB connection closed')
+      await disconnectMongoClient()
+      console.log('MongoDB connections closed')
     } catch (error) {
       console.error('Error closing MongoDB:', error)
     }
