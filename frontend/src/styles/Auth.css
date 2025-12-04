@@ -200,3 +200,20 @@
 .captcha-wrapper input {
   flex: 1;
 }
+
+.error-message {
+background: #ffe6e6;
+color: #cc0000;
+padding: 10px 14px;
+border-radius: 6px;
+border: 1px solid #ffb3b3;
+margin-bottom: 12px;
+font-size: 0.9rem;
+animation: fadeIn 0.2s ease-in-out;
+}
+
+
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}

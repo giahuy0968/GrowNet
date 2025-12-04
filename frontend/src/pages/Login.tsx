@@ -4,6 +4,11 @@ import '../styles/Auth.css'
 
 export default function Login() {
   const navigate = useNavigate()
+
+  const [error, setError] = useState('')
+
+  const [isLoading, setIsLoading] = useState(false)
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -18,10 +23,22 @@ export default function Login() {
     })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Handle login
-    navigate('/dashboard')
+
+    if (formData.password.length < 8) {
+      setError('Mật khẩu phải có ít nhất 8 ký tự!')
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      // TODO: API login khi có backend
+      navigate('/dashboard')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -52,11 +69,12 @@ export default function Login() {
             <input
               type="password"
               name="password"
-              placeholder="•••••"
+              placeholder="••••••••"
               value={formData.password}
               onChange={handleChange}
               required
             />
+            {error && <div className="error-message">{error}</div>}
           </div>
 
           <div className="form-options">
@@ -72,8 +90,8 @@ export default function Login() {
             <Link to="/forgot-password" className="link-forgot">Quên mật khẩu?</Link>
           </div>
 
-          <button type="submit" className="btn-auth">
-            Đăng nhập
+          <button type="submit" className="btn-auth" disabled={isLoading}>
+            {isLoading ? 'Đang xử lý...' : 'Đăng nhập'}
           </button>
 
           <div className="divider">
@@ -81,11 +99,11 @@ export default function Login() {
           </div>
 
           <div className="social-buttons">
-            <button type="button" className="btn-social btn-google">
+            <button type="button" className="btn-social btn-google" disabled={isLoading}>
               <img src="/google-icon.svg" alt="Google" />
               Google
             </button>
-            <button type="button" className="btn-social btn-facebook">
+            <button type="button" className="btn-social btn-facebook" disabled={isLoading}>
               <img src="/facebook-icon.svg" alt="Facebook" />
               Facebook
             </button>
