@@ -35,6 +35,9 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
+    'http://202.92.6.223:3000',
+    'http://202.92.6.223:5173',
+    'http://202.92.6.223',
     process.env.CLIENT_URL || 'http://localhost:3000'
   ],
   credentials: true,

@@ -25,7 +25,6 @@
 - `POST /:id/like` - Like/unlike post
 - `POST /:id/comment` - Add comment
 - `DELETE /:postId/comment/:commentId` - Delete comment
-
 ### Connections (`/api/connections`)
 - `POST /request/:userId` - Send friend request
 - `PUT /accept/:id` - Accept friend request
