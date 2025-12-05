@@ -1,6 +1,10 @@
 // API Configuration
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
-export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:4000';
+const isDev = import.meta.env.DEV;
+const DEFAULT_API_URL = isDev ? 'http://localhost:4000/api' : 'http://202.92.6.223:4000/api';
+const DEFAULT_SOCKET_URL = isDev ? 'http://localhost:4000' : 'http://202.92.6.223:4000';
+
+export const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API_URL;
+export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || DEFAULT_SOCKET_URL;
 
 // Helper function to get auth token
 export const getAuthToken = (): string | null => {

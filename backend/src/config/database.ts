@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const connectDB = async (): Promise<void> => {
   try {
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/grownet';
+    const mongoURI = process.env.MONGODB_URI || 'mongodb://202.92.6.223:27017/grownet';
     
     await mongoose.connect(mongoURI, {
       serverSelectionTimeoutMS: 5000,

@@ -6,7 +6,7 @@ import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 export const env = {
-    mongoUri: process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/grownet',
+    mongoUri: process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://202.92.6.223:27017/grownet',
     port: parseInt(process.env.PORT || '4000', 10),
     nodeEnv: process.env.NODE_ENV || 'development',
 };

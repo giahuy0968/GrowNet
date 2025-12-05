@@ -53,10 +53,12 @@ Tạo file `.env` trong thư mục `backend/`:
 # Application
 NODE_ENV=development
 PORT=4000
-CLIENT_URL=http://localhost:5173
+CLIENT_URL=http://202.92.6.223:3000
+# CLIENT_URL=http://localhost:5173
 
 # Database
-MONGODB_URI=mongodb://localhost:27017/grownet
+MONGODB_URI=mongodb://admin:changethispassword123@202.92.6.223:27017/grownet?authSource=admin
+# MONGODB_URI=mongodb://localhost:27017/grownet
 
 # JWT
 JWT_SECRET=your-super-secret-jwt-key-change-this
@@ -82,8 +84,11 @@ npm install
 Tạo file `.env` trong thư mục `frontend/`:
 ```env
 # API Configuration
-VITE_API_URL=http://localhost:4000/api
-VITE_SOCKET_URL=http://localhost:4000
+VITE_API_URL=http://202.92.6.223:4000/api
+VITE_SOCKET_URL=http://202.92.6.223:4000
+# Local development fallback (nếu chạy frontend trên máy cá nhân)
+# VITE_API_URL=http://localhost:4000/api
+# VITE_SOCKET_URL=http://localhost:4000
 VITE_ENV=development
 ```
 
@@ -94,9 +99,11 @@ npm run dev
 
 ### 4. Truy cập ứng dụng
 
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:4000/api
-- **Health Check**: http://localhost:4000/api/health
+- **Production Frontend**: http://202.92.6.223:3000
+- **Production Backend API**: http://202.92.6.223:4000/api
+- **Production Health Check**: http://202.92.6.223:4000/api/health
+- **Local Frontend (dev)**: http://localhost:5173
+- **Local Backend API (dev)**: http://localhost:4000/api
 
 ## 📁 Cấu trúc dự án
 

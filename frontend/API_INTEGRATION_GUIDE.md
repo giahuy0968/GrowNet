@@ -194,8 +194,11 @@ await notificationService.deleteNotification(notificationId);
 ### Environment Variables (`.env`)
 
 ```env
-VITE_API_URL=http://localhost:4000/api
-VITE_SOCKET_URL=http://localhost:4000
+VITE_API_URL=http://202.92.6.223:4000/api
+VITE_SOCKET_URL=http://202.92.6.223:4000
+# Local development (giữ lại nếu chỉ chạy trên máy cá nhân)
+# VITE_API_URL=http://localhost:4000/api
+# VITE_SOCKET_URL=http://localhost:4000
 VITE_ENV=development
 ```
 
@@ -204,13 +207,16 @@ VITE_ENV=development
 File `vite.config.ts` đã được cấu hình proxy tự động:
 
 ```typescript
+const runtimeEnv = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env || {}
+const proxyTarget = runtimeEnv.VITE_PROXY_TARGET || 'http://localhost:4000'
+
 export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: proxyTarget,
         changeOrigin: true,
         secure: false
       }

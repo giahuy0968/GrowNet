@@ -1,6 +1,102 @@
-# GROWNET BACKEND - DETAILED CHECKLIST
+# GROWNET - CHECKLIST LOCALHOST → VPS (202.92.6.223:27017)
 
-## ✅ HOÀN THÀNH (COMPLETED)
+## 📋 TỔNG QUAN
+- **VPS IP**: 202.92.6.223
+- **MongoDB Port**: 27017
+- **Backend Port**: 4000
+- **Frontend Port**: 3000
+- **Tổng số vị trí dùng localhost**: 27 chỗ
+
+---
+
+## 🔴 CẦN SỬA ĐỔI NGAY (CRITICAL - Production Code)
+
+### 1. Backend CORS Configuration ⚠️ QUAN TRỌNG
+**File**: `backend/src/index.ts` (lines 34-41)
+- [x] Line 36: `'http://localhost:3000'` → Đã có VPS IP
+- [x] Line 37: `'http://localhost:5173'` → Đã có VPS IP  
+- [x] Line 41: `process.env.CLIENT_URL || 'http://localhost:3000'` → Có fallback localhost
+- **Trạng thái**: ✅ Đã có VPS trong CORS, nhưng vẫn giữ localhost cho dev
+
+### 2. Frontend API Configuration ⚠️ QUAN TRỌNG
+**File**: `frontend/src/config/api.ts` (lines 2-3)
+- [x] Line 2: `export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'`
+- [x] Line 3: `export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:4000'`
+- **Trạng thái**: ✅ Đã thêm fallback thông minh (dev = localhost, prod = VPS)
+
+### 3. Frontend Vite Proxy Configuration
+**File**: `frontend/vite.config.ts` (line 10)
+- [x] Line 10: `target: 'http://localhost:4000'`
+- **Trạng thái**: ✅ Cho phép cấu hình qua biến `VITE_PROXY_TARGET`
+
+### 4. Environment Files (Templates)
+**File**: `backend/.env.example` (line 8)
+- [x] `MONGODB_URI=mongodb://admin:changethispassword123@localhost:27017/grownet?authSource=admin`
+- **Trạng thái**: ✅ Mặc định trỏ VPS, giữ dòng localhost comment cho dev
+
+**File**: `.env.example` (line 6)
+- [x] `MONGODB_URI=mongodb://localhost:27017/grownet`
+- **Trạng thái**: ✅ Template mặc định dùng VPS, kèm tùy chọn localhost
+
+---
+
+## 🟡 TÀI LIỆU & HƯỚNG DẪN (Documentation)
+
+### 5. README.md
+**File**: `README.md`
+- [x] Line 56: `CLIENT_URL=http://localhost:5173`
+- [x] Line 59: `MONGODB_URI=mongodb://localhost:27017/grownet`
+- [x] Line 85: `VITE_API_URL=http://localhost:4000/api`
+- [x] Line 86: `VITE_SOCKET_URL=http://localhost:4000`
+- [x] Line 97-99: URLs trong phần hướng dẫn
+- **Trạng thái**: ✅ README phân biệt Production vs Local
+
+### 6. API Integration Guide
+**File**: `frontend/API_INTEGRATION_GUIDE.md`
+- [x] Line 197: `VITE_API_URL=http://localhost:4000/api`
+- [x] Line 198: `VITE_SOCKET_URL=http://localhost:4000`
+- [x] Line 213: `target: 'http://localhost:4000'`
+- **Trạng thái**: ✅ Guide hiển thị giá trị VPS + hướng dẫn dev
+
+---
+
+## 🟢 CÔNG CỤ & SCRIPTS (Tools - OK để giữ localhost)
+
+### 7. PowerShell Scripts (Development Tools)
+Các file này **CÓ THỂ GIỮ LOCALHOST** vì dùng cho SSH tunnel hoặc Docker local:
+
+- ✅ `connect-mongodb.ps1` - Dùng docker exec vào container local
+- ✅ `tunnel-mongodb.ps1` - Tạo SSH tunnel, localhost là đúng
+- ✅ `help.ps1` - Hướng dẫn dev
+- ✅ `stop-system-nginx.ps1` - Test sau khi deploy
+
+### 8. Postman Environment
+**File**: `GrowNet-Local.postman_environment.json`
+- ✅ Line 7: `"value": "http://localhost:4000/api"` 
+- **Trạng thái**: OK - Đây là env LOCAL, đã có Production env riêng
+
+### 9. VS Code Launch Config
+**File**: `.vscode/launch.json`
+- ✅ Lines 10-11: Chrome debug config
+- **Trạng thái**: OK - Dùng cho debug local
+
+---
+
+## 🔵 DOCKER & DEPLOYMENT (Container Config)
+
+### 10. Docker Compose
+**File**: `docker-compose.yml`
+- ✅ Line 29: `MONGODB_URI=mongodb://admin:changethispassword123@mongodb:27017/...`
+- **Trạng thái**: OK - Dùng service name `mongodb` (không phải localhost)
+
+### 11. Deploy Scripts
+**File**: `deploy-to-vps.sh`
+- ✅ Line 86: `echo "Test it: curl http://localhost:4000/api/health"`
+- **Trạng thái**: OK - Test command trên VPS local
+
+---
+
+## ✅ ĐÃ CẤU HÌNH ĐÚNG (HOÀN THÀNH)
 
 ### 1. Cấu hình môi trường
 - [x] Backend `.env` - Đã cấu hình với MongoDB VPS
@@ -21,83 +117,118 @@
 - [x] Code pushed to GitHub
 - [x] MongoDB URI configured
 
-## ⚠️ VẤN ĐỀ PHÁT HIỆN (ISSUES FOUND)
 
-### API Routes trả về 404
-**Kết quả Test:**
-```
-✅ Health Check: OK (200)
-❌ /api/auth/register: 404 NOT FOUND
-❌ /api/auth/login: 404 NOT FOUND
-❌ /api/posts: 404 NOT FOUND
-❌ /api/chats: 404 NOT FOUND
-```
+---
 
-**Nguyên nhân có thể:**
-1. Backend trên VPS đang chạy phiên bản CŨ (chưa pull code mới)
-2. Backend chưa được restart sau khi update code
-3. Routes chưa được register đúng cách
-4. PM2 đang chạy bản build cũ
+## 📊 HÀNH ĐỘNG ƯU TIÊN (TODO)
 
-## 🔧 HÀNH ĐỘNG CẦN LÀM (TODO)
+### 🔴 Mức 1 - KHẨN CẤP (Phải sửa cho Production)
+1. [x] **Sửa frontend/src/config/api.ts**
+   - ✅ Đã thêm fallback tự động (dev = localhost, prod = VPS)
 
-### Mức 1 - KHẨN CẤP
-1. [ ] **Kiểm tra backend trên VPS đang chạy version nào**
+2. [ ] **Kiểm tra file .env thực tế trên VPS**
    ```bash
    # Trên VPS
-   cd /root/GrowNet
-   git log -1  # Xem commit hiện tại
+   cat /root/GrowNet/backend/.env
+   cat /root/GrowNet/frontend/.env
    ```
 
-2. [ ] **Pull code mới nhất về VPS**
-   ```bash
-   cd /root/GrowNet
-   git pull origin main
-   ```
+3. [ ] **Verify CORS origins**
+   - Đảm bảo backend chấp nhận requests từ domain production
+   - Check nếu dùng domain name thay vì IP
 
-3. [ ] **Rebuild và restart backend**
-   ```bash
-   cd backend
-   npm install
-   npm run build
-   pm2 restart grownet-backend
-   ```
+### 🟡 Mức 2 - QUAN TRỌNG (Cập nhật tài liệu)
+4. [x] **Cập nhật README.md**
+   - ✅ Phân biệt rõ Production vs Local
 
-4. [ ] **Verify routes đã hoạt động**
-   ```powershell
-   .\test-api.ps1
-   ```
+5. [x] **Cập nhật API_INTEGRATION_GUIDE.md**
+   - ✅ Ví dụ env và proxy đã phản ánh VPS
 
-### Mức 2 - QUAN TRỌNG
-5. [ ] **Kiểm tra PM2 logs**
-   ```bash
-   pm2 logs grownet-backend
-   ```
+6. [x] **Cập nhật .env.example files**
+   - ✅ backend/.env.example
+   - ✅ .env.example ở root
 
-6. [ ] **Test đầy đủ tất cả API endpoints**
-   - Authentication (register, login)
-   - Users (search, profile)
-   - Posts (CRUD, like, comment)
-   - Chats (get, send messages)
-   - Connections (friends, requests)
-   - Notifications
+### 🟢 Mức 3 - TỐT NÊN CÓ (Nice to have)
+7. [ ] **Tạo Postman environment mới**
+   - File: GrowNet-VPS.postman_environment.json
+   - Base URL: http://202.92.6.223:4000/api
 
-7. [ ] **Test Socket.IO real-time features**
-   - Connection/disconnection
-   - Online status
-   - Real-time messaging
-   - Typing indicators
+8. [x] **Cập nhật vite.config.ts**
+   - ✅ Cấu hình qua biến `VITE_PROXY_TARGET`
 
-### Mức 3 - CẢI THIỆN
-8. [ ] **Setup CI/CD để tự động deploy**
-9. [ ] **Thêm monitoring và alerting**
-10. [ ] **Viết integration tests**
+---
 
-## 📊 KẾT QUẢ KIỂM TRA HIỆN TẠI
+## 🎯 TỔNG KẾT & KHUYẾN NGHỊ
 
-### Backend Status
-- **Server**: ✅ Running on http://202.92.6.223:4000
-- **MongoDB**: ✅ Connected to 202.92.6.223:27017
+### Chiến lược tiếp cận:
+1. **Environment Variables** (Tốt nhất) ✅
+   - Dùng `.env` files khác nhau cho dev/prod
+   - Code giữ localhost làm fallback cho dev local
+   - Production deploy với env variables đúng
+
+2. **Code Changes** (Nếu cần)
+   - Chỉ sửa fallback values trong `frontend/src/config/api.ts`
+   - Để lại localhost trong dev tools (PowerShell scripts, Postman Local, etc.)
+
+3. **Documentation** (Nên làm)
+   - Cập nhật README với ví dụ VPS
+   - Phân biệt rõ local dev vs production setup
+
+### Files KHÔNG CẦN SỬA (Giữ nguyên):
+- ✅ PowerShell scripts (dev tools)
+- ✅ docker-compose.yml (dùng service names)
+- ✅ tunnel-mongodb.ps1 (SSH tunnel concept)
+- ✅ GrowNet-Local.postman_environment.json (đã có Production env)
+- ✅ .vscode/launch.json (debug config)
+- ✅ deploy scripts (localhost đúng khi test trên VPS)
+
+### Files CẦN REVIEW:
+- ⚠️ backend/src/index.ts (đảm bảo CLIENT_URL cập nhật nếu đổi domain)
+- 📝 `.env` trên VPS (cần kiểm tra thủ công)
+- 📝 Postman environments (cân nhắc thêm bản VPS)
+
+---
+
+## 🔍 COMMAND ĐỂ KIỂM TRA
+
+### Kiểm tra file .env hiện tại:
+```powershell
+# Local
+Get-Content .\.env
+Get-Content .\backend\.env
+Get-Content .\frontend\.env
+```
+
+### Kiểm tra trên VPS:
+```bash
+ssh root@202.92.6.223
+cd /root/GrowNet
+cat backend/.env | grep MONGODB_URI
+cat frontend/.env | grep VITE_
+```
+
+### Test API sau khi sửa:
+```powershell
+.\test-api.ps1
+```
+
+---
+
+## 📞 CHECKLIST CHO LẦN SAU DEPLOY
+
+- [ ] Pull code mới nhất trên VPS
+- [ ] Verify .env files có đúng VPS settings
+- [ ] Rebuild frontend: `npm run build`
+- [ ] Restart backend: `pm2 restart grownet-backend`
+- [ ] Test API endpoints
+- [ ] Test Socket.IO real-time features
+- [ ] Check browser console không có CORS errors
+- [ ] Check MongoDB connection successful
+
+---
+
+*Cập nhật lần cuối: 2025-12-05*
+*VPS: 202.92.6.223 | MongoDB: 27017 | Backend: 4000 | Frontend: 3000*
 - **Health Check**: ✅ PASS
 - **API Routes**: ❌ FAIL (404 errors)
 
