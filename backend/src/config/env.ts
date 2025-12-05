@@ -17,6 +17,7 @@ export const env = {
     mongoUri: process.env.MONGO_URI!,
     port: parseInt(process.env.PORT || '5000', 10),
     nodeEnv: process.env.NODE_ENV || 'development',
+    jwtSecret: process.env.JWT_SECRET || '',
 };
 
 // Tạm comment validation để test

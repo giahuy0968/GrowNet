@@ -101,15 +101,17 @@ router.post('/', auth, async (req, res) => {
 router.put('/:messageId/read', auth, async (req, res) => {
     try {
         const { messageId } = req.params;
+        const currentUserId = (req as any).user._id;
 
-        const message = await Message.findByIdAndUpdate(
-            messageId,
+        // SỬA ĐỔI: Thêm điều kiện receiver: currentUserId
+        const message = await Message.findOneAndUpdate(
+            { _id: messageId, receiver: currentUserId }, // Chỉ update nếu ID khớp VÀ người dùng hiện tại là người nhận
             { read: true },
             { new: true }
         );
 
         if (!message) {
-            return res.status(404).json({ error: 'Message not found' });
+            return res.status(404).json({ error: 'Message not found or unauthorized to read' });
         }
 
         res.json(message);

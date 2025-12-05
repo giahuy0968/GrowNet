@@ -9,8 +9,9 @@ export const errorHandler = (
 ) => {
     console.error(`Error: ${error.message}`);
     console.error(`Path: ${req.path}`);
+    if (process.env.NODE_ENV === 'development') {
     console.error(`Body:`, req.body);
-
+}
     res.status(500).json({
         error: 'Internal Server Error',
         message: process.env.NODE_ENV === 'development' ? error.message : undefined,
