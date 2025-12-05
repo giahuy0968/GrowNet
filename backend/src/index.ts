@@ -30,8 +30,7 @@ const io = new Server(server, {
   }
 });
 
-// Middleware
-app.use(cors({
+const corsOptions: cors.CorsOptions = {
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
@@ -43,7 +42,11 @@ app.use(cors({
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+// Middleware
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
