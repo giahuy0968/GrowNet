@@ -11,14 +11,14 @@ export const register = async (req: AuthRequest, res: Response): Promise<void> =
     const { username, email, password, fullName, interests, location, age, gender } = req.body;
 
     // Check if user exists
-    const existingUser = await User.findOne({ 
-      $or: [{ email }, { username }] 
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }]
     });
 
     if (existingUser) {
       throw new AppError('Username or email already exists', 400);
     }
-
+    //comment
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
