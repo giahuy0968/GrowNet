@@ -1,5 +1,4 @@
 import { Response } from 'express';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import { AuthRequest } from '../middleware/auth';
@@ -18,7 +17,7 @@ export const register = async (req: AuthRequest, res: Response): Promise<void> =
     if (existingUser) {
       throw new AppError('Username or email already exists', 400);
     }
-    //comment
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -26,7 +25,7 @@ export const register = async (req: AuthRequest, res: Response): Promise<void> =
     const user = await User.create({
       username,
       email,
-      password: hashedPassword,
+      password,
       fullName,
       interests: interests || [],
       location,
@@ -64,17 +63,14 @@ export const login = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
-    // Find user
     const user = await User.findOne({ email });
 
     if (!user) {
       throw new AppError('Invalid email or password', 401);
     }
 
-    // Check password
-    const isValidPassword = await bcrypt.compare(password, user.password);
-
-    if (!isValidPassword) {
+    // ❌ Không bcrypt.compare — so sánh trực tiếp
+    if (password !== user.password) {
       throw new AppError('Invalid email or password', 401);
     }
 
@@ -168,16 +164,13 @@ export const changePassword = async (req: AuthRequest, res: Response): Promise<v
       throw new AppError('User not found', 404);
     }
 
-    // Verify current password
-    const isValidPassword = await bcrypt.compare(currentPassword, user.password);
-
-    if (!isValidPassword) {
+    // ❌ Không bcrypt — so sánh trực tiếp
+    if (currentPassword !== user.password) {
       throw new AppError('Current password is incorrect', 401);
     }
 
-    // Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
+    // Lưu password mới dạng plaintext luôn
+    user.password = newPassword;
     await user.save();
 
     res.json({ message: 'Password changed successfully' });
