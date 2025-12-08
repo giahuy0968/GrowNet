@@ -37,8 +37,12 @@ const changePasswordValidation = [
 // Routes
 router.post('/register', registerValidation, validateRequest, register);
 router.post('/login', loginValidation, validateRequest, login);
+
 router.get('/me', authMiddleware, getCurrentUser);
 router.put('/profile', authMiddleware, updateProfileValidation, validateRequest, updateProfile);
+// Support both PUT /password and POST /change-password for flexibility
 router.put('/password', authMiddleware, changePasswordValidation, validateRequest, changePassword);
+router.post('/change-password', authMiddleware, changePasswordValidation, validateRequest, changePassword);
+
 
 export default router;

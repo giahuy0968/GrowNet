@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
@@ -6,7 +6,7 @@ import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
 
 // Register
-export const register = async (req: AuthRequest, res: Response): Promise<void> => {
+export const register = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { username, email, password, fullName, interests, location, age, gender } = req.body;
 
@@ -55,12 +55,13 @@ export const register = async (req: AuthRequest, res: Response): Promise<void> =
       }
     });
   } catch (error: any) {
-    throw new AppError(error.message, error.statusCode || 500);
+    const err = error instanceof AppError ? error : new AppError(error.message || 'Internal Server Error', error.statusCode || 500);
+    return next(err);
   }
 };
 
 // Login
-export const login = async (req: AuthRequest, res: Response): Promise<void> => {
+export const login = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { email, password } = req.body;
 
@@ -105,12 +106,13 @@ export const login = async (req: AuthRequest, res: Response): Promise<void> => {
       }
     });
   } catch (error: any) {
-    throw new AppError(error.message, error.statusCode || 500);
+    const err = error instanceof AppError ? error : new AppError(error.message || 'Internal Server Error', error.statusCode || 500);
+    return next(err);
   }
 };
 
 // Get current user
-export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<void> => {
+export const getCurrentUser = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const user = await User.findById(req.userId).select('-password');
 
@@ -120,12 +122,13 @@ export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<v
 
     res.json({ user });
   } catch (error: any) {
-    throw new AppError(error.message, error.statusCode || 500);
+    const err = error instanceof AppError ? error : new AppError(error.message || 'Internal Server Error', error.statusCode || 500);
+    return next(err);
   }
 };
 
 // Update profile
-export const updateProfile = async (req: AuthRequest, res: Response): Promise<void> => {
+export const updateProfile = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { fullName, bio, interests, location, age, gender, avatar } = req.body;
 
@@ -153,12 +156,13 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
       user
     });
   } catch (error: any) {
-    throw new AppError(error.message, error.statusCode || 500);
+    const err = error instanceof AppError ? error : new AppError(error.message || 'Internal Server Error', error.statusCode || 500);
+    return next(err);
   }
 };
 
 // Change password
-export const changePassword = async (req: AuthRequest, res: Response): Promise<void> => {
+export const changePassword = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { currentPassword, newPassword } = req.body;
 
@@ -182,6 +186,7 @@ export const changePassword = async (req: AuthRequest, res: Response): Promise<v
 
     res.json({ message: 'Password changed successfully' });
   } catch (error: any) {
-    throw new AppError(error.message, error.statusCode || 500);
+    const err = error instanceof AppError ? error : new AppError(error.message || 'Internal Server Error', error.statusCode || 500);
+    return next(err);
   }
 };
