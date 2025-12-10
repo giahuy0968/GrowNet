@@ -7,7 +7,12 @@ interface ChatWindowProps {
   chatName: string | null
 }
 
-export default function ChatWindow({ chatName }: ChatWindowProps) {
+interface ChatWindowProps {
+  chatName: string | null;
+  showSearch?: boolean;
+}
+
+export default function ChatWindow({ chatName, showSearch = false }: ChatWindowProps) {
   const [message, setMessage] = useState('')
   const navigate = useNavigate()
 
@@ -71,14 +76,19 @@ export default function ChatWindow({ chatName }: ChatWindowProps) {
           >
             <Icon name="phone" size="md" aria-hidden />
           </button>
-          <button className="icon-btn" aria-label="Tìm kiếm">
-            <Icon name="search" size="md" aria-hidden />
-          </button>
-          <button className="icon-btn" aria-label="Tùy chọn">
-            <Icon name="more" size="md" aria-hidden />
-          </button>
+          {!showSearch && (
+            <button className="icon-btn" aria-label="Tìm kiếm">
+              <Icon name="search" size="md" aria-hidden />
+            </button>
+          )}
         </div>
       </div>
+
+      {showSearch && (
+        <div className="chat-search-bar" role="search" aria-label="Tìm kiếm tin nhắn">
+          <input type="text" placeholder="Tìm kiếm tin nhắn trong cuộc hội thoại..." />
+        </div>
+      )}
 
       <div className="messages-container">
         {messages.map((msg, index) => (

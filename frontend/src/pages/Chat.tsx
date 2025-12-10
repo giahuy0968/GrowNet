@@ -6,17 +6,19 @@ import '../styles/Chat.css'
 
 export default function Chat() {
   const [selectedChat, setSelectedChat] = useState<string | null>('Trần Văn B')
+  const [selectedRole, setSelectedRole] = useState<'mentor' | 'mentee'>('mentee')
+  const [showSearch, setShowSearch] = useState(false)
 
   return (
     <div className="chat-layout">
-      <ChatSidebar 
+      <ChatSidebar
         selectedChat={selectedChat}
         onSelectChat={setSelectedChat}
       />
-      
-      <ChatWindow chatName={selectedChat} />
-      
-      <ChatInfo chatName={selectedChat} />
+
+      <ChatWindow chatName={selectedChat} showSearch={showSearch} />
+
+      <ChatInfo chatName={selectedChat} role={selectedRole} onOpenSearch={() => setShowSearch(prev => !prev)} />
     </div>
   )
 }

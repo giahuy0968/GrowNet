@@ -63,7 +63,7 @@ export default function Calendar() {
             </div>
           </div>
 
-          <div className="schedule-item" onClick={() => navigate('/schedule/demo-456')} role="button" tabIndex={0} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && navigate('/schedule/demo-456')}>
+          <div className="schedule-item" onClick={() => navigate('/schedule')} role="button" tabIndex={0} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && navigate('/schedule')}>
             <div className="schedule-time">14:30 - 15:30</div>
             <div className="schedule-event">
               <div className="event-title">Review Code - Dự án X</div>
@@ -72,7 +72,10 @@ export default function Calendar() {
           </div>
         </div>
 
-        <button className="btn-view-all" onClick={() => navigate('/schedule/demo-123')}>Xem chi tiết</button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn-view-all" onClick={() => navigate('/schedule/detail')}>Xem chi tiết</button>
+          <button className="btn-view-all" onClick={() => navigate('/schedule')}>Mở trang đặt lịch</button>
+        </div>
       </div>
     </div>
   )

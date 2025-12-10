@@ -20,6 +20,10 @@ import MentorProfileChange from './pages/MentorProfileChange';
 import MenteeProfile from './pages/MenteeProfile';
 import CallPage from './pages/CallPage';
 import AppointmentDetail from './pages/AppointmentDetail';
+import MessageSearch from './pages/MessageSearch';
+import NotFound from './pages/NotFound';
+import ScheduleDetail from './pages/ScheduleDetail';
+import Profile from './pages/Profile';
 const MyProfileWrapper = () => {
     // Logic giả định: kiểm tra xem người dùng hiện tại là mentor hay mentee
     const isCurrentUserMentor = true; // Thay bằng logic thực tế
@@ -43,6 +47,8 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/messages/search" element={<MessageSearch />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/advanced-settings" element={<AdvancedSettings />} />
         <Route path="/terms-privacy" element={<TermsPrivacy />} />
@@ -52,13 +58,14 @@ export default function App() {
         <Route path="/my-profile" element={<MyProfileWrapper />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/schedule/:id" element={<AppointmentDetail />} />
+        <Route path="/schedule/detail" element={<ScheduleDetail />} />
         <Route path="/call/:chatName" element={<CallPage />} />
         <Route path="/profile-change" element={<ProfileMenteeChange />} />
         <Route path="/mentorchange" element={<MentorProfileChange />} />
       </Route>
       {/* Admin Routes */}
       <Route path="/admin/*" element={<AdminRoutes />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
