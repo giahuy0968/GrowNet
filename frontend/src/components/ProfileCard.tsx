@@ -1,10 +1,18 @@
 
 import React from 'react'
 import '../styles/ProfileCard.css'
+import { useNavigate } from 'react-router-dom';
 
-export default function ProfileCard() {
+export default function ProfileCard({ userId = 'mentor-123' }) { // Thêm prop để xác định ID
+  const navigate = useNavigate();
+  // Logic giả định để xác định loại profile và điều hướng
+  const profileType = 'mentor'; // Thay bằng logic thực tế (mentor/mentee)
+  const handleClick = () => {
+      // Điều hướng đến trang hồ sơ chi tiết của người khác
+      navigate(`/${profileType}-profile/${userId}`); 
+  }
   return (
-    <div className="profile-card">
+    <div className="profile-card" onClick={handleClick}>
       <div className="profile-header">
         <img src="/profile-bg.jpg" alt="Background" className="profile-bg" />
       </div>
@@ -25,12 +33,11 @@ export default function ProfileCard() {
             <p>
               Chuyên gia Frontend 5 năm kinh nghiệm. Đã hoàn thành hơn 10 dự án lớn nhờ sử dụng React và NextJS, tập trung vào hiệu suất và trải nghiệm người dùng...
             </p>
-            <button className="btn-read-more">Xem thêm chi tiết</button>
           </div>
         </div>
       </div>
 
-      <div className="profile-actions">
+      <div className="profile-actions" onClick={(e) => e.stopPropagation()}>
         <button className="btn-action btn-cancel">✕</button>
         <button className="btn-action btn-accept">✓</button>
       </div>

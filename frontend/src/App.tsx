@@ -20,6 +20,17 @@ import MentorProfileChange from './pages/MentorProfileChange';
 import MenteeProfile from './pages/MenteeProfile';
 import CallPage from './pages/CallPage';
 import AppointmentDetail from './pages/AppointmentDetail';
+const MyProfileWrapper = () => {
+    // Logic giả định: kiểm tra xem người dùng hiện tại là mentor hay mentee
+    const isCurrentUserMentor = true; // Thay bằng logic thực tế
+    if (isCurrentUserMentor) {
+        // Render MentorProfile với prop isOwner=true
+        return <MentorProfile isOwner={true} />;
+    } else {
+        // Render MenteeProfile với prop isOwner=true
+        return <MenteeProfile isOwner={true} />;
+    }
+}
 export default function App() {
   return (
     <Routes>
@@ -36,8 +47,9 @@ export default function App() {
         <Route path="/advanced-settings" element={<AdvancedSettings />} />
         <Route path="/terms-privacy" element={<TermsPrivacy />} />
         <Route path="/profile-setup" element={<ProfileSetup />} />
-        <Route path="/mentee-profile" element={<MenteeProfile />} />
-        <Route path="/mentor-profile" element={<MentorProfile />} />
+        <Route path="/mentee-profile/:id" element={<MenteeProfile isOwner={false} />} />
+        <Route path="/mentor-profile/:id" element={<MentorProfile isOwner={false} />} />
+        <Route path="/my-profile" element={<MyProfileWrapper />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/schedule/:id" element={<AppointmentDetail />} />
         <Route path="/call/:chatName" element={<CallPage />} />

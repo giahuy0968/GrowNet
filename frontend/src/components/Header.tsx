@@ -82,7 +82,7 @@ export default function Header({ onOpenFilter }: HeaderProps) {
           <img src="/user_avt.png" alt="User" onClick={handleToggleDropdown} />
           {showDropdown && (
             <div className="dropdown-menu">
-              <button onClick={() => navigate("/mentee-profile")}>
+              <button onClick={() => navigate("/my-profile")}>
                 <Icon name="user" size="md" className="mr-2" aria-hidden /> Thông tin cá nhân
               </button>
               <button onClick={() => handleSelect('settings')}>
