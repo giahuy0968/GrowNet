@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Notification from '../components/Notification'
 import '../styles/Header.css'
+import { Icon } from './ui/Icon'
 
 
 interface HeaderProps {
@@ -63,20 +64,32 @@ export default function Header({ onOpenFilter }: HeaderProps) {
 
       <div className="header-search">
         <input type="text" placeholder="Tìm mentor, kỹ năng hoặc lĩnh vực..." />
-        <button className="search-btn">🔍</button>
+        <button className="search-btn" aria-label="Tìm kiếm">
+          <Icon name="search" size="md" aria-hidden />
+        </button>
       </div>
 
       <div className="header-actions">
-        <button className="icon-btn" onClick={handleOpenChat}>💬</button>
+        <button className="icon-btn" onClick={handleOpenChat} aria-label="Chat">
+          <Icon name="chat" size="md" aria-hidden />
+        </button>
 
-        <button className="icon-btn" onClick={handleToggleNotification}>🔔</button>
+        <button className="icon-btn" onClick={handleToggleNotification} aria-label="Thông báo">
+          <Icon name="bell" size="md" aria-hidden />
+        </button>
         <div className="user-avatar" ref={dropdownRef}>
           <img src="/user_avt.png" alt="User" onClick={handleToggleDropdown} />
           {showDropdown && (
             <div className="dropdown-menu">
-              <button onClick={() => navigate("/mentee-profile")}>👤 Thông tin cá nhân</button>
-              <button onClick={() => handleSelect('settings')}>⚙️ Cài đặt</button>
-              <button onClick={() => handleSelect('logout')}>🔙 Đăng xuất</button>
+              <button onClick={() => navigate("/mentee-profile")}>
+                <Icon name="user" size="md" className="mr-2" aria-hidden /> Thông tin cá nhân
+              </button>
+              <button onClick={() => handleSelect('settings')}>
+                <Icon name="settings" size="md" className="mr-2" aria-hidden /> Cài đặt
+              </button>
+              <button onClick={() => handleSelect('logout')}>
+                <Icon name="logout" size="md" className="mr-2" aria-hidden /> Đăng xuất
+              </button>
             </div>
           )}
         </div>

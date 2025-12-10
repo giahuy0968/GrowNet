@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../styles/ChatWindow.css'
+import { Icon } from './ui/Icon'
 
 interface ChatWindowProps {
   chatName: string | null
@@ -56,7 +57,10 @@ export default function ChatWindow({ chatName }: ChatWindowProps) {
           <img src="/avatar-tran.jpg" alt={chatName} className="chat-avatar" />
           <div>
             <h3>{chatName}</h3>
-            <span className="online-status">🟢 Đang hoạt động</span>
+            <span className="online-status inline-flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden />
+              Đang hoạt động
+            </span>
           </div>
         </div>
         <div className="chat-actions">
@@ -64,9 +68,15 @@ export default function ChatWindow({ chatName }: ChatWindowProps) {
             className="icon-btn"
             aria-label="Gọi điện"
             onClick={() => chatName && navigate(`/call/${encodeURIComponent(chatName)}`)}
-          >📞</button>
-          <button className="icon-btn">🔍</button>
-          <button className="icon-btn">⋮</button>
+          >
+            <Icon name="phone" size="md" aria-hidden />
+          </button>
+          <button className="icon-btn" aria-label="Tìm kiếm">
+            <Icon name="search" size="md" aria-hidden />
+          </button>
+          <button className="icon-btn" aria-label="Tùy chọn">
+            <Icon name="more" size="md" aria-hidden />
+          </button>
         </div>
       </div>
 
@@ -87,7 +97,9 @@ export default function ChatWindow({ chatName }: ChatWindowProps) {
       </div>
 
       <div className="chat-input-container">
-        <button className="icon-btn">📎</button>
+        <button className="icon-btn" aria-label="Đính kèm">
+          <Icon name="attach" size="md" aria-hidden />
+        </button>
         <input
           type="text"
           placeholder="Nhập tin nhắn..."
@@ -95,8 +107,12 @@ export default function ChatWindow({ chatName }: ChatWindowProps) {
           onChange={(e) => setMessage(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSend()}
         />
-        <button className="icon-btn">📝</button>
-        <button className="send-btn" onClick={handleSend}>➤</button>
+        <button className="icon-btn" aria-label="Ghi chú">
+          <Icon name="edit" size="md" aria-hidden />
+        </button>
+        <button className="send-btn" onClick={handleSend} aria-label="Gửi">
+          <Icon name="send" size="md" aria-hidden />
+        </button>
       </div>
     </div>
   )

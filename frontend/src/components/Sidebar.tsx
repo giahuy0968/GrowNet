@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import '../styles/Sidebar.css'
+import { Icon } from './ui/Icon'
 
 interface SidebarProps {
   onOpenFilter: () => void
@@ -16,7 +17,9 @@ export default function Sidebar({ onOpenFilter }: SidebarProps) {
       <div className="sidebar-section">
         <div className="section-header">
           <h3>Bộ lọc nhanh</h3>
-          <button className="filter-icon" onClick={onOpenFilter}>⚙️</button>
+          <button className="filter-icon" onClick={onOpenFilter} aria-label="Bộ lọc">
+            <Icon name="settings" size="md" aria-hidden />
+          </button>
         </div>
 
         <div className="filter-group">
@@ -51,7 +54,10 @@ export default function Sidebar({ onOpenFilter }: SidebarProps) {
         <div className="filter-group">
           <h4>Trạng thái</h4>
           <button className="status-btn active">
-            🟢 Đang hoạt động
+            <span className="inline-flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden />
+              Đang hoạt động
+            </span>
           </button>
         </div>
       </div>
