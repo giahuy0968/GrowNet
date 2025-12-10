@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './AppointmentDetail.css';
+import '../styles/AppointmentDetail.css';
 
 type TimeSlot = {
     id: number;
