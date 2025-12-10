@@ -59,7 +59,6 @@ export default function Calendar() {
             <div className="schedule-time">09:00 - 10:00</div>
             <div className="schedule-event">
               <div className="event-title">Gặp Mentor Nguyễn A</div>
-              <div className="event-status available">Đã xác nhận</div>
             </div>
           </div>
 
@@ -67,7 +66,6 @@ export default function Calendar() {
             <div className="schedule-time">14:30 - 15:30</div>
             <div className="schedule-event">
               <div className="event-title">Review Code - Dự án X</div>
-              <div className="event-status busy">Đang bận</div>
             </div>
           </div>
         </div>

@@ -42,6 +42,10 @@ export default function ScheduleDetail() {
                                     <td>
                                         <strong>09:00 - 10:00</strong><br />
                                         <span className="muted">Thứ Năm, 12/12/2025</span>
+                                        <div className="note-row">
+                                            <span className="note-label">Ghi chú:</span>
+                                            <span className="note-text">Thảo luận mục tiêu học kỳ và kế hoạch theo tuần.</span>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -57,6 +61,10 @@ export default function ScheduleDetail() {
                                     <td>
                                         <strong>14:00 - 15:00</strong><br />
                                         <span className="muted">Thứ Sáu, 13/12/2025</span>
+                                        <div className="note-row">
+                                            <span className="note-label">Ghi chú:</span>
+                                            <span className="note-text">Review code module X, chuẩn bị câu hỏi cho buổi sau.</span>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

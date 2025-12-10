@@ -124,7 +124,7 @@
     padding: 15px;
     border-bottom: 1px solid #eee;
     font-size: 0.95em;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 .schedule-table th {
@@ -165,6 +165,21 @@
 
 .muted {
     color: #666;
+}
+
+.note-row {
+    margin-top: 8px;
+    display: flex;
+    gap: 6px;
+}
+
+.note-label {
+    font-weight: 700;
+    color: #444;
+}
+
+.note-text {
+    color: #333;
 }
 
 .badge-status {
