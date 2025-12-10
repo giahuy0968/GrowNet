@@ -1,7 +1,7 @@
 
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../styles/ProfileCard.css'
-import { useNavigate } from 'react-router-dom';
 
 export default function ProfileCard({ userId = 'mentor-123' }) { // Thêm prop để xác định ID
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ export default function ProfileCard({ userId = 'mentor-123' }) { // Thêm prop �
 
       <div className="profile-actions" onClick={(e) => e.stopPropagation()}>
         <button className="btn-action btn-cancel">✕</button>
-        <button className="btn-action btn-accept">✓</button>
+        <button className="btn-action btn-accept" onClick={() => navigate('/chat')}>✓</button>
       </div>
     </div>
   )
