@@ -17,8 +17,8 @@
 
 .mentor-profile-page {
     background: var(--bg-page);
-    min-height: 100vh;
-    padding: 40px 28px;
+    min-height: 90vh;
+    padding: 10px 28px;
     box-sizing: border-box;
 }
 
