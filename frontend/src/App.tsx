@@ -20,6 +20,7 @@ import MentorProfileChange from './pages/MentorProfileChange';
 import MenteeProfile from './pages/MenteeProfile';
 import CallPage from './pages/CallPage';
 import AppointmentDetail from './pages/AppointmentDetail';
+import ScheduleDetail from './pages/ScheduleDetail';
 export default function App() {
   return (
     <Routes>
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="/mentor-profile" element={<MentorProfile />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/schedule/:id" element={<AppointmentDetail />} />
+        <Route path="/schedule/detail" element={<ScheduleDetail />} />
         <Route path="/call/:chatName" element={<CallPage />} />
         <Route path="/profile-change" element={<ProfileMenteeChange />} />
         <Route path="/mentorchange" element={<MentorProfileChange />} />

@@ -74,9 +74,6 @@ export default function ChatWindow({ chatName }: ChatWindowProps) {
           <button className="icon-btn" aria-label="Tìm kiếm">
             <Icon name="search" size="md" aria-hidden />
           </button>
-          <button className="icon-btn" aria-label="Tùy chọn">
-            <Icon name="more" size="md" aria-hidden />
-          </button>
         </div>
       </div>
 
