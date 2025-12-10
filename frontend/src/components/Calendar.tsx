@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../styles/Calendar.css'
 
 export default function Calendar() {
+  const navigate = useNavigate()
   const [currentMonth] = useState('Tháng 10, 2025')
   const [viewMode, setViewMode] = useState<'week' | 'month'>('month')
 
@@ -17,13 +19,13 @@ export default function Calendar() {
       </div>
 
       <div className="view-toggle">
-        <button 
+        <button
           className={viewMode === 'week' ? 'active' : ''}
           onClick={() => setViewMode('week')}
         >
           Tuần
         </button>
-        <button 
+        <button
           className={viewMode === 'month' ? 'active' : ''}
           onClick={() => setViewMode('month')}
         >
@@ -53,15 +55,15 @@ export default function Calendar() {
       <div className="schedule-section">
         <h4>Lịch trình ngày 03/10</h4>
         <div className="schedule-list">
-          <div className="schedule-item">
+          <div className="schedule-item" onClick={() => navigate('/schedule/demo-123')} role="button" tabIndex={0} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && navigate('/schedule/demo-123')}>
             <div className="schedule-time">09:00 - 10:00</div>
             <div className="schedule-event">
               <div className="event-title">Gặp Mentor Nguyễn A</div>
               <div className="event-status available">Đã xác nhận</div>
             </div>
           </div>
-          
-          <div className="schedule-item">
+
+          <div className="schedule-item" onClick={() => navigate('/schedule/demo-456')} role="button" tabIndex={0} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && navigate('/schedule/demo-456')}>
             <div className="schedule-time">14:30 - 15:30</div>
             <div className="schedule-event">
               <div className="event-title">Review Code - Dự án X</div>
@@ -69,8 +71,8 @@ export default function Calendar() {
             </div>
           </div>
         </div>
-        
-        <button className="btn-view-all">Xem chi tiết</button>
+
+        <button className="btn-view-all" onClick={() => navigate('/schedule/demo-123')}>Xem chi tiết</button>
       </div>
     </div>
   )

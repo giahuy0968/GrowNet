@@ -15,13 +15,16 @@ import {
     PaperClipIcon,
     PencilSquareIcon,
     HomeIcon,
+    ClockIcon,
     CheckCircleIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
     XMarkIcon,
     CheckIcon,
     PlusIcon,
-    MinusIcon
+    MinusIcon,
+    SunIcon,
+    MoonIcon,
 } from '@heroicons/react/24/outline';
 
 const icons = {
@@ -34,6 +37,7 @@ const icons = {
     logout: ArrowRightOnRectangleIcon,
     send: PaperAirplaneIcon,
     calendar: CalendarDaysIcon,
+    clock: ClockIcon,
     phone: PhoneIcon,
     more: EllipsisVerticalIcon,
     attach: PaperClipIcon,
@@ -46,6 +50,8 @@ const icons = {
     check: CheckIcon,
     plus: PlusIcon,
     minus: MinusIcon,
+    sun: SunIcon,
+    moon: MoonIcon,
 };
 
 export type IconName = keyof typeof icons;

@@ -8,6 +8,7 @@ import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import Chat from './pages/Chat'
 import MainLayout from './MainLayout'
+import { ProtectedRoute } from './components/ProtectedRoute'
 import Settings from "./pages/Settings";
 import ChangePassword from "./pages/ChangePassword";
 import AdvancedSettings from './pages/AdvancedSettings';
@@ -18,6 +19,7 @@ import MentorProfile from './pages/MentorProfile';
 import MentorProfileChange from './pages/MentorProfileChange';
 import MenteeProfile from './pages/MenteeProfile';
 import CallPage from './pages/CallPage';
+import AppointmentDetail from './pages/AppointmentDetail';
 export default function App() {
   return (
     <Routes>
@@ -26,7 +28,7 @@ export default function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/welcome" element={<Welcome />} />
       {/* Các trang dùng chung Header qua MainLayout */}
-      <Route element={<MainLayout />}>
+      <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/settings" element={<Settings />} />
@@ -37,12 +39,14 @@ export default function App() {
         <Route path="/mentee-profile" element={<MenteeProfile />} />
         <Route path="/mentor-profile" element={<MentorProfile />} />
         <Route path="/schedule" element={<Schedule />} />
+        <Route path="/schedule/:id" element={<AppointmentDetail />} />
         <Route path="/call/:chatName" element={<CallPage />} />
         <Route path="/profile-change" element={<ProfileMenteeChange />} />
         <Route path="/mentorchange" element={<MentorProfileChange />} />
       </Route>
       {/* Admin Routes */}
       <Route path="/admin/*" element={<AdminRoutes />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   )
 }

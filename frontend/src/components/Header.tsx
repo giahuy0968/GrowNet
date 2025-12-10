@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import Notification from '../components/Notification'
 import '../styles/Header.css'
@@ -94,18 +95,21 @@ export default function Header({ onOpenFilter }: HeaderProps) {
           )}
         </div>
       </div>
-      {showNotification && (
-        <div
-          className="notification-overlay"
-          onClick={() => setShowNotification(false)}
-        >
+      {showNotification && createPortal(
+        (
           <div
-            className="notification-wrapper"
-            onClick={(e) => e.stopPropagation()}
+            className="notification-overlay"
+            onClick={() => setShowNotification(false)}
           >
-            <Notification />
+            <div
+              className="notification-wrapper"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Notification />
+            </div>
           </div>
-        </div>
+        ),
+        document.body
       )}
     </header>
   )

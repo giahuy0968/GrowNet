@@ -29,6 +29,11 @@
   --muted: 148 163 184;
   --primary: 96 165 250;
   --primary-foreground: 17 24 39;
+
+  .btn-secondary {
+    @apply bg-[rgb(var(--secondary))] text-[rgb(var(--secondary-foreground))] hover:bg-indigo-600;
+  }
+
   --secondary: 129 140 248;
   --secondary-foreground: 17 24 39;
   --card: 15 23 42;

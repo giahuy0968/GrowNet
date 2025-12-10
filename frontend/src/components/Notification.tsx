@@ -56,13 +56,13 @@ export default function Notification() {
       </div>
 
       <div className="notification-tabs">
-        <button 
+        <button
           className={activeTab === 'all' ? 'active' : ''}
           onClick={() => setActiveTab('all')}
         >
           TẤT CẢ
         </button>
-        <button 
+        <button
           className={activeTab === 'unread' ? 'active' : ''}
           onClick={() => setActiveTab('unread')}
         >
