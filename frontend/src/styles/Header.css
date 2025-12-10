@@ -1,6 +1,7 @@
 .dashboard-header {
   background: white;
   padding: 16px 32px;
+  height: 10vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
