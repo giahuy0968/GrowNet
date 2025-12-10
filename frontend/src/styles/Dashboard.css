@@ -7,7 +7,8 @@
 .dashboard-content {
   display: grid;
   height: auto;
-  align-items: start; 
+  align-items: stretch;
+  /* make columns equal height */
   grid-template-columns: 280px 1fr 320px;
   gap: 60px;
   padding: 12px 32px;
@@ -34,12 +35,16 @@
 
 .main-content {
   min-height: auto;
+  align-self: stretch;
+  display: flex;
 }
 
 .right-sidebar {
   position: sticky;
   top: 24px;
-  height: fit-content;
+  align-self: stretch;
+  height: 100%;
+  display: flex;
 }
 
 @media (max-width: 1280px) {
