@@ -1,9 +1,10 @@
 /* === Sidebar === */
 .sidebar {
-  background: #fff;
+  background: rgb(var(--card));
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgb(var(--border));
+  box-shadow: var(--shadow-sm);
 }
 
 .sidebar-section {
@@ -32,6 +33,16 @@
   border: none;
   cursor: pointer;
   font-size: 18px;
+  color: rgb(var(--fg));
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.filter-icon:hover {
+  color: rgb(var(--muted));
+}
+
+.filter-icon:active {
+  transform: scale(0.96);
 }
 
 /* === Filter Groups === */
@@ -61,6 +72,11 @@
   font-size: 13px;
   font-weight: 500;
   border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.tag:hover {
+  background: #dbeafe;
 }
 
 /* === Location Tabs === */
@@ -74,7 +90,7 @@
   padding: 8px 12px;
   font-size: 13px;
   background: #fff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgb(var(--border));
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
@@ -90,7 +106,7 @@
 .experience-slider {
   width: 100%;
   height: 6px;
-  background: #e2e8f0;
+  background: rgb(var(--border));
   border-radius: 3px;
   outline: none;
 }
