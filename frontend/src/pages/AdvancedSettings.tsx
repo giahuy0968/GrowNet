@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import "../styles/AdvancedSettings.css";
+import "../styles/Settings.css";
 import Toast from "../components/Toast";
 
 export default function AdvancedSettings() {
@@ -31,7 +32,7 @@ export default function AdvancedSettings() {
 
       <div className="advanced-card">
         <div className="advanced-header">
-          <button className="back-btn" onClick={() => navigate(-1)}>←</button>
+          <button className="back-btn" onClick={() => navigate(-1)}>← Quay lại</button>
           <h2 className="advanced-title">Cài Đặt Nâng Cao</h2>
         </div>
 

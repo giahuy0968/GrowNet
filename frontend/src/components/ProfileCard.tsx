@@ -1,8 +1,10 @@
 
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../styles/ProfileCard.css'
 
 export default function ProfileCard() {
+  const navigate = useNavigate()
   return (
     <div className="profile-card">
       <div className="profile-header">
@@ -32,7 +34,7 @@ export default function ProfileCard() {
 
       <div className="profile-actions">
         <button className="btn-action btn-cancel">✕</button>
-        <button className="btn-action btn-accept">✓</button>
+        <button className="btn-action btn-accept" onClick={() => navigate('/chat')}>✓</button>
       </div>
     </div>
   )
