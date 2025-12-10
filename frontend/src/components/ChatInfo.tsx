@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import '../styles/ChatInfo.css'
 
 interface ChatInfoProps {
-  chatName: string | null
+  chatName: string | null;
+  role?: 'mentor' | 'mentee';
+  onOpenSearch?: () => void;
 }
 
-export default function ChatInfo({ chatName }: ChatInfoProps) {
+export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: ChatInfoProps) {
   if (!chatName) return null
 
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -59,19 +61,19 @@ export default function ChatInfo({ chatName }: ChatInfoProps) {
       </div>
 
       <div className="profile-actions">
-        <button className="action-btn">
+        <button className="action-btn" onClick={() => window.location.assign(role === 'mentor' ? '/mentor-profile' : '/mentee-profile')}>
           <div>
             <span>👤</span>
           </div>
           <span>Xem trang cá nhân</span>
         </button>
-        <button className="action-btn">
+        <button className="action-btn" onClick={() => onOpenSearch && onOpenSearch()}>
           <div>
             <span>🔍</span>
           </div>
           <span>Tìm kiếm tin nhắn</span>
         </button>
-        <button className="action-btn">
+        <button className="action-btn" onClick={() => window.location.assign('/settings')}>
           <div>
             <span>🎨</span>
           </div>

@@ -21,6 +21,9 @@ import MenteeProfile from './pages/MenteeProfile';
 import CallPage from './pages/CallPage';
 import AppointmentDetail from './pages/AppointmentDetail';
 import ScheduleDetail from './pages/ScheduleDetail';
+import Profile from './pages/Profile';
+import NotFound from './pages/NotFound';
+import MessageSearch from './pages/MessageSearch';
 export default function App() {
   return (
     <Routes>
@@ -33,6 +36,8 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/messages/search" element={<MessageSearch />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/advanced-settings" element={<AdvancedSettings />} />
         <Route path="/terms-privacy" element={<TermsPrivacy />} />
@@ -48,7 +53,7 @@ export default function App() {
       </Route>
       {/* Admin Routes */}
       <Route path="/admin/*" element={<AdminRoutes />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
