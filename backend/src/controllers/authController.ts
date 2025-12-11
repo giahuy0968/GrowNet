@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
-
+import bcrypt from 'bcryptjs';
 // Register
 export const register = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
