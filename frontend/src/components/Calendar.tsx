@@ -72,7 +72,7 @@ export default function Calendar() {
 
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="btn-view-all" onClick={() => navigate('/schedule/detail')}>Xem chi tiết</button>
-          <button className="btn-view-all" onClick={() => navigate('/schedule')}>Mở trang đặt lịch</button>
+          <button className="btn-view-all" onClick={() => navigate('/mentorSchedule')}>Mở trang đặt lịch</button>
         </div>
       </div>
     </div>

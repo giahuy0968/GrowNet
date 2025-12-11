@@ -24,6 +24,7 @@ import MessageSearch from './pages/MessageSearch';
 import NotFound from './pages/NotFound';
 import ScheduleDetail from './pages/ScheduleDetail';
 import Profile from './pages/Profile';
+import MentorSchedule from './pages/mentorSchedule';
 const MyProfileWrapper = () => {
   // Logic giả định: kiểm tra xem người dùng hiện tại là mentor hay mentee
   const isCurrentUserMentor = true; // Thay bằng logic thực tế
@@ -59,6 +60,7 @@ export default function App() {
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/schedule/:id" element={<AppointmentDetail />} />
         <Route path="/schedule/detail" element={<ScheduleDetail />} />
+        <Route path="/mentorSchedule" element={<MentorSchedule />} />
         <Route path="/call/:chatName" element={<CallPage />} />
         <Route path="/profile-change" element={<ProfileMenteeChange />} />
         <Route path="/mentorchange" element={<MentorProfileChange />} />
