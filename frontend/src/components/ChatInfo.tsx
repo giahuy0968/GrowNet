@@ -8,20 +8,19 @@ interface ChatInfoProps {
   onOpenSearch?: () => void;
 }
 
-const [isModalOpen, setIsModalOpen] = useState(false);
-
-const handleOpenModal = () => setIsModalOpen(true);
-const handleCloseModal = () => setIsModalOpen(false);
-
-const handleDelete = () => {
-    // Logic xóa đoạn chat
-    console.log("Xóa đoạn chat đã được xác nhận!");
-    handleCloseModal();
-};
-
 export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: ChatInfoProps) {
   if (!chatName) return null
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleDelete = () => {
+      // Logic xóa đoạn chat
+      console.log("Xóa đoạn chat đã được xác nhận!");
+      handleCloseModal();
+  };
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   const handleDeleteHistory = () => {
