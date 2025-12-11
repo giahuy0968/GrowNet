@@ -1,7 +1,7 @@
 /* Full page background */
 .advanced-container {
   width: 100%;
-  min-height: 100vh;
+  min-height: 80vh;
   background: #f3f6fa;
   display: flex;
   justify-content: center;
@@ -14,7 +14,7 @@
   width: 700px;
   background: white;
   border-radius: 18px;
-  padding: 32px;
+  padding: 24px;
   box-shadow: 0px 2px 14px rgba(0, 0, 0, 0.08);
 }
 
@@ -22,7 +22,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 /* Nút Back */
@@ -95,14 +95,14 @@
 
 /* Setting rows */
 .section {
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 .setting-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #e6e8f2;
 }
 
@@ -198,10 +198,10 @@ input:checked+.slider-toggle:before {
 /* Save button */
 .save-btn {
   width: 70%;
-  margin: 24px auto 0;
+  margin: 16px auto 0;
   display: block;
   background: #4caf50;
-  padding: 12px 0;
+  padding: 10px 0;
   color: white;
   border-radius: 12px;
   font-size: 16px;
