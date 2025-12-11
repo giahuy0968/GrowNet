@@ -8,8 +8,8 @@ export default function ProfileCard({ userId = 'mentor-123' }) { // Thêm prop �
   // Logic giả định để xác định loại profile và điều hướng
   const profileType = 'mentor'; // Thay bằng logic thực tế (mentor/mentee)
   const handleClick = () => {
-      // Điều hướng đến trang hồ sơ chi tiết của người khác
-      navigate(`/${profileType}-profile/${userId}`); 
+    // Điều hướng đến trang hồ sơ chi tiết của người khác
+    navigate(`/${profileType}-profile/${userId}`);
   }
   return (
     <div className="profile-card" onClick={handleClick}>
