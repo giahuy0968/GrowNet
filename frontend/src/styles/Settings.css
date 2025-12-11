@@ -1,3 +1,24 @@
+.settings-back-btn {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  box-shadow: none;
+  transition: color 0.2s, transform 0.2s;
+  z-index: 2;
+}
+
+.settings-back-btn:hover {
+  color: #1565c0;
+  transform: translateX(-2px);
+}
+
 .settings-page {
   display: flex;
   justify-content: center;
@@ -30,7 +51,9 @@
   margin: 0;
   font-size: 22px;
   font-weight: 600;
-  color: #fff
+  color: #fff;
+  border: none !important;
+  background: none !important;
 }
 
 .close-btn {
