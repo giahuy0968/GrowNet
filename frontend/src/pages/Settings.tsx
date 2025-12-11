@@ -44,7 +44,7 @@ export default function Settings({
           </div>
         </div>
 
-        {/* Community Section */}
+        {/* Community Sectionsdfndfbewifubei */}
         <div className="settings-section">
           <h4>CHUNG & CỘNG ĐỒNG</h4>
           <div className="settings-item" onClick={() => navigate("/advanced-settings")} style={{ cursor: "pointer" }}>
