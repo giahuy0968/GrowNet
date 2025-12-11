@@ -2,9 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 20px;
+  min-height: calc(100vh - 72px);
+  background: #f8fafc;
+  padding: 0px 20px 0px 20px;
 }
 
 .schedule-modal {
@@ -20,7 +20,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 32px;
+  padding: 5px 32px;
   border-bottom: 1px solid #f0f0f0;
   background: white;
 }
@@ -54,7 +54,7 @@
 
 .schedule-content {
   display: flex;
-  padding: 32px;
+  padding: 0px 20px 20px;
   gap: 48px;
   align-items: stretch;
 }
@@ -70,7 +70,7 @@
 .calendar-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 .calendar-nav {
@@ -123,7 +123,7 @@
 .calendar-days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 
 .calendar-day {
@@ -133,15 +133,15 @@
   align-items: center;
   justify-content: center;
   border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 5px;
+  font-size: 12px;
   font-weight: 500;
   color: #374151;
   cursor: pointer;
   transition: all 0.2s;
   background: white;
   position: relative;
-  gap: 4px;
+  gap: 3px;
 }
 
 .calendar-day:hover {
@@ -311,18 +311,33 @@
   margin: 8px 0;
 }
 
+/* ===== Header Row (Title + Toggle) ===== */
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-row h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
 /* ===== Course Section ===== */
 .course-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0px;
 }
 
 .course-section h3 {
   font-size: 14px;
   font-weight: 700;
   color: #1f2937;
-  margin: 0;
+  margin: 0 0 12px 0;
 }
 
 .course-description {
@@ -363,18 +378,20 @@
 /* ===== Notification Toggle ===== */
 .notification-toggle {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  padding-top: 12px;
+  padding-top: 0px;
   gap: 12px;
+  border-top: none;
+  flex-shrink: 0;
 }
 
 .notification-toggle label {
   font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+  font-weight: 600;
+  color: #1f2937;
   margin: 0;
-  flex: 1;
+  flex: 0 0 auto;
 }
 
 /* ===== Toggle Switch ===== */

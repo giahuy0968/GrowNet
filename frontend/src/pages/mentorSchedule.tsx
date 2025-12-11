@@ -213,21 +213,23 @@ const MentorSchedule: React.FC = () => {
             {/* Divider */}
             <div className="divider"></div>
 
-            {/* Notification toggle */}
-            <div className="notification-toggle">
-              <label htmlFor="notification-switch">Xác nhận lịch hẹn</label>
-              <input
-                id="notification-switch"
-                type="checkbox"
-                className="toggle-switch"
-                checked={isNotificationEnabled}
-                onChange={handleToggleNotification}
-              />
+            {/* Header row: Title and Toggle */}
+            <div className="header-row">
+              <h3>Khóa học Marketing cơ bản</h3>
+              <div className="notification-toggle">
+                <label htmlFor="notification-switch">Xác nhận lịch hẹn</label>
+                <input
+                  id="notification-switch"
+                  type="checkbox"
+                  className="toggle-switch"
+                  checked={isNotificationEnabled}
+                  onChange={handleToggleNotification}
+                />
+              </div>
             </div>
 
             {/* Course info */}
             <div className="course-section">
-              <h3>Khóa học Marketing cơ bản</h3>
               <p className="course-description">
                 Khóa học giới thiệu các nguyên lý cơ bản của Marketing hiện đại, từ chiến lược tổng thể đến thực hiện các chiến dịch cụ thể.
               </p>
