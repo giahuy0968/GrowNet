@@ -160,6 +160,11 @@ export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: Ch
         </div>
         <button className="view-all">Xem tất cả</button>
       </div>
+      <DeleteChatModal 
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleDelete}
+      />
     </div>
   )
 }
