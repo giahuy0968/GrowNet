@@ -19,12 +19,10 @@ export default function Settings({
       <div className="settings-card">
         {/* Header */}
         <div className="settings-header">
+          <button className="settings-back-btn" aria-label="Quay lại" onClick={() => navigate(-1)}>
+            &#8592;
+          </button>
           <h2>Cài Đặt</h2>
-          {onClose && (
-            <button className="close-btn" onClick={onClose}>
-              ✕
-            </button>
-          )}
         </div>
 
         {/* Avatar + Name */}

@@ -150,13 +150,15 @@ textarea {
     padding: 12px;
     border: 1px dashed #e5e7eb;
     border-radius: 10px;
-    background: #fff;
+    padding: 96px 24px 24px;
+    /* account for sticky header height */
     position: relative;
 }
 
 .education-entry::before {
     content: "";
-    position: absolute;
+    max-height: calc(90vh - 72px);
+    /* prevent header overlap when scrolling */
     left: -1px;
     top: 12px;
     bottom: 12px;
@@ -256,7 +258,8 @@ button {
     align-items: center;
     justify-content: center;
     padding: 24px;
-    z-index: 1000;
+    z-index: 5000;
+    /* ensure overlay sits above app header */
 }
 
 .mpc-modal {
@@ -269,32 +272,64 @@ button {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin-top: 80px;
 }
 
-.mpc-header {
-    background: var(--primary);
-    color: #fff;
+.mentee-mpc-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 14px 18px;
+    background: transparent;
+    gap: 10px;
 }
 
-.mpc-title {
+.mentee-mpc-title {
+    color: #1e40af;
     font-weight: 700;
     letter-spacing: .3px;
 }
 
-.mpc-close {
+.mentee-mpc-close {
     border: 0;
-    background: transparent;
-    color: #fff;
+    background: none;
+    color: black;
     font-size: 22px;
     cursor: pointer;
 }
 
-.mpc-close:hover {
+.mentee-mpc-close:hover {
     color: #e2e8f0;
+}
+
+.mentee-mpc-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    background: transparent;
+}
+
+.mentee-mpc-back {
+    border: none;
+    background: transparent;
+    color: #2563eb;
+    font-size: 22px;
+    cursor: pointer;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.mentee-mpc-back:hover {
+    color: #1d4ed8;
+    transform: translateX(2px);
+}
+
+.mentee-mpc-title {
+    font-weight: 700;
+    letter-spacing: .3px;
+    color: #2563eb;
+    font-size: 18px;
 }
 
 .mpc-body {

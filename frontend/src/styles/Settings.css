@@ -26,6 +26,7 @@
 }
 
 .settings-header h2 {
+  color: white;
   margin: 0;
   font-size: 22px;
   font-weight: 600;
@@ -85,6 +86,7 @@
   padding: 10px 0;
   border-bottom: 1px solid #f3f3f3;
   cursor: pointer;
+  background: transparent;
   transition: background 0.2s;
 }
 
