@@ -1,4 +1,5 @@
 import React from 'react';
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import '../styles/MentorProfile.css';
 import { Navigate, useNavigate } from 'react-router-dom';
 interface ExperienceItem {
@@ -54,10 +55,10 @@ export default function MentorProfile({ isOwner = false }: MentorProfileProps) {
                             <p className="mentor-meta">Mentor • UX/UI Designer • TP.HCM</p>
                             {!isOwner && (
                                 <div className="action-row">
-                                    <button className="btn-primary" type="button" onClick={() => navigate('/chat')}>🤝 Kết nối ngay</button>
+                                    <button className="btn-primary-mentor" type="button" onClick={() => navigate('/chat')}>🤝 Kết nối ngay</button>
                                     <button className="btn-ghost" type="button" onClick={() => navigate('/schedule')}>📅 Đặt lịch</button>
                                     <button className="btn-mess" type="button" onClick={() => navigate('/chat')}>
-                                        <img src="/paper-plane.svg" alt="send" />
+                                        <PaperAirplaneIcon style={{ width: 20, height: 20, color: '#1d4ed8' }} />
                                     </button>
                                 </div>
                             )}

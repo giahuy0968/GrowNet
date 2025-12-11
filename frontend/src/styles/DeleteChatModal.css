@@ -1,107 +1,258 @@
-/* === 1. Backdrop (Nền mờ) === */
+/* DeleteChatModal.css */
+
+/* Backdrop với animation fade in */
 .modal-backdrop {
-  /* Che phủ toàn bộ màn hình */
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(4px);
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000; 
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease-out;
 }
 
+/* Modal container */
 .delete-chat-modal {
-  width: 90%;
-  max-width: 400px;
-  background: #fff;
+  background: white;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  padding: 24px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 400px;
+  animation: slideUp 0.3s ease-out;
+  overflow: hidden;
 }
 
+/* Modal Header */
 .modal-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .header-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0 auto;
-  color: #1e293b;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .close-btn {
-  position: absolute;
-  top: 16px; 
-  right: 16px;
   background: none;
   border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #64748b;
-  padding: 4px 8px;
+  font-size: 1.5rem;
   line-height: 1;
-  transition: color 0.2s;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .close-btn:hover {
-  color: #1e293b;
+  background-color: #f3f4f6;
+  color: #374151;
 }
 
+.close-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Modal Body */
 .modal-body {
-  margin-bottom: 30px;
-  text-align: center;
+  padding: 1.5rem;
 }
 
 .modal-message {
-  font-size: 14px;
-  color: #475569;
+  color: #6b7280;
+  font-size: 0.9375rem;
   line-height: 1.5;
   margin: 0;
 }
 
+/* Modal Actions */
 .modal-actions {
   display: flex;
-  justify-content: flex-end; 
-  gap: 12px;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem 1.5rem;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
 }
 
-.btn-cancel {
-  background: none;
+/* Base button styles */
+.modal-actions button {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
   border: none;
-  color: #475569;
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.2s ease;
+  min-width: 100px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Cancel button */
+.btn-cancel {
+  background-color: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
 }
 
 .btn-cancel:hover {
-  background: #f1f5f9; 
-  color: #1e293b;
+  background-color: #f9fafb;
+  border-color: #9ca3af;
 }
 
+.btn-cancel:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.btn-cancel:active {
+  transform: translateY(1px);
+}
+
+/* Delete confirm button */
 .btn-delete-confirm {
-  background: #ef4444; 
-  border: none;
-  color: #fff;
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  background-color: #dc2626;
+  color: white;
+  margin-top: 12px;
 }
 
 .btn-delete-confirm:hover {
-  background: #dc2626; 
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+  background-color: #b91c1c;
+}
+
+.btn-delete-confirm:focus {
+  outline: 2px solid #f87171;
+  outline-offset: 2px;
+}
+
+.btn-delete-confirm:active {
+  background-color: #991b1b;
+  transform: translateY(1px);
+}
+
+/* Disabled state for delete button (if needed later) */
+.btn-delete-confirm:disabled {
+  background-color: #fca5a5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Focus-visible polyfill for better accessibility */
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .delete-chat-modal {
+    max-width: 100%;
+    margin: 0 1rem;
+  }
+
+  .modal-header {
+    padding: 1.25rem 1.25rem 0.75rem;
+  }
+
+  .modal-body {
+    padding: 1.25rem;
+  }
+
+  .modal-actions {
+    padding: 0.75rem 1.25rem 1.25rem;
+    flex-direction: column-reverse;
+  }
+
+  .header-title {
+    font-size: 1rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .delete-chat-modal {
+    background-color: #1f2937;
+    color: white;
+  }
+
+  .header-title {
+    color: #f9fafb;
+  }
+
+  .modal-message {
+    color: #d1d5db;
+  }
+
+  .modal-header {
+    border-bottom-color: #374151;
+  }
+
+  .modal-actions {
+    background-color: #111827;
+    border-top-color: #374151;
+  }
+
+  .close-btn {
+    color: #9ca3af;
+  }
+
+  .close-btn:hover {
+    background-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .btn-cancel {
+    background-color: #374151;
+    color: #e5e7eb;
+    border-color: #4b5563;
+  }
+
+  .btn-cancel:hover {
+    background-color: #4b5563;
+  }
 }

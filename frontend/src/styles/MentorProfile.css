@@ -99,10 +99,10 @@
     flex-wrap: wrap;
 }
 
-.btn-primary {
-    background: #fff; 
-    color: var(--primary); 
-    border: 1px solid var(--primary);
+.btn-primary-mentor {
+    background: #1d4ed8;
+    color: #fff;
+    border: 1px solid #1d4ed8;
     padding: 10px 18px;
     font-size: 14px;
     font-weight: 600;
@@ -111,7 +111,7 @@
     box-shadow: var(--shadow-soft);
 }
 
-.btn-primary:hover {
+.btn-primary-mentor:hover {
     background: var(--primary-hover);
     color: #fff;
     border-color: var(--primary-hover);
@@ -135,16 +135,26 @@
 .btn-mess {
     background: #eef2ff;
     border: 1px solid #c7d2fe;
-    /* Reduced overall footprint */
     width: 40px;
     height: 40px;
     padding: 6px;
-    /* tighter inner spacing */
     border-radius: var(--radius-sm);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+
+.btn-mess:hover {
+    background: #e0e7ff;
+    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.08);
+}
+
+.btn-mess:hover svg {
+    color: #1e40af !important;
+    transform: translateX(2px);
+    transition: color 0.2s, transform 0.2s;
 }
 
 /* Ensure icon scales appropriately inside smaller button */

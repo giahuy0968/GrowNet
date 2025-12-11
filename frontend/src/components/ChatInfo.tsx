@@ -1,5 +1,7 @@
+// src/components/ChatInfo.tsx
 import React, { useState } from 'react'
-import DeleteChatModal from './DeleteChatModal';
+import DeleteChatModal from './DeleteChatModal'
+import ReportModal from './ReportModal'
 import '../styles/ChatInfo.css'
 
 interface ChatInfoProps {
@@ -12,6 +14,7 @@ export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: Ch
   if (!chatName) return null
   
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -21,20 +24,24 @@ export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: Ch
       console.log("Xóa đoạn chat đã được xác nhận!");
       handleCloseModal();
   };
+
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   const handleDeleteHistory = () => {
-    // TODO: integrate real delete logic
-    // eslint-disable-next-line no-console
-    console.log('Delete chat history triggered for', chatName)
+    handleOpenModal();
     setSettingsOpen(false)
+    console.log('Delete chat history triggered for', chatName)
   }
 
   const handleReport = () => {
-    // TODO: integrate real report logic
-    // eslint-disable-next-line no-console
+    // Mở modal báo cáo
+    setIsReportOpen(true);
+    setSettingsOpen(false);
     console.log('Report chat triggered for', chatName)
-    setSettingsOpen(false)
+  }
+
+  const handleCloseReport = () => {
+    setIsReportOpen(false);
   }
 
   return (
@@ -50,30 +57,27 @@ export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: Ch
           aria-label="Cài đặt hội thoại"
           onClick={() => setSettingsOpen(o => !o)}
         >⚙️</button>
-        <img src="/user_avt.png" alt={chatName} className="profile-avatar" />
+        <img src="/user_avt.png" alt={chatName || ''} className="profile-avatar" />
         <h4>{chatName}</h4>
         <p className="status">🟢 Đang hoạt động</p>
         {settingsOpen && (
           <div className="settings-menu" role="menu" aria-label="Tùy chọn cài đặt">
-            <div>
-              <button type="button" className="settings-item danger"
-                role="menuitem"
-                onClick={handleDeleteHistory}
-              >Xóa lịch sử trò chuyện</button>
-              <DeleteChatModal 
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-            onConfirm={handleDelete}
-        />
-
-            </div>
-
+            <button 
+              type="button" 
+              className="settings-item danger"
+              role="menuitem"
+              onClick={handleDeleteHistory}
+            >
+              Xóa lịch sử trò chuyện
+            </button>
             <button
               type="button"
               className="settings-item warn"
               role="menuitem"
               onClick={handleReport}
-            >Báo cáo</button>
+            >
+              Báo cáo
+            </button>
           </div>
         )}
       </div>
@@ -97,7 +101,6 @@ export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: Ch
           </div>
           <span>Giao diện thoại</span>
         </button>
-
       </div>
 
       <div className="media-section">
@@ -164,6 +167,18 @@ export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: Ch
         </div>
         <button className="view-all">Xem tất cả</button>
       </div>
+
+      <DeleteChatModal 
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleDelete}
+      />
+
+      <ReportModal
+        isOpen={isReportOpen}
+        onClose={handleCloseReport}
+        chatName={chatName}
+      />
     </div>
   )
 }
