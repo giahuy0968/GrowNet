@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { FiMic, FiVideo, FiPhoneOff, FiX } from 'react-icons/fi';
 import '../styles/CallPage.css';
 
 export default function CallPage() {
@@ -46,7 +47,9 @@ export default function CallPage() {
         <div className="call-page">
             <div className="call-header">
                 <h2>Cuộc gọi với {chatName}</h2>
-                <button className="end-btn" onClick={handleHangUp} aria-label="Kết thúc cuộc gọi">✕</button>
+                <button className="end-btn" onClick={handleHangUp} aria-label="Kết thúc cuộc gọi">
+                    <FiX size={20} />
+                </button>
             </div>
 
             {error && <div className="call-error">{error}</div>}
@@ -67,9 +70,15 @@ export default function CallPage() {
             </div>
 
             <div className="call-controls">
-                <button className="control-btn" aria-label="Tắt/Mở micro">🎙️</button>
-                <button className="control-btn" aria-label="Tắt/Mở camera">🎥</button>
-                <button className="control-btn danger" onClick={handleHangUp} aria-label="Kết thúc">Kết thúc</button>
+                <button className="control-btn" aria-label="Tắt/Mở micro">
+                    <FiMic size={18} />
+                </button>
+                <button className="control-btn" aria-label="Tắt/Mở camera">
+                    <FiVideo size={18} />
+                </button>
+                <button className="control-btn danger" onClick={handleHangUp} aria-label="Kết thúc">
+                    <FiPhoneOff size={18} />
+                </button>
             </div>
 
             <div className="call-hints">
