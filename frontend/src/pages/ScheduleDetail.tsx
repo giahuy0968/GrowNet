@@ -10,8 +10,8 @@ export default function ScheduleDetail() {
         <div className="schedule-page">
             <div className="schedule-container">
                 <div className="schedule-header">
-                    <button className="back-link" onClick={() => history.back()}>{'<'} Quay lại</button>
-                    <h1>Quản lý Lịch trình Cố vấn Chi tiết</h1>
+                    <button className="back-link" onClick={() => history.back()}>←</button>
+                    <h1>Quản lý lịch trình cố vấn chi tiết</h1>
                 </div>
 
                 <div className="tabs-toolbar-wrapper">
@@ -23,7 +23,7 @@ export default function ScheduleDetail() {
                         <table className="schedule-table">
                             <thead>
                                 <tr>
-                                    <th>Đối tác (Vai trò)</th>
+                                    <th>Đối tác</th>
                                     <th>Thời gian/Ngày</th>
 
                                 </tr>

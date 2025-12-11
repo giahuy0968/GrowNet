@@ -29,16 +29,29 @@
 
 .schedule-header h1 {
     font-size: 24px;
-    color: var(--text-color);
+    color: #1d4ed8;
     margin: 0;
 }
 
 .back-link {
-    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
     border: none;
-    color: var(--primary-color);
-    font-weight: 600;
+    background: transparent;
+    font-size: 20px;
     cursor: pointer;
+    color: #1d4ed8;
+
+    transition: 0.2s;
+}
+
+.back-link:hover {
+    background: #f1f1f1;
 }
 
 .tabs-toolbar-wrapper {
