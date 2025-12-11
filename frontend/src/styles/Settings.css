@@ -18,17 +18,37 @@
 .settings-header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 16px;
-  background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
-  color: #fff;
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
 }
 
 .settings-header h2 {
+  color: white;
   margin: 0;
   font-size: 18px;
   font-weight: 700;
+  border: none !important;
+  background: none !important;
 }
+
+.settings-back-btn {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.settings-back-btn:hover {
+  color: #c7d2fe;
+  transform: translateX(-2px);
+}
+
 
 .back-btn {
   appearance: none;
@@ -93,11 +113,12 @@
   padding: 12px 0;
   border-bottom: 1px solid #f7f8fb;
   cursor: pointer;
+  background: transparent;
   transition: background 0.2s;
 }
 
 .settings-item:hover {
-  background: #f6f9ff;
+  background: #f7f8fb;
 }
 
 /* Căn chỉnh text và arrow */

@@ -151,9 +151,11 @@ export default function ProfileSetup() {
             <div className="mpc-modal">
 
                 {/* HEADER */}
-                <div className="mpc-header">
-                    <span className="mpc-title">Chỉnh sửa hồ sơ </span>
-                    <button className="mpc-close" aria-label="Đóng" onClick={close}>×</button>
+                <div className="mentee-mpc-header">
+                    <button className="mentee-mpc-back" aria-label="Quay lại" onClick={close}>
+                        &#8592;
+                    </button>
+                    <span className="mentee-mpc-title">Chỉnh sửa hồ sơ</span>
                 </div>
 
                 {/* BODY */}

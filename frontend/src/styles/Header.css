@@ -1,15 +1,19 @@
 .dashboard-header {
   background: rgb(var(--card));
   padding: 16px 32px;
-  height: 10vh;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgb(var(--border));
   box-shadow: var(--shadow-sm);
-  position: relative;
-  z-index: 1500;
-  /* ensure header stacking context is above page content so overlay inside can stack on top */
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3000;
+  /* stay above page content */
+  backdrop-filter: saturate(150%) blur(4px);
 }
 
 .header-logo {
