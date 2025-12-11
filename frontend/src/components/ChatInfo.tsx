@@ -12,7 +12,6 @@ export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: Ch
   if (!chatName) return null
   
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
@@ -26,8 +25,10 @@ export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: Ch
   const handleDeleteHistory = () => {
     // TODO: integrate real delete logic
     // eslint-disable-next-line no-console
-    console.log('Delete chat history triggered for', chatName)
+    handleOpenModal();
     setSettingsOpen(false)
+    console.log('Delete chat history triggered for', chatName)
+    
   }
 
   const handleReport = () => {
@@ -55,19 +56,14 @@ export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: Ch
         <p className="status">🟢 Đang hoạt động</p>
         {settingsOpen && (
           <div className="settings-menu" role="menu" aria-label="Tùy chọn cài đặt">
-            <div>
-              <button type="button" className="settings-item danger"
-                role="menuitem"
-                onClick={handleDeleteHistory}
-              >Xóa lịch sử trò chuyện</button>
-              <DeleteChatModal 
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-            onConfirm={handleDelete}
-        />
-
-            </div>
-
+            <button 
+              type="button" 
+              className="settings-item danger"
+              role="menuitem"
+              onClick={handleDeleteHistory}
+            >
+              Xóa lịch sử trò chuyện
+            </button>
             <button
               type="button"
               className="settings-item warn"
