@@ -1,58 +1,52 @@
 .settings-page {
   display: flex;
   justify-content: center;
-  padding: 24px 16px;
-  background: #f6f8fc;
+  align-items: center;
+  min-height: 80vh;
+  background: #f3f6fa;
+  box-sizing: border-box;
+  padding: 25px 16px;
 }
 
 .settings-card {
-  width: 100%;
-  max-width: 560px;
+  width: 400px;
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  text-align: center;
 }
 
 /* Header */
 .settings-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
+  background: #1976d2;
   color: #fff;
+  padding: 16px;
+  position: relative;
 }
 
 .settings-header h2 {
   margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.back-btn {
-  appearance: none;
-  border: 1px solid #ffffff40;
-  background: #ffffff1a;
-  color: #fff;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 14px;
+  font-size: 22px;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
-  transition: all 0.2s ease;
+  color: #fff
 }
 
-.back-btn:hover {
-  background: #ffffff33;
-  border-color: #ffffff80;
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  border: none;
+  background: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 /* Avatar + Name */
 .settings-user {
-  margin: 16px 0 8px 0;
-  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 .settings-avatar {
@@ -71,18 +65,16 @@
 /* Section */
 .settings-section {
   text-align: left;
-  padding: 0 20px 8px 20px;
-  border-top: 1px solid #f0f2f5;
-  margin-top: 8px;
+  padding: 0 36px;
+  border-top: 1px solid #eee;
+  margin-top: 12px;
 }
 
 .settings-section h4 {
-  font-size: 12px;
-  color: #2563eb;
+  font-size: 13px;
+  color: #1976d2;
   margin-top: 12px;
   margin-bottom: 8px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
 }
 
 /* Item layout */
@@ -90,14 +82,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #f7f8fb;
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f3f3;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .settings-item:hover {
-  background: #f6f9ff;
+  background: #f5faff;
 }
 
 /* Căn chỉnh text và arrow */
@@ -114,19 +106,19 @@
 
 /* Logout button */
 .logout-btn {
-  background: #ef4444;
+  background: #ff6b6b;
   color: white;
   border: none;
-  padding: 12px 0;
-  border-radius: 8px;
-  width: 86%;
-  margin: 20px auto 24px auto;
+  padding: 10px 0;
+  border-radius: 6px;
+  width: 80%;
+  margin: 20px auto;
   display: block;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s;
 }
 
 .logout-btn:hover {
-  background: #dc2626;
+  background: #ff4d4d;
 }

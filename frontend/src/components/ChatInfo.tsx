@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import DeleteChatModal from './DeleteChatModal';
 import '../styles/ChatInfo.css'
 
 interface ChatInfoProps {
@@ -6,6 +7,17 @@ interface ChatInfoProps {
   role?: 'mentor' | 'mentee';
   onOpenSearch?: () => void;
 }
+
+const [isModalOpen, setIsModalOpen] = useState(false);
+
+const handleOpenModal = () => setIsModalOpen(true);
+const handleCloseModal = () => setIsModalOpen(false);
+
+const handleDelete = () => {
+    // Logic xóa đoạn chat
+    console.log("Xóa đoạn chat đã được xác nhận!");
+    handleCloseModal();
+};
 
 export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: ChatInfoProps) {
   if (!chatName) return null
@@ -44,12 +56,19 @@ export default function ChatInfo({ chatName, role = 'mentee', onOpenSearch }: Ch
         <p className="status">🟢 Đang hoạt động</p>
         {settingsOpen && (
           <div className="settings-menu" role="menu" aria-label="Tùy chọn cài đặt">
-            <button
-              type="button"
-              className="settings-item danger"
-              role="menuitem"
-              onClick={handleDeleteHistory}
-            >Xóa lịch sử trò chuyện</button>
+            <div>
+              <button type="button" className="settings-item danger"
+                role="menuitem"
+                onClick={handleDeleteHistory}
+              >Xóa lịch sử trò chuyện</button>
+              <DeleteChatModal 
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            onConfirm={handleDelete}
+        />
+
+            </div>
+
             <button
               type="button"
               className="settings-item warn"
