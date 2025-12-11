@@ -15,7 +15,7 @@ export default function DeleteChatModal({ isOpen, onClose, onConfirm }: DeleteCh
   return (
     <div className="modal-backdrop">
       <div className="delete-chat-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        
+
         {/* === Header === */}
         <div className="modal-header">
           <h3 id="modal-title" className="header-title">
@@ -35,17 +35,17 @@ export default function DeleteChatModal({ isOpen, onClose, onConfirm }: DeleteCh
 
         {/* === Footer/Actions === */}
         <div className="modal-actions">
-          <button 
-            className="btn-cancel" 
+          <button
+            className="btn-cancel"
             onClick={onClose}
           >
             Hủy
           </button>
-          <button 
-            className="btn-delete-confirm" 
+          <button
+            className="btn-delete-confirm"
             onClick={onConfirm}
           >
-            Xóa đoạn chat
+            Xóa
           </button>
         </div>
       </div>
