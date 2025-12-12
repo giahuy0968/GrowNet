@@ -8,10 +8,13 @@ export interface IUser extends Document {
   bio?: string;
   avatar?: string;
   interests: string[];
+  fields?: string[];
+  skills?: string[];
   location?: {
     city: string;
     country: string;
   };
+  experienceYears?: number;
   age?: number;
   gender?: string;
   createdAt: Date;
@@ -53,13 +56,33 @@ const UserSchema = new Schema<IUser>({
     type: String,
     default: 'https://i.pravatar.cc/150'
   },
-  interests: [{
-    type: String,
-    trim: true
-  }],
+  interests: {
+    type: [{ type: String, trim: true }],
+    default: []
+  },
+  fields: {
+    type: [{ type: String, trim: true, lowercase: true }],
+    default: []
+  },
+  skills: {
+    type: [{ type: String, trim: true, lowercase: true }],
+    default: []
+  },
   location: {
-    city: String,
-    country: String
+    city: {
+      type: String,
+      trim: true
+    },
+    country: {
+      type: String,
+      trim: true
+    }
+  },
+  experienceYears: {
+    type: Number,
+    min: 0,
+    max: 60,
+    default: 0
   },
   age: {
     type: Number,
@@ -80,5 +103,8 @@ const UserSchema = new Schema<IUser>({
 
 // Indexes - email and username already indexed via unique: true
 UserSchema.index({ createdAt: -1 });
+UserSchema.index({ 'location.city': 1 });
+UserSchema.index({ interests: 1 });
+UserSchema.index({ fields: 1 });
 
 export default mongoose.model<IUser>('User', UserSchema);

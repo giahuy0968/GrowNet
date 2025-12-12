@@ -3,36 +3,40 @@ import { useNavigate } from 'react-router-dom'
 import { useSwipeable } from 'react-swipeable'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../contexts/AuthContext'
+import type { User } from '../services/auth.service'
 import '../styles/ProfileCard.css'
 
 interface ProfileCardProps {
-  onSwipe?: (dir: 'left' | 'right') => void;
+  profile?: User;
+  onSwipe?: (dir: 'left' | 'right', profile: User) => void;
+  disabled?: boolean;
 }
 
-export default function ProfileCard({ onSwipe }: ProfileCardProps) {
+export default function ProfileCard({ profile, onSwipe, disabled }: ProfileCardProps) {
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user: authUser } = useAuth()
+  const displayUser = profile || authUser
 
-  if (!user) {
+  if (!displayUser) {
     return (
       <div className="profile-card loading">
-        <p>Đang tải thông tin tài khoản...</p>
+        <p>Không tìm thấy thông tin người dùng</p>
       </div>
     )
   }
 
-  const location = [user.location?.city, user.location?.country]
+  const location = [displayUser.location?.city, displayUser.location?.country]
     .filter(Boolean)
     .join(', ') || 'Chưa cập nhật'
-  const interests = user.interests && user.interests.length > 0
-    ? user.interests
+  const interests = displayUser.interests && displayUser.interests.length > 0
+    ? displayUser.interests
     : ['Chưa cập nhật']
-  const summary = user.bio || 'Thêm mô tả để mentee/mentor hiểu rõ hơn về bạn.'
+  const summary = displayUser.bio || 'Thêm mô tả để mentee/mentor hiểu rõ hơn về bạn.'
 
   // Swipe handlers
   const handlers = useSwipeable({
-    onSwipedLeft: () => onSwipe?.('left'),
-    onSwipedRight: () => onSwipe?.('right'),
+    onSwipedLeft: () => !disabled && onSwipe?.('left', displayUser),
+    onSwipedRight: () => !disabled && onSwipe?.('right', displayUser),
 
     trackMouse: true,
   })
@@ -49,16 +53,20 @@ export default function ProfileCard({ onSwipe }: ProfileCardProps) {
   const handleAccept = (e: React.MouseEvent) => {
     e.stopPropagation()
     setSwipeDir('right')
-    onSwipe?.('right')
+    if (!disabled) {
+      onSwipe?.('right', displayUser)
+    }
   }
   const handleCancel = (e: React.MouseEvent) => {
     e.stopPropagation()
     setSwipeDir('left')
-    onSwipe?.('left')
+    if (!disabled) {
+      onSwipe?.('left', displayUser)
+    }
   }
 
   const handleClick = () => {
-    navigate(`/profile/${user._id}`)
+    navigate(`/profile/${displayUser._id}`)
   }
 
   return (
@@ -78,9 +86,9 @@ export default function ProfileCard({ onSwipe }: ProfileCardProps) {
 
         <div className="profile-body">
           <div className="profile-info">
-            <img src={user.avatar || '/user_avt.png'} alt={user.fullName} className="profile-avatar" />
-            <h2>{user.fullName || user.username}</h2>
-            <p className="profile-role">{user.username} • {location}</p>
+            <img src={displayUser.avatar || '/user_avt.png'} alt={displayUser.fullName} className="profile-avatar" />
+            <h2>{displayUser.fullName || displayUser.username}</h2>
+            <p className="profile-role">{displayUser.username} • {location}</p>
 
             <div className="profile-tags">
               {interests.map(tag => (
@@ -96,8 +104,8 @@ export default function ProfileCard({ onSwipe }: ProfileCardProps) {
         </div>
 
         <div className="profile-actions" onClick={(e) => e.stopPropagation()}>
-          <button className="btn-action btn-cancel" onClick={handleCancel}>✕</button>
-          <button className="btn-action btn-accept" onClick={handleAccept}>✓</button>
+          <button className="btn-action btn-cancel" onClick={handleCancel} disabled={disabled}>✕</button>
+          <button className="btn-action btn-accept" onClick={handleAccept} disabled={disabled}>✓</button>
         </div>
       </motion.div>
     </AnimatePresence>

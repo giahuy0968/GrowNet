@@ -8,7 +8,19 @@ import { sendSuccess } from '../utils/response';
 // Register
 export const register = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { username, email, password, fullName, interests, location, age, gender } = req.body;
+    const {
+      username,
+      email,
+      password,
+      fullName,
+      interests,
+      location,
+      age,
+      gender,
+      fields,
+      skills,
+      experienceYears
+    } = req.body;
 
     // Check if user exists
     const existingUser = await User.findOne({
@@ -29,6 +41,9 @@ export const register = async (req: AuthRequest, res: Response): Promise<void> =
       password,
       fullName,
       interests: interests || [],
+      fields: fields || [],
+      skills: skills || [],
+      experienceYears,
       location,
       age,
       gender
@@ -50,7 +65,10 @@ export const register = async (req: AuthRequest, res: Response): Promise<void> =
         email: user.email,
         fullName: user.fullName,
         avatar: user.avatar,
-        interests: user.interests
+        interests: user.interests,
+        fields: user.fields,
+        skills: user.skills,
+        experienceYears: user.experienceYears
       }
     };
 
@@ -101,6 +119,9 @@ export const login = async (req: AuthRequest, res: Response): Promise<void> => {
         avatar: user.avatar,
         bio: user.bio,
         interests: user.interests,
+        fields: user.fields,
+        skills: user.skills,
+        experienceYears: user.experienceYears,
         location: user.location
       }
     };
@@ -129,7 +150,18 @@ export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<v
 // Update profile
 export const updateProfile = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { fullName, bio, interests, location, age, gender, avatar } = req.body;
+    const {
+      fullName,
+      bio,
+      interests,
+      location,
+      age,
+      gender,
+      avatar,
+      fields,
+      skills,
+      experienceYears
+    } = req.body;
 
     const user = await User.findByIdAndUpdate(
       req.userId,
@@ -137,6 +169,9 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
         fullName,
         bio,
         interests,
+        fields,
+        skills,
+        experienceYears,
         location,
         age,
         gender,

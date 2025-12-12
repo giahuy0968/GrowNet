@@ -1,17 +1,28 @@
-import React, { useState } from 'react'
+import React from 'react'
 import '../styles/Sidebar.css'
 import { Icon } from './ui/Icon'
 
+const FIELD_OPTIONS = ['Design', 'Marketing', 'UX/UI', 'TypeScript', 'ReactJS', 'Java']
+
 interface SidebarProps {
   onOpenFilter: () => void
+  selectedFields: string[]
+  selectedLocation: string
+  experienceYears: number
+  onToggleField: (field: string) => void
+  onSelectLocation: (location: string) => void
+  onExperienceChange: (value: number) => void
 }
 
-export default function Sidebar({ onOpenFilter }: SidebarProps) {
-  const [selectedFields, setSelectedFields] = useState<string[]>(['Design', 'Marketing'])
-  const [selectedSkills, setSelectedSkills] = useState<string[]>(['TypeScript', 'ReactJS'])
-  const [selectedLocation, setSelectedLocation] = useState('TP HCM')
-  const [experienceYears, setExperienceYears] = useState(3)
-
+export default function Sidebar({
+  onOpenFilter,
+  selectedFields,
+  selectedLocation,
+  experienceYears,
+  onToggleField,
+  onSelectLocation,
+  onExperienceChange
+}: SidebarProps) {
   return (
     <aside className="sidebar">
       <div className="sidebar-section">
@@ -25,18 +36,41 @@ export default function Sidebar({ onOpenFilter }: SidebarProps) {
         <div className="filter-group">
           <h4>Lĩnh vực</h4>
           <div className="tag-list">
-            {['Design', 'Marketing', 'UX/UI', 'TypeScript', 'ReactJS', 'Java'].map(tag => (
-              <span key={tag} className="tag">{tag}</span>
-            ))}
+            {FIELD_OPTIONS.map(tag => {
+              const active = selectedFields.includes(tag)
+              return (
+                <button
+                  type="button"
+                  key={tag}
+                  className={`tag ${active ? 'active' : ''}`}
+                  aria-pressed={active}
+                  onClick={() => onToggleField(tag)}
+                >
+                  {tag}
+                </button>
+              )
+            })}
           </div>
         </div>
 
         <div className="filter-group">
           <h4>Khu vực</h4>
           <div className="location-tabs">
-            <button className={selectedLocation === 'TP HCM' ? 'active' : ''}>TP HCM</button>
-            <button className={selectedLocation === 'Hà Nội' ? 'active' : ''}>Hà Nội</button>
-            <button className={selectedLocation === 'Khác' ? 'active' : ''}>Khác...</button>
+            <button
+              type="button"
+              className={selectedLocation === 'TP HCM' ? 'active' : ''}
+              onClick={() => onSelectLocation('TP HCM')}
+            >TP HCM</button>
+            <button
+              type="button"
+              className={selectedLocation === 'Hà Nội' ? 'active' : ''}
+              onClick={() => onSelectLocation('Hà Nội')}
+            >Hà Nội</button>
+            <button
+              type="button"
+              className={selectedLocation === 'Khác' ? 'active' : ''}
+              onClick={() => onSelectLocation('Khác')}
+            >Khác...</button>
           </div>
         </div>
         <div className="filter-group">
@@ -46,7 +80,7 @@ export default function Sidebar({ onOpenFilter }: SidebarProps) {
             min="0"
             max="10"
             value={experienceYears}
-            onChange={(e) => setExperienceYears(Number(e.target.value))}
+            onChange={(e) => onExperienceChange(Number(e.target.value))}
             className="experience-slider"
           />
           <span className="experience-value">{experienceYears}+</span>

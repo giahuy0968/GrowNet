@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { formatDistanceToNow, isToday, isYesterday } from 'date-fns'
 import { vi } from 'date-fns/locale'
 import notificationService, { type Notification as NotificationItem } from '../services/notification.service'
+import { useSocket } from '../contexts/SocketContext'
 import '../styles/Notification.css'
 
 type Tab = 'all' | 'unread'
@@ -11,6 +12,7 @@ export default function Notification() {
   const [notifications, setNotifications] = useState<NotificationItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const { socket } = useSocket()
 
   const loadNotifications = async () => {
     setLoading(true)
@@ -28,6 +30,25 @@ export default function Notification() {
   useEffect(() => {
     loadNotifications()
   }, [])
+
+  useEffect(() => {
+    if (!socket) return
+
+    const handleNewNotification = (payload: NotificationItem) => {
+      setNotifications(prev => {
+        const exists = prev.some(notification => notification._id === payload._id)
+        if (exists) {
+          return prev
+        }
+        return [payload, ...prev]
+      })
+    }
+
+    socket.on('notification:new', handleNewNotification)
+    return () => {
+      socket.off('notification:new', handleNewNotification)
+    }
+  }, [socket])
 
   const filteredNotifications = useMemo(() => {
     if (activeTab === 'all') return notifications

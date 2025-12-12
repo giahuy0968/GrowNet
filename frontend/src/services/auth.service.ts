@@ -21,10 +21,13 @@ export interface User {
   bio?: string;
   avatar?: string;
   interests?: string[];
+  fields?: string[];
+  skills?: string[];
   location?: {
     city?: string;
     country?: string;
   };
+  experienceYears?: number;
   age?: number;
   gender?: string;
   createdAt: string;

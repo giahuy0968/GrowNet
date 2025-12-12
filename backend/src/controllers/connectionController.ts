@@ -1,9 +1,11 @@
 import { Response } from 'express';
 import Connection from '../models/Connection';
 import Notification from '../models/Notification';
+import User from '../models/User';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
 import { sendSuccess } from '../utils/response';
+import { emitToUser } from '../config/socket';
 
 // Send friend request
 export const sendRequest = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -26,20 +28,25 @@ export const sendRequest = async (req: AuthRequest, res: Response): Promise<void
       throw new AppError('Connection already exists', 400);
     }
 
-    const connection = await Connection.create({
-      userId1: req.userId,
-      userId2: userId,
-      status: 'pending'
-    });
+    const [connection, requester] = await Promise.all([
+      Connection.create({
+        userId1: req.userId,
+        userId2: userId,
+        status: 'pending'
+      }),
+      User.findById(req.userId).select('fullName username')
+    ]);
 
-    // Create notification
-    await Notification.create({
+    const requesterName = requester?.fullName || requester?.username || 'Someone';
+    const notification = await Notification.create({
       userId: userId,
       type: 'connection',
-      message: 'sent you a friend request',
+      message: `${requesterName} sent you a connection request`,
       relatedId: connection._id,
       read: false
     });
+
+    emitToUser(userId, 'notification:new', notification.toObject());
 
     sendSuccess(res, connection, {
       status: 201,

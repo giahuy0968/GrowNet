@@ -5,6 +5,12 @@ import http from 'http';
 import { Server } from 'socket.io';
 import connectDB from './config/database';
 import { errorHandler } from './middleware/errorHandler';
+import {
+  initSocketServer,
+  registerOnlineUser,
+  removeOnlineUserBySocket,
+  getOnlineUsers
+} from './config/socket';
 
 // Import routes
 import authRoutes from './routes/authRoutes';
@@ -29,6 +35,8 @@ const io = new Server(server, {
     methods: ['GET', 'POST']
   }
 });
+
+initSocketServer(io);
 
 const allowedOrigins = [
   'http://localhost:3000',
@@ -83,14 +91,14 @@ app.use('/api/chats', chatRoutes);
 app.use('/api/notifications', notificationRoutes);
 
 // Socket.IO connection handling
-const onlineUsers = new Map<string, string>(); // userId -> socketId
+const onlineUsers = getOnlineUsers();
 
 io.on('connection', (socket: any) => {
   console.log('User connected:', socket.id);
 
   // User joins
   socket.on('user:online', (userId: string) => {
-    onlineUsers.set(userId, socket.id);
+    registerOnlineUser(userId, socket.id);
     io.emit('user:status', { userId, status: 'online' });
   });
 
@@ -118,12 +126,9 @@ io.on('connection', (socket: any) => {
     console.log('User disconnected:', socket.id);
     
     // Find and remove user from online list
-    for (const [userId, socketId] of onlineUsers.entries()) {
-      if (socketId === socket.id) {
-        onlineUsers.delete(userId);
-        io.emit('user:status', { userId, status: 'offline' });
-        break;
-      }
+    const userId = removeOnlineUserBySocket(socket.id);
+    if (userId) {
+      io.emit('user:status', { userId, status: 'offline' });
     }
   });
 });

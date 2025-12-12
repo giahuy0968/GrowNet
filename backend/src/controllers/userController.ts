@@ -28,6 +28,10 @@ export const searchUsers = async (req: AuthRequest, res: Response): Promise<void
     const { q, interests, location } = req.query;
     const query: any = {};
 
+    if (req.userId) {
+      query._id = { $ne: req.userId };
+    }
+
     if (q) {
       query.$or = [
         { username: { $regex: q, $options: 'i' } },

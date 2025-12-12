@@ -9,33 +9,23 @@ import Dashboard from './pages/Dashboard'
 import Chat from './pages/Chat'
 import MainLayout from './MainLayout'
 import { ProtectedRoute } from './components/ProtectedRoute'
-import Settings from "./pages/Settings";
-import ChangePassword from "./pages/ChangePassword";
-import AdvancedSettings from './pages/AdvancedSettings';
-import TermsPrivacy from './pages/TermsPrivacy';
-import ProfileMenteeChange from './pages/MenteeProfileChange';
-import Schedule from './pages/Schedule';
-import MentorProfile from './pages/MentorProfile';
-import MentorProfileChange from './pages/MentorProfileChange';
-import MenteeProfile from './pages/MenteeProfile';
-import CallPage from './pages/CallPage';
-import AppointmentDetail from './pages/AppointmentDetail';
-import MessageSearch from './pages/MessageSearch';
-import NotFound from './pages/NotFound';
-import ScheduleDetail from './pages/ScheduleDetail';
-import Profile from './pages/Profile';
-import MentorSchedule from './pages/mentorSchedule';
-const MyProfileWrapper = () => {
-  // Logic giả định: kiểm tra xem người dùng hiện tại là mentor hay mentee
-  const isCurrentUserMentor = true; // Thay bằng logic thực tế
-  if (isCurrentUserMentor) {
-    // Render MentorProfile với prop isOwner=true
-    return <MentorProfile isOwner={true} />;
-  } else {
-    // Render MenteeProfile với prop isOwner=true
-    return <MenteeProfile isOwner={true} />;
-  }
-}
+import Settings from './pages/Settings'
+import ChangePassword from './pages/ChangePassword'
+import AdvancedSettings from './pages/AdvancedSettings'
+import TermsPrivacy from './pages/TermsPrivacy'
+import ProfileMenteeChange from './pages/MenteeProfileChange'
+import Schedule from './pages/Schedule'
+import MentorProfile from './pages/MentorProfile'
+import MentorProfileChange from './pages/MentorProfileChange'
+import MenteeProfile from './pages/MenteeProfile'
+import CallPage from './pages/CallPage'
+import AppointmentDetail from './pages/AppointmentDetail'
+import MessageSearch from './pages/MessageSearch'
+import NotFound from './pages/NotFound'
+import ScheduleDetail from './pages/ScheduleDetail'
+import Profile from './pages/Profile'
+import MentorSchedule from './pages/mentorSchedule'
+import MyProfile from './pages/MyProfile'
 export default function App() {
   return (
     <Routes>
@@ -56,7 +46,7 @@ export default function App() {
         <Route path="/profile-setup" element={<ProfileSetup />} />
         <Route path="/mentee-profile/:id" element={<MenteeProfile isOwner={false} />} />
         <Route path="/mentor-profile/:id" element={<MentorProfile isOwner={false} />} />
-        <Route path="/my-profile" element={<MyProfileWrapper />} />
+        <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/schedule/:id" element={<AppointmentDetail />} />
         <Route path="/schedule/detail" element={<ScheduleDetail />} />
