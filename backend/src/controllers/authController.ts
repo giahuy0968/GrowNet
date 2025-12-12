@@ -1,12 +1,36 @@
-import { Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
+import svgCaptcha from 'svg-captcha';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import User from '../models/User';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
 import { sendSuccess } from '../utils/response';
-// Register
-export const register = async (req: AuthRequest, res: Response): Promise<void> => {
+
+/* ===================== CAPTCHA ===================== */
+export const getCaptcha = (req: Request, res: Response): void => {
+  const captcha = svgCaptcha.create({
+    size: 5,
+    noise: 2,
+    ignoreChars: '0oO1ilI',
+    color: false,
+    background: '#f6f7fb'
+  });
+
+  if (req.session) {
+    req.session.captcha = captcha.text;
+  }
+
+  res.type('image/svg+xml');
+  res.send(captcha.data);
+};
+
+/* ===================== REGISTER ===================== */
+export const register = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const {
       username,
@@ -19,10 +43,20 @@ export const register = async (req: AuthRequest, res: Response): Promise<void> =
       gender,
       fields,
       skills,
-      experienceYears
+      experienceYears,
+      captcha
     } = req.body;
 
-    // Check if user exists
+    // Validate captcha
+    if (
+      !req.session?.captcha ||
+      (captcha || '').trim() !== req.session.captcha
+    ) {
+      throw new AppError('CAPTCHA không hợp lệ', 400);
+    }
+    delete req.session.captcha;
+
+    // Check existing user
     const existingUser = await User.findOne({
       $or: [{ email }, { username }]
     });
@@ -38,7 +72,7 @@ export const register = async (req: AuthRequest, res: Response): Promise<void> =
     const user = await User.create({
       username,
       email,
-      password,
+      password: hashedPassword,
       fullName,
       interests: interests || [],
       fields: fields || [],
@@ -49,67 +83,75 @@ export const register = async (req: AuthRequest, res: Response): Promise<void> =
       gender
     });
 
-    // Generate token
-    const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
+    if (!process.env.JWT_SECRET) {
+      throw new AppError('JWT_SECRET is not defined', 500);
+    }
+
     const token = jwt.sign(
       { userId: user._id },
-      jwtSecret,
+      process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 
-    const payload = {
-      token,
-      user: {
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-        fullName: user.fullName,
-        avatar: user.avatar,
-        interests: user.interests,
-        fields: user.fields,
-        skills: user.skills,
-        experienceYears: user.experienceYears
+    sendSuccess(
+      res,
+      {
+        token,
+        user: {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          fullName: user.fullName,
+          avatar: user.avatar,
+          interests: user.interests,
+          fields: user.fields,
+          skills: user.skills,
+          experienceYears: user.experienceYears
+        }
+      },
+      {
+        status: 201,
+        message: 'User registered successfully'
       }
-    };
-
-    sendSuccess(res, payload, {
-      status: 201,
-      message: 'User registered successfully'
-    });
-  } catch (error: any) {
-    throw new AppError(error.message, error.statusCode || 500);
+    );
+  } catch (err) {
+    next(err);
   }
 };
 
-// Login
-export const login = async (req: AuthRequest, res: Response): Promise<void> => {
+/* ===================== LOGIN ===================== */
+export const login = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-
     if (!user) {
       throw new AppError('Invalid email or password', 401);
     }
 
-    // ❌ Không bcrypt.compare — so sánh trực tiếp
-    if (password !== user.password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       throw new AppError('Invalid email or password', 401);
     }
 
-    // Update last active
     user.lastActive = new Date();
     await user.save();
 
-    // Generate token
-    const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
+    if (!process.env.JWT_SECRET) {
+      throw new AppError('JWT_SECRET is not defined', 500);
+    }
+
     const token = jwt.sign(
       { userId: user._id },
-      jwtSecret,
+      process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 
-    const payload = {
+    sendSuccess(res, {
       token,
       user: {
         _id: user._id,
@@ -124,16 +166,18 @@ export const login = async (req: AuthRequest, res: Response): Promise<void> => {
         experienceYears: user.experienceYears,
         location: user.location
       }
-    };
-
-    sendSuccess(res, payload, { message: 'Login successful' });
-  } catch (error: any) {
-    throw new AppError(error.message, error.statusCode || 500);
+    }, { message: 'Login successful' });
+  } catch (err) {
+    next(err);
   }
 };
 
-// Get current user
-export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<void> => {
+/* ===================== GET CURRENT USER ===================== */
+export const getCurrentUser = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const user = await User.findById(req.userId).select('-password');
 
@@ -142,13 +186,17 @@ export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<v
     }
 
     sendSuccess(res, user);
-  } catch (error: any) {
-    throw new AppError(error.message, error.statusCode || 500);
+  } catch (err) {
+    next(err);
   }
 };
 
-// Update profile
-export const updateProfile = async (req: AuthRequest, res: Response): Promise<void> => {
+/* ===================== UPDATE PROFILE ===================== */
+export const updateProfile = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const {
       fullName,
@@ -186,33 +234,35 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
     }
 
     sendSuccess(res, user, { message: 'Profile updated successfully' });
-  } catch (error: any) {
-    throw new AppError(error.message, error.statusCode || 500);
+  } catch (err) {
+    next(err);
   }
 };
 
-// Change password
-export const changePassword = async (req: AuthRequest, res: Response): Promise<void> => {
+/* ===================== CHANGE PASSWORD ===================== */
+export const changePassword = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { currentPassword, newPassword } = req.body;
 
     const user = await User.findById(req.userId);
-
     if (!user) {
       throw new AppError('User not found', 404);
     }
 
-    // ❌ Không bcrypt — so sánh trực tiếp
-    if (currentPassword !== user.password) {
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
       throw new AppError('Current password is incorrect', 401);
     }
 
-    // Lưu password mới dạng plaintext luôn
-    user.password = newPassword;
+    user.password = await bcrypt.hash(newPassword, 10);
     await user.save();
 
     sendSuccess(res, null, { message: 'Password changed successfully' });
-  } catch (error: any) {
-    throw new AppError(error.message, error.statusCode || 500);
+  } catch (err) {
+    next(err);
   }
 };

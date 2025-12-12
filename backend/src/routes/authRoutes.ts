@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login, getCurrentUser, updateProfile, changePassword } from '../controllers/authController';
+import { register, login, getCurrentUser, updateProfile, changePassword, getCaptcha } from '../controllers/authController';
 import { authMiddleware } from '../middleware/auth';
 import { validateRequest } from '../middleware/validator';
 import { body } from 'express-validator';
@@ -35,6 +35,7 @@ const changePasswordValidation = [
 ];
 
 // Routes
+router.get('/captcha', getCaptcha);
 router.post('/register', registerValidation, validateRequest, register);
 router.post('/login', loginValidation, validateRequest, login);
 router.get('/me', authMiddleware, getCurrentUser);

@@ -179,7 +179,10 @@ export default function ChatWindow({ chat, showSearch = false, onChatUpdated }: 
 
         {filteredMessages.map(message => {
           const senderId = resolveUserId(message.senderId)
-          const isOwnMessage = senderId === user?._id
+          // Log để kiểm tra giá trị userId và senderId
+          console.log('Current userId:', user?._id, 'Message senderId:', senderId)
+          // Đảm bảo so sánh cùng kiểu dữ liệu (string)
+          const isOwnMessage = senderId?.toString() === user?._id?.toString()
           const timestamp = message.createdAt
             ? format(new Date(message.createdAt), 'HH:mm', { locale: vi })
             : ''
