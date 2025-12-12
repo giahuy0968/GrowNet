@@ -3,6 +3,7 @@ import Connection from '../models/Connection';
 import Notification from '../models/Notification';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
+import { sendSuccess } from '../utils/response';
 
 // Send friend request
 export const sendRequest = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -40,9 +41,9 @@ export const sendRequest = async (req: AuthRequest, res: Response): Promise<void
       read: false
     });
 
-    res.status(201).json({
-      message: 'Friend request sent successfully',
-      connection
+    sendSuccess(res, connection, {
+      status: 201,
+      message: 'Friend request sent successfully'
     });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
@@ -67,10 +68,7 @@ export const acceptRequest = async (req: AuthRequest, res: Response): Promise<vo
     connection.status = 'accepted';
     await connection.save();
 
-    res.json({
-      message: 'Friend request accepted',
-      connection
-    });
+    sendSuccess(res, connection, { message: 'Friend request accepted' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -91,7 +89,7 @@ export const rejectRequest = async (req: AuthRequest, res: Response): Promise<vo
       throw new AppError('Friend request not found', 404);
     }
 
-    res.json({ message: 'Friend request rejected' });
+    sendSuccess(res, null, { message: 'Friend request rejected' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -111,7 +109,11 @@ export const getFriends = async (req: AuthRequest, res: Response): Promise<void>
       return conn.userId1._id.toString() === req.userId ? conn.userId2 : conn.userId1;
     });
 
-    res.json({ friends, count: friends.length });
+    sendSuccess(res, friends, {
+      meta: {
+        count: friends.length
+      }
+    });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -127,7 +129,11 @@ export const getPendingRequests = async (req: AuthRequest, res: Response): Promi
       .populate('userId1', '-password')
       .sort({ createdAt: -1 });
 
-    res.json({ requests, count: requests.length });
+    sendSuccess(res, requests, {
+      meta: {
+        count: requests.length
+      }
+    });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -150,7 +156,7 @@ export const removeFriend = async (req: AuthRequest, res: Response): Promise<voi
       throw new AppError('Friendship not found', 404);
     }
 
-    res.json({ message: 'Friend removed successfully' });
+    sendSuccess(res, null, { message: 'Friend removed successfully' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }

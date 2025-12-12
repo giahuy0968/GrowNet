@@ -1,4 +1,4 @@
-import apiService from './api.service';
+import apiService, { ApiResponse } from './api.service';
 import { setAuthToken, removeAuthToken } from '../config/api';
 
 export interface RegisterData {
@@ -38,31 +38,34 @@ export interface AuthResponse {
 
 class AuthService {
   async register(data: RegisterData): Promise<AuthResponse> {
-    const response = await apiService.post<AuthResponse>('/auth/register', data);
-    if (response.token) {
-      setAuthToken(response.token);
+    const response = await apiService.post<ApiResponse<AuthResponse>>('/auth/register', data);
+    if (response.data.token) {
+      setAuthToken(response.data.token);
     }
-    return response;
+    return response.data;
   }
 
   async login(data: LoginData): Promise<AuthResponse> {
-    const response = await apiService.post<AuthResponse>('/auth/login', data);
-    if (response.token) {
-      setAuthToken(response.token);
+    const response = await apiService.post<ApiResponse<AuthResponse>>('/auth/login', data);
+    if (response.data.token) {
+      setAuthToken(response.data.token);
     }
-    return response;
+    return response.data;
   }
 
   async getCurrentUser(): Promise<User> {
-    return apiService.get<User>('/auth/me');
+    const response = await apiService.get<ApiResponse<User>>('/auth/me');
+    return response.data;
   }
 
   async updateProfile(data: Partial<User>): Promise<User> {
-    return apiService.put<User>('/auth/profile', data);
+    const response = await apiService.put<ApiResponse<User>>('/auth/profile', data);
+    return response.data;
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
-    return apiService.put('/auth/password', { currentPassword, newPassword });
+    const response = await apiService.put<ApiResponse<null>>('/auth/password', { currentPassword, newPassword });
+    return { message: response.message || 'Password changed successfully' };
   }
 
   logout(): void {

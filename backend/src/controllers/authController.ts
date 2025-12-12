@@ -1,9 +1,10 @@
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 import User from '../models/User';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
-import bcrypt from 'bcryptjs';
+import { sendSuccess } from '../utils/response';
 // Register
 export const register = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -41,17 +42,21 @@ export const register = async (req: AuthRequest, res: Response): Promise<void> =
       { expiresIn: '7d' }
     );
 
-    res.status(201).json({
-      message: 'User registered successfully',
+    const payload = {
       token,
       user: {
-        id: user._id,
+        _id: user._id,
         username: user.username,
         email: user.email,
         fullName: user.fullName,
         avatar: user.avatar,
         interests: user.interests
       }
+    };
+
+    sendSuccess(res, payload, {
+      status: 201,
+      message: 'User registered successfully'
     });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
@@ -86,11 +91,10 @@ export const login = async (req: AuthRequest, res: Response): Promise<void> => {
       { expiresIn: '7d' }
     );
 
-    res.json({
-      message: 'Login successful',
+    const payload = {
       token,
       user: {
-        id: user._id,
+        _id: user._id,
         username: user.username,
         email: user.email,
         fullName: user.fullName,
@@ -99,7 +103,9 @@ export const login = async (req: AuthRequest, res: Response): Promise<void> => {
         interests: user.interests,
         location: user.location
       }
-    });
+    };
+
+    sendSuccess(res, payload, { message: 'Login successful' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -114,7 +120,7 @@ export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<v
       throw new AppError('User not found', 404);
     }
 
-    res.json({ user });
+    sendSuccess(res, user);
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -144,10 +150,7 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
       throw new AppError('User not found', 404);
     }
 
-    res.json({
-      message: 'Profile updated successfully',
-      user
-    });
+    sendSuccess(res, user, { message: 'Profile updated successfully' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -173,7 +176,7 @@ export const changePassword = async (req: AuthRequest, res: Response): Promise<v
     user.password = newPassword;
     await user.save();
 
-    res.json({ message: 'Password changed successfully' });
+    sendSuccess(res, null, { message: 'Password changed successfully' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }

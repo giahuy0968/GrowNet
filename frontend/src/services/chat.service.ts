@@ -1,4 +1,4 @@
-import apiService from './api.service';
+import apiService, { ApiResponse } from './api.service';
 import { User } from './auth.service';
 
 export interface Message {
@@ -31,25 +31,49 @@ export interface SendMessageData {
   type?: 'text' | 'image' | 'file';
 }
 
+export interface ChatListResult {
+  chats: Chat[];
+  count: number;
+}
+
+export interface MessageListResult {
+  messages: Message[];
+  count: number;
+}
+
 class ChatService {
-  async getAllChats(): Promise<Chat[]> {
-    return apiService.get<Chat[]>('/chats');
+  async getAllChats(): Promise<ChatListResult> {
+    const response = await apiService.get<ApiResponse<Chat[], { count: number }>>('/chats');
+    return {
+      chats: response.data,
+      count: response.meta?.count ?? response.data.length
+    };
   }
 
   async getOrCreateChat(userId: string): Promise<Chat> {
-    return apiService.get<Chat>(`/chats/with/${userId}`);
+    const response = await apiService.get<ApiResponse<Chat>>(`/chats/with/${userId}`);
+    return response.data;
   }
 
-  async getMessages(chatId: string, page: number = 1): Promise<Message[]> {
-    return apiService.get<Message[]>(`/chats/${chatId}/messages?page=${page}`);
+  async getMessages(chatId: string, page: number = 1): Promise<MessageListResult> {
+    const response = await apiService.get<ApiResponse<Message[], { count: number }>>(
+      `/chats/${chatId}/messages?page=${page}`
+    );
+
+    return {
+      messages: response.data,
+      count: response.meta?.count ?? response.data.length
+    };
   }
 
   async sendMessage(chatId: string, data: SendMessageData): Promise<Message> {
-    return apiService.post<Message>(`/chats/${chatId}/messages`, data);
+    const response = await apiService.post<ApiResponse<Message>>(`/chats/${chatId}/messages`, data);
+    return response.data;
   }
 
-  async markAsRead(chatId: string): Promise<{ message: string }> {
-    return apiService.put(`/chats/${chatId}/read`);
+  async markAsRead(chatId: string): Promise<string> {
+    const response = await apiService.put<ApiResponse<null>>(`/chats/${chatId}/read`);
+    return response.message || 'Messages marked as read';
   }
 }
 

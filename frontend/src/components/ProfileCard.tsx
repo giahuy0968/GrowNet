@@ -1,14 +1,33 @@
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSwipeable } from 'react-swipeable'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useAuth } from '../contexts/AuthContext'
+import '../styles/ProfileCard.css'
 
+interface ProfileCardProps {
+  onSwipe?: (dir: 'left' | 'right') => void;
+}
 
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSwipeable } from 'react-swipeable';
-import { motion, AnimatePresence } from 'framer-motion';
-import '../styles/ProfileCard.css';
+export default function ProfileCard({ onSwipe }: ProfileCardProps) {
+  const navigate = useNavigate()
+  const { user } = useAuth()
 
-export default function ProfileCard({ userId = 'mentor-123', onSwipe }: { userId?: string, onSwipe?: (dir: 'left' | 'right') => void }) {
-  const navigate = useNavigate();
-  const profileType = 'mentor'; // Thay bằng logic thực tế (mentor/mentee)
+  if (!user) {
+    return (
+      <div className="profile-card loading">
+        <p>Đang tải thông tin tài khoản...</p>
+      </div>
+    )
+  }
+
+  const location = [user.location?.city, user.location?.country]
+    .filter(Boolean)
+    .join(', ') || 'Chưa cập nhật'
+  const interests = user.interests && user.interests.length > 0
+    ? user.interests
+    : ['Chưa cập nhật']
+  const summary = user.bio || 'Thêm mô tả để mentee/mentor hiểu rõ hơn về bạn.'
 
   // Swipe handlers
   const handlers = useSwipeable({
@@ -16,31 +35,31 @@ export default function ProfileCard({ userId = 'mentor-123', onSwipe }: { userId
     onSwipedRight: () => onSwipe?.('right'),
 
     trackMouse: true,
-  });
+  })
 
   // Animation state
-  const [swipeDir, setSwipeDir] = React.useState<null | 'left' | 'right'>(null);
+  const [swipeDir, setSwipeDir] = React.useState<null | 'left' | 'right'>(null)
 
   React.useEffect(() => {
     if (swipeDir) {
-      setTimeout(() => setSwipeDir(null), 400);
+      setTimeout(() => setSwipeDir(null), 400)
     }
-  }, [swipeDir]);
+  }, [swipeDir])
 
   const handleAccept = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setSwipeDir('right');
-    onSwipe?.('right');
-  };
+    e.stopPropagation()
+    setSwipeDir('right')
+    onSwipe?.('right')
+  }
   const handleCancel = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setSwipeDir('left');
-    onSwipe?.('left');
-  };
+    e.stopPropagation()
+    setSwipeDir('left')
+    onSwipe?.('left')
+  }
 
   const handleClick = () => {
-    navigate(`/${profileType}-profile/${userId}`);
-  };
+    navigate(`/profile/${user._id}`)
+  }
 
   return (
     <AnimatePresence>
@@ -59,20 +78,19 @@ export default function ProfileCard({ userId = 'mentor-123', onSwipe }: { userId
 
         <div className="profile-body">
           <div className="profile-info">
-            <h2>Nguyễn A</h2>
-            <p className="profile-role">Frontend Developer • TP.HCM</p>
+            <img src={user.avatar || '/user_avt.png'} alt={user.fullName} className="profile-avatar" />
+            <h2>{user.fullName || user.username}</h2>
+            <p className="profile-role">{user.username} • {location}</p>
 
             <div className="profile-tags">
-              <span className="tag">ReactJS</span>
-              <span className="tag">TypeScript</span>
-              <span className="tag">UI/UX</span>
+              {interests.map(tag => (
+                <span className="tag" key={tag}>{tag}</span>
+              ))}
             </div>
 
             <div className="profile-description">
               <h3>Mô tả tóm tắt</h3>
-              <p>
-                Chuyên gia Frontend 5 năm kinh nghiệm. Đã hoàn thành hơn 10 dự án lớn nhờ sử dụng React và NextJS, tập trung vào hiệu suất và trải nghiệm người dùng...
-              </p>
+              <p>{summary}</p>
             </div>
           </div>
         </div>
@@ -83,5 +101,5 @@ export default function ProfileCard({ userId = 'mentor-123', onSwipe }: { userId
         </div>
       </motion.div>
     </AnimatePresence>
-  );
+  )
 }

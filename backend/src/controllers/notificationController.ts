@@ -2,6 +2,7 @@ import { Response } from 'express';
 import Notification from '../models/Notification';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
+import { sendSuccess } from '../utils/response';
 
 // Get notifications
 export const getNotifications = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -17,10 +18,11 @@ export const getNotifications = async (req: AuthRequest, res: Response): Promise
       read: false
     });
 
-    res.json({
-      notifications,
-      count: notifications.length,
-      unreadCount
+    sendSuccess(res, notifications, {
+      meta: {
+        count: notifications.length,
+        unreadCount
+      }
     });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
@@ -42,7 +44,7 @@ export const markAsRead = async (req: AuthRequest, res: Response): Promise<void>
       throw new AppError('Notification not found', 404);
     }
 
-    res.json({ message: 'Notification marked as read', notification });
+    sendSuccess(res, notification, { message: 'Notification marked as read' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -56,7 +58,7 @@ export const markAllAsRead = async (req: AuthRequest, res: Response): Promise<vo
       { read: true }
     );
 
-    res.json({ message: 'All notifications marked as read' });
+    sendSuccess(res, null, { message: 'All notifications marked as read' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -76,7 +78,7 @@ export const deleteNotification = async (req: AuthRequest, res: Response): Promi
       throw new AppError('Notification not found', 404);
     }
 
-    res.json({ message: 'Notification deleted' });
+    sendSuccess(res, null, { message: 'Notification deleted' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }

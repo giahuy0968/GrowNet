@@ -4,6 +4,7 @@ import Chat from '../models/Chat';
 import Message from '../models/Message';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
+import { sendSuccess } from '../utils/response';
 
 // Get or create chat
 export const getOrCreateChat = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -29,7 +30,7 @@ export const getOrCreateChat = async (req: AuthRequest, res: Response): Promise<
       chat = await Chat.findById(createdChat._id).populate('participants', '-password');
     }
 
-    res.json({ chat });
+    sendSuccess(res, chat);
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -47,7 +48,11 @@ export const getAllChats = async (req: AuthRequest, res: Response): Promise<void
       .populate('participants', '-password')
       .sort({ updatedAt: -1 });
 
-    res.json({ chats, count: chats.length });
+    sendSuccess(res, chats, {
+      meta: {
+        count: chats.length
+      }
+    });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -77,7 +82,12 @@ export const getMessages = async (req: AuthRequest, res: Response): Promise<void
       .sort({ createdAt: -1 })
       .limit(Number(limit));
 
-    res.json({ messages: messages.reverse(), count: messages.length });
+    const orderedMessages = messages.reverse();
+    sendSuccess(res, orderedMessages, {
+      meta: {
+        count: orderedMessages.length
+      }
+    });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -127,9 +137,9 @@ export const sendMessage = async (req: AuthRequest, res: Response): Promise<void
     const populatedMessage = await Message.findById(message._id)
       .populate('senderId', 'username fullName avatar');
 
-    res.status(201).json({
-      message: 'Message sent successfully',
-      data: populatedMessage
+    sendSuccess(res, populatedMessage, {
+      status: 201,
+      message: 'Message sent successfully'
     });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
@@ -156,7 +166,7 @@ export const markAsRead = async (req: AuthRequest, res: Response): Promise<void>
       }
     );
 
-    res.json({ message: 'Messages marked as read' });
+    sendSuccess(res, null, { message: 'Messages marked as read' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }

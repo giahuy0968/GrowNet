@@ -1,5 +1,11 @@
 import { API_URL, getAuthHeaders } from '../config/api';
 
+export interface ApiResponse<T, M = undefined> {
+  data: T;
+  message?: string;
+  meta?: M;
+}
+
 class ApiService {
   private baseURL: string;
 
