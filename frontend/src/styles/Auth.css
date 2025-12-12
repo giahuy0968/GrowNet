@@ -53,18 +53,21 @@
   margin-bottom: 32px;
 }
 
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.auth-card {
+  background: white;
+  border-radius: 16px;
+  padding: 48px 40px;
+  max-width: 720px;
+  /* increased width */
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: -8px;
+.register-card {
+  max-width: 640px;
+  /* increased width for register */
 }
+
 
 .checkbox-label {
   display: flex;
@@ -198,5 +201,14 @@
 }
 
 .captcha-wrapper input {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  /* allow input to shrink inside flex container */
+  box-sizing: border-box;
+}
+
+/* ensure captcha display doesn't force overflow */
+.captcha-display {
+  max-width: 240px;
+  width: auto;
 }

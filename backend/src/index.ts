@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import session from 'express-session';
 import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io';
@@ -67,6 +68,18 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Session middleware (used for CAPTCHA storage, etc.)
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'change-me',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  }
+}));
+
 // Connect to database
 connectDB();
 
@@ -116,7 +129,7 @@ io.on('connection', (socket: any) => {
   // Disconnect
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
-    
+
     // Find and remove user from online list
     for (const [userId, socketId] of onlineUsers.entries()) {
       if (socketId === socket.id) {

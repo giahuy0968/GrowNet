@@ -5,7 +5,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (username: string, email: string, password: string, fullName: string) => Promise<void>;
+  register: (username: string, email: string, password: string, fullName: string, captcha?: string) => Promise<void>;
   logout: () => void;
   updateUser: (data: Partial<User>) => Promise<void>;
   isAuthenticated: boolean;
@@ -57,9 +57,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const register = async (username: string, email: string, password: string, fullName: string) => {
+  const register = async (username: string, email: string, password: string, fullName: string, captcha?: string) => {
     try {
-      const response = await authService.register({ username, email, password, fullName });
+      const response = await authService.register({ username, email, password, fullName, captcha });
       setUser(response.user);
     } catch (error) {
       throw error;

@@ -1,4 +1,5 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
+import svgCaptcha from 'svg-captcha';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import User from '../models/User';
@@ -6,9 +7,32 @@ import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
 import { sendSuccess } from '../utils/response';
 // Register
+export const getCaptcha = (req: Request, res: Response): void => {
+  const captcha = svgCaptcha.create({
+    size: 5,
+    noise: 2,
+    ignoreChars: '0oO1ilI',
+    color: false,
+    background: '#f6f7fb'
+  });
+  if (req.session) {
+    // store exact captcha text (case-sensitive)
+    req.session.captcha = captcha.text;
+  }
+  res.type('image/svg+xml');
+  res.send(captcha.data);
+};
+
 export const register = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { username, email, password, fullName, interests, location, age, gender } = req.body;
+    const { username, email, password, fullName, interests, location, age, gender, captcha } = req.body;
+
+    // Validate captcha (case-sensitive)
+    if (!req.session || !req.session.captcha || (captcha || '').trim() !== req.session.captcha) {
+      throw new AppError('CAPTCHA không hợp lệ', 400);
+    }
+    // remove used captcha
+    delete req.session.captcha;
 
     // Check if user exists
     const existingUser = await User.findOne({
