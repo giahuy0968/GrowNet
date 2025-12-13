@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import {
   postService,
@@ -36,6 +37,7 @@ const formatRelativeTime = (value: string) => {
 
 export default function Social() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const isAdmin = user?.role === 'admin' || user?.role === 'moderator'
   const [posts, setPosts] = useState<Post[]>([])
   const [pagination, setPagination] = useState<PaginationMeta | undefined>()
@@ -169,8 +171,16 @@ export default function Social() {
   const handleConnect = async (targetId: string) => {
     setConnectStatus(prev => ({ ...prev, [targetId]: 'pending' }))
     try {
-      await connectionService.sendRequest(targetId)
+      const result = await connectionService.sendRequest(targetId)
       setConnectStatus(prev => ({ ...prev, [targetId]: 'sent' }))
+
+      if (result.matched && result.chat?._id) {
+        setToast('Hai bạn đã match! Mở chat ngay nhé.')
+        navigate('/chat', { state: { chatId: result.chat._id } })
+        return
+      }
+
+      setToast('Đã gửi lời mời kết nối')
     } catch (error) {
       console.error('Không thể gửi lời mời', error)
       setConnectStatus(prev => ({ ...prev, [targetId]: 'idle' }))
