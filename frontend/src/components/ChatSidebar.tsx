@@ -131,8 +131,8 @@ export default function ChatSidebar({
               <div className="contact-info">
                 <div className="contact-name">{name}</div>
                 <div className="contact-message">{lastMessage}</div>
-              </div>
-              <div className="contact-time">{lastUpdated}</div>
+                <div className="contact-time">{lastUpdated}</div>
+              </div>              
             </button>
           )
         })}

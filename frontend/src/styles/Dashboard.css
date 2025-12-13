@@ -1,7 +1,7 @@
 /* Dashboard Layout Styles */
 .dashboard-layout {
   min-height: 80vh;
-  background: #f8fafc;
+  background: #edf4fa;
 }
 
 .dashboard-content {
@@ -35,15 +35,16 @@
 
 .main-content {
   min-height: auto;
-  align-self: stretch;
   display: flex;
+  align-items: flex-start;
+  max-width: 550px;
+  margin: 0 auto;
 }
 
 .right-sidebar {
   position: sticky;
   top: 24px;
-  align-self: stretch;
-  height: 100%;
+  height: fit-content;
   display: flex;
 }
 

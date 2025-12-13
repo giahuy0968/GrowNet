@@ -70,40 +70,44 @@ export default function ChatInfo({ chat, onOpenSearch }: ChatInfoProps) {
 
   return (
     <div className="chat-info">
-      <div className="info-header">
-        <h3>THÔNG TIN HỘI THOẠI</h3>
-      </div>
+      <div className="info-header-wrapper">
+        <div className="info-header">
+          <h3>THÔNG TIN HỘI THOẠI</h3>
+        </div>
+        <button
+            type="button"
+            className="settings-btn"
+            aria-label="Cài đặt hội thoại"
+            onClick={() => setSettingsOpen(o => !o)}
+          >⚙️</button>
+          {settingsOpen && (
+            <div className="settings-menu" role="menu" aria-label="Tùy chọn cài đặt">
+              <button 
+                type="button" 
+                className="settings-item danger"
+                role="menuitem"
+                onClick={handleDeleteHistory}
+              >
+                Xóa lịch sử trò chuyện
+              </button>
+              <button
+                type="button"
+                className="settings-item warn"
+                role="menuitem"
+                onClick={handleReport}
+              >
+                Báo cáo
+              </button>
+            </div>
+          )}
+        </div>
 
       <div className="user-profile">
-        <button
-          type="button"
-          className="settings-btn"
-          aria-label="Cài đặt hội thoại"
-          onClick={() => setSettingsOpen(o => !o)}
-        >⚙️</button>
+        
         <img src={participantAvatar || '/user_avt.png'} alt={participantName} className="profile-avatar" />
         <h4>{participantName}</h4>
         <p className="status">{isOnline ? '🟢 Đang hoạt động' : '⚪ Ngoại tuyến'}</p>
-        {settingsOpen && (
-          <div className="settings-menu" role="menu" aria-label="Tùy chọn cài đặt">
-            <button 
-              type="button" 
-              className="settings-item danger"
-              role="menuitem"
-              onClick={handleDeleteHistory}
-            >
-              Xóa lịch sử trò chuyện
-            </button>
-            <button
-              type="button"
-              className="settings-item warn"
-              role="menuitem"
-              onClick={handleReport}
-            >
-              Báo cáo
-            </button>
-          </div>
-        )}
+        
       </div>
 
       <div className="profile-actions">
