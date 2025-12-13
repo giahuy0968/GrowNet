@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
 import ProfileCard from '../components/ProfileCard'
 import Calendar from '../components/Calendar'
-import FilterModal from '../components/FilterModal'
+import FilterModal, { type AdvancedFilterValues } from '../components/FilterModal'
 import Toast from '../components/Toast'
-import { userService, connectionService, chatService } from '../services'
+import { userService, connectionService } from '../services'
 import type { User } from '../services'
 import '../styles/Dashboard.css'
 
@@ -12,6 +13,71 @@ interface FilterState {
   fields: string[]
   location: string
   experienceYears: number
+}
+
+interface AdvancedFilterState extends AdvancedFilterValues {}
+
+const normalizeText = (value?: string) => (
+  (value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim()
+)
+
+const LOCATION_ALIASES: Record<string, string[]> = {
+  'tp hcm': ['tp hcm', 'ho chi minh', 'hochiminh', 'sai gon', 'saigon'],
+  'ha noi': ['ha noi', 'hanoi'],
+  'da nang': ['da nang', 'danang'],
+  'can tho': ['can tho', 'cantho'],
+  'hai phong': ['hai phong', 'haiphong'],
+  remote: ['remote', 'online'],
+  singapore: ['singapore']
+}
+
+const PRIORITY_LOCATIONS = new Set(
+  Object.values(LOCATION_ALIASES).reduce<string[]>((acc, list) => acc.concat(list), [])
+)
+
+const matchesLocation = (user: User, target: string) => {
+  const city = normalizeText(user.location?.city)
+  const country = normalizeText(user.location?.country)
+
+  if (target === 'khac') {
+    if (!city) return true
+    return !PRIORITY_LOCATIONS.has(city)
+  }
+
+  const aliases = LOCATION_ALIASES[target]
+  if (aliases) {
+    if (target === 'remote' || target === 'singapore') {
+      return aliases.includes(city) || aliases.includes(country)
+    }
+    return aliases.includes(city)
+  }
+
+  return city === target
+}
+
+const userMatchesSearch = (user: User, query: string) => {
+  const normalizedQuery = normalizeText(query)
+  if (!normalizedQuery) return true
+
+  const haystacks = [
+    normalizeText(user.fullName),
+    normalizeText(user.username),
+    normalizeText(user.bio)
+  ]
+
+  const collections = [user.skills, user.fields, user.interests]
+  collections.forEach(list => {
+    if (list && Array.isArray(list)) {
+      list.forEach(item => haystacks.push(normalizeText(item)))
+    }
+  })
+
+  return haystacks.some(value => value && value.includes(normalizedQuery))
 }
 
 export default function Dashboard() {
@@ -22,16 +88,38 @@ export default function Dashboard() {
   const [processingDecision, setProcessingDecision] = useState(false)
   const [toastState, setToastState] = useState({ open: false, message: '' })
   const [filters, setFilters] = useState<FilterState>({ fields: [], location: '', experienceYears: 0 })
+  const [advancedFilters, setAdvancedFilters] = useState<AdvancedFilterState>({ role: '', fields: [], skills: [], locations: [] })
+  const [searchTerm, setSearchTerm] = useState('')
+  const navigate = useNavigate()
+  const routerLocation = useLocation()
+
+  useEffect(() => {
+    const params = new URLSearchParams(routerLocation.search)
+    setSearchTerm(params.get('search') || '')
+  }, [routerLocation.search])
 
   const fetchSuggestions = useCallback(async () => {
     setLoadingSuggestions(true)
     setSuggestionError(null)
     try {
+      const combinedFields = Array.from(new Set([...filters.fields, ...advancedFilters.fields]))
+      const locationTargets = new Set<string>()
+      if (filters.location) {
+        locationTargets.add(normalizeText(filters.location))
+      }
+      advancedFilters.locations.forEach(loc => {
+        if (loc) {
+          locationTargets.add(normalizeText(loc))
+        }
+      })
+
       let suggestions: User[]
-      if (filters.fields.length || (filters.location && filters.location !== 'Khác')) {
+      const shouldQuery = combinedFields.length || (filters.location && filters.location !== 'Khác') || searchTerm
+      if (shouldQuery) {
         const { users } = await userService.filterUsers({
-          interests: filters.fields,
-          location: filters.location && filters.location !== 'Khác' ? filters.location : undefined
+          q: searchTerm || undefined,
+          interests: combinedFields.length ? combinedFields : undefined,
+          location: filters.location && filters.location !== 'Khác' && !advancedFilters.locations.length ? filters.location : undefined
         })
         suggestions = users
       } else {
@@ -40,29 +128,38 @@ export default function Dashboard() {
 
       let filtered = suggestions
 
-      if (filters.location) {
-        const norm = filters.location.toLowerCase()
-        if (norm === 'khác') {
-          filtered = filtered.filter(user => {
-            const city = user.location?.city?.toLowerCase() || ''
-            return !city || (city !== 'tp hcm' && city !== 'hà nội')
-          })
-        } else {
-          filtered = filtered.filter(user => user.location?.city?.toLowerCase() === norm)
-        }
+      if (locationTargets.size) {
+        filtered = filtered.filter(user => {
+          return Array.from(locationTargets).some(target => matchesLocation(user, target))
+        })
       }
 
-      if (filters.fields.length) {
+      if (combinedFields.length) {
         filtered = filtered.filter(user => {
           const tags = (user.fields && user.fields.length > 0
             ? user.fields
             : user.interests) || []
-          return filters.fields.some(field => tags.includes(field))
+          return combinedFields.some(field => tags.includes(field))
+        })
+      }
+
+      if (advancedFilters.role) {
+        filtered = filtered.filter(user => user.role?.toLowerCase() === advancedFilters.role)
+      }
+
+      if (advancedFilters.skills.length) {
+        filtered = filtered.filter(user => {
+          const skillSet = new Set((user.skills || []).map(item => item.toLowerCase()))
+          return advancedFilters.skills.some(skill => skillSet.has(skill.toLowerCase()))
         })
       }
 
       if (filters.experienceYears > 0) {
         filtered = filtered.filter(user => (user.experienceYears ?? 0) >= filters.experienceYears)
+      }
+
+      if (searchTerm) {
+        filtered = filtered.filter(user => userMatchesSearch(user, searchTerm))
       }
 
       setSuggestedUsers(filtered)
@@ -72,7 +169,7 @@ export default function Dashboard() {
     } finally {
       setLoadingSuggestions(false)
     }
-  }, [filters])
+  }, [filters, advancedFilters, searchTerm])
 
   useEffect(() => {
     fetchSuggestions()
@@ -109,9 +206,16 @@ export default function Dashboard() {
     if (direction === 'right') {
       setProcessingDecision(true)
       try {
-        await connectionService.sendRequest(profile._id)
-        await chatService.getOrCreateChat(profile._id)
-        showToast(`Đã gửi lời mời kết nối tới ${profile.fullName || profile.username}`)
+        const result = await connectionService.sendRequest(profile._id)
+        const displayName = profile.fullName || profile.username || 'thành viên'
+
+        if (result.matched && result.chat) {
+          showToast(`Bạn và ${displayName} đã match! Mở chat ngay.`)
+          navigate('/chat', { state: { chatId: result.chat._id } })
+        } else {
+          showToast(`Đã gửi lời mời kết nối tới ${displayName}`)
+        }
+
         setSuggestedUsers(prev => prev.slice(1))
       } catch (error: any) {
         const message = error?.response?.data?.message || error?.message || 'Không thể gửi lời mời kết nối'
@@ -123,7 +227,7 @@ export default function Dashboard() {
     }
 
     setSuggestedUsers(prev => prev.slice(1))
-  }, [processingDecision, showToast])
+  }, [processingDecision, showToast, navigate])
 
   return (
     <div className="dashboard-layout">
@@ -174,7 +278,11 @@ export default function Dashboard() {
       </div>
 
       {showFilterModal && (
-        <FilterModal onClose={() => setShowFilterModal(false)} />
+        <FilterModal
+          onClose={() => setShowFilterModal(false)}
+          initialValues={advancedFilters}
+          onApply={(values) => setAdvancedFilters(values)}
+        />
       )}
 
       <Toast

@@ -8,6 +8,9 @@ export interface Message {
   content: string;
   type: 'text' | 'image' | 'file';
   fileUrl?: string;
+  fileName?: string;
+  fileSize?: number;
+  mimeType?: string;
   readBy: string[];
   createdAt: string;
 }
@@ -55,9 +58,13 @@ class ChatService {
     return response.data;
   }
 
-  async getMessages(chatId: string, page: number = 1): Promise<MessageListResult> {
+  async getMessages(chatId: string, page: number = 1, limit?: number): Promise<MessageListResult> {
+    const query = new URLSearchParams({ page: String(page) });
+    if (limit) {
+      query.append('limit', String(limit));
+    }
     const response = await apiService.get<ApiResponse<Message[], { count: number }>>(
-      `/chats/${chatId}/messages?page=${page}`
+      `/chats/${chatId}/messages?${query.toString()}`
     );
 
     return {
@@ -68,6 +75,11 @@ class ChatService {
 
   async sendMessage(chatId: string, data: SendMessageData): Promise<Message> {
     const response = await apiService.post<ApiResponse<Message>>(`/chats/${chatId}/messages`, data);
+    return response.data;
+  }
+
+  async uploadAttachment(chatId: string, formData: FormData): Promise<Message> {
+    const response = await apiService.postFormData<ApiResponse<Message>>(`/chats/${chatId}/attachments`, formData);
     return response.data;
   }
 

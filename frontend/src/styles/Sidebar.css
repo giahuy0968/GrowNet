@@ -58,6 +58,29 @@
   color: #475569;
 }
 
+.field-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field-group {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.field-group__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
 /* === Tags === */
 .tag-list {
   display: flex;
@@ -88,26 +111,33 @@
 }
 
 /* === Location Tabs === */
-.location-tabs {
-  display: flex;
+.location-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 8px;
 }
 
-.location-tabs button {
-  flex: 1;
+.location-option {
   padding: 8px 12px;
   font-size: 13px;
   background: #fff;
   border: 1px solid rgb(var(--border));
-  border-radius: 6px;
+  border-radius: 999px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.location-tabs button.active {
+.location-option.active {
   background: #3b82f6;
   color: #fff;
   border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+.location-hint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #64748b;
 }
 
 /* === Experience Slider === */
@@ -128,9 +158,39 @@
   cursor: pointer;
 }
 
+.experience-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.experience-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.experience-mark small {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.experience-mark .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e2e8f0;
+}
+
+.experience-mark .dot.is-active {
+  background: #3b82f6;
+}
+
 .experience-value {
-  margin: 8px 0 0 auto;
-  font-size: 14px;
+  margin-top: 8px;
+  font-size: 13px;
   font-weight: 600;
   color: #3b82f6;
 }

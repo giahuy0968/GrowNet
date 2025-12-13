@@ -26,6 +26,11 @@ import ScheduleDetail from './pages/ScheduleDetail'
 import Profile from './pages/Profile'
 import MentorSchedule from './pages/mentorSchedule'
 import MyProfile from './pages/MyProfile'
+import UserProfile from './pages/UserProfile'
+import MentorAcademy from './pages/MentorAcademy'
+import CourseCatalog from './pages/CourseCatalog'
+import AdminUserManagement from './pages/AdminUserManagement'
+import Social from './pages/Social'
 export default function App() {
   return (
     <Routes>
@@ -39,6 +44,7 @@ export default function App() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profiles/:id" element={<UserProfile />} />
         <Route path="/messages/search" element={<MessageSearch />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/advanced-settings" element={<AdvancedSettings />} />
@@ -51,6 +57,10 @@ export default function App() {
         <Route path="/schedule/:id" element={<AppointmentDetail />} />
         <Route path="/schedule/detail" element={<ScheduleDetail />} />
         <Route path="/mentorSchedule" element={<MentorSchedule />} />
+        <Route path="/mentor-academy" element={<MentorAcademy />} />
+        <Route path="/social" element={<Social />} />
+        <Route path="/courses" element={<CourseCatalog />} />
+        <Route path="/admin/users" element={<AdminUserManagement />} />
         <Route path="/call/:chatName" element={<CallPage />} />
         <Route path="/profile-change" element={<ProfileMenteeChange />} />
         <Route path="/mentorchange" element={<MentorProfileChange />} />

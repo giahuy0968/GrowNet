@@ -62,6 +62,16 @@ class ApiService {
     return this.handleResponse<T>(response);
   }
 
+  async patch<T>(endpoint: string, data?: any): Promise<T> {
+    const response = await fetch(`${this.baseURL}${endpoint}`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      credentials: 'include',
+      body: JSON.stringify(data)
+    });
+    return this.handleResponse<T>(response);
+  }
+
   async postFormData<T>(endpoint: string, formData: FormData): Promise<T> {
     const token = localStorage.getItem('token');
     const headers: HeadersInit = {};

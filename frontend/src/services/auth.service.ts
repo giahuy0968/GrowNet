@@ -7,12 +7,18 @@ export interface RegisterData {
   password: string;
   fullName: string;
   captcha?: string;
+  role?: 'mentor' | 'mentee';
 }
 
 export interface LoginData {
   email: string;
   password: string;
 }
+
+export type UserRole = 'mentor' | 'mentee' | 'admin' | 'moderator';
+export type AccountStatus = 'active' | 'locked' | 'suspended';
+export type ProfileStatus = 'pending' | 'approved' | 'rejected';
+export type LoginProvider = 'password' | 'google' | 'linkedin';
 
 export interface User {
   _id: string;
@@ -24,6 +30,9 @@ export interface User {
   interests?: string[];
   fields?: string[];
   skills?: string[];
+  jobTitle?: string;
+  languages?: string[];
+  availability?: string;
   location?: {
     city?: string;
     country?: string;
@@ -31,6 +40,18 @@ export interface User {
   experienceYears?: number;
   age?: number;
   gender?: string;
+  role?: UserRole;
+  accountStatus?: AccountStatus;
+  profileStatus?: ProfileStatus;
+  moderationNotes?: string;
+  lastLoginProvider?: LoginProvider;
+  lastLoginAt?: string;
+  oauthProviders?: Array<{
+    provider: LoginProvider;
+    lastLoginAt: string;
+    accountId?: string;
+  }>;
+  isSpamSuspected?: boolean;
   createdAt: string;
   lastActive: string;
 }

@@ -1,5 +1,11 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+export type UserRole = 'mentor' | 'mentee' | 'admin' | 'moderator';
+
+export type AccountStatus = 'active' | 'locked' | 'suspended';
+export type ProfileStatus = 'pending' | 'approved' | 'rejected';
+export type LoginProvider = 'password' | 'google' | 'linkedin';
+
 export interface IUser extends Document {
   username: string;
   email: string;
@@ -17,9 +23,21 @@ export interface IUser extends Document {
   experienceYears?: number;
   age?: number;
   gender?: string;
+  role: UserRole;
   createdAt: Date;
   updatedAt: Date;
   lastActive: Date;
+  accountStatus: AccountStatus;
+  profileStatus: ProfileStatus;
+  moderationNotes?: string;
+  lastLoginProvider?: LoginProvider;
+  lastLoginAt?: Date;
+  oauthProviders: Array<{
+    provider: LoginProvider;
+    lastLoginAt: Date;
+    accountId?: string;
+  }>;
+  isSpamSuspected: boolean;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -93,6 +111,58 @@ const UserSchema = new Schema<IUser>({
     type: String,
     enum: ['male', 'female', 'other', '']
   },
+  role: {
+    type: String,
+    enum: ['mentor', 'mentee', 'admin', 'moderator'],
+    default: 'mentee'
+  },
+  accountStatus: {
+    type: String,
+    enum: ['active', 'locked', 'suspended'],
+    default: 'active'
+  },
+  profileStatus: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending'
+  },
+  moderationNotes: {
+    type: String,
+    maxlength: 500
+  },
+  lastLoginProvider: {
+    type: String,
+    enum: ['password', 'google', 'linkedin'],
+    default: 'password'
+  },
+  lastLoginAt: {
+    type: Date,
+    default: Date.now
+  },
+  oauthProviders: {
+    type: [
+      {
+        provider: {
+          type: String,
+          enum: ['password', 'google', 'linkedin'],
+          required: true
+        },
+        accountId: {
+          type: String,
+          trim: true
+        },
+        lastLoginAt: {
+          type: Date,
+          default: Date.now
+        }
+      }
+    ],
+    default: []
+  },
+  isSpamSuspected: {
+    type: Boolean,
+    default: false
+  },
   lastActive: {
     type: Date,
     default: Date.now
@@ -106,5 +176,7 @@ UserSchema.index({ createdAt: -1 });
 UserSchema.index({ 'location.city': 1 });
 UserSchema.index({ interests: 1 });
 UserSchema.index({ fields: 1 });
+UserSchema.index({ role: 1, accountStatus: 1 });
+UserSchema.index({ profileStatus: 1 });
 
 export default mongoose.model<IUser>('User', UserSchema);

@@ -1,5 +1,6 @@
 import apiService, { ApiResponse } from './api.service';
 import { User } from './auth.service';
+import { Chat } from './chat.service';
 
 export interface Connection {
   _id: string;
@@ -20,14 +21,20 @@ export interface PendingRequestsResult {
   count: number;
 }
 
+export interface ConnectionMatchResult {
+  connection: Connection;
+  matched: boolean;
+  chat?: Chat;
+}
+
 class ConnectionService {
-  async sendRequest(userId: string): Promise<Connection> {
-    const response = await apiService.post<ApiResponse<Connection>>(`/connections/request/${userId}`);
+  async sendRequest(userId: string): Promise<ConnectionMatchResult> {
+    const response = await apiService.post<ApiResponse<ConnectionMatchResult>>(`/connections/request/${userId}`);
     return response.data;
   }
 
-  async acceptRequest(connectionId: string): Promise<Connection> {
-    const response = await apiService.put<ApiResponse<Connection>>(`/connections/accept/${connectionId}`);
+  async acceptRequest(connectionId: string): Promise<ConnectionMatchResult> {
+    const response = await apiService.put<ApiResponse<ConnectionMatchResult>>(`/connections/accept/${connectionId}`);
     return response.data;
   }
 

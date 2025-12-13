@@ -4,6 +4,7 @@ import session from 'express-session';
 import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io';
+import path from 'path';
 import connectDB from './config/database';
 import { errorHandler } from './middleware/errorHandler';
 import {
@@ -20,6 +21,10 @@ import postRoutes from './routes/postRoutes';
 import connectionRoutes from './routes/connectionRoutes';
 import chatRoutes from './routes/chatRoutes';
 import notificationRoutes from './routes/notificationRoutes';
+import meetingRoutes from './routes/meetingRoutes';
+import courseRoutes from './routes/courseRoutes';
+import certificateRoutes from './routes/certificateRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -75,6 +80,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
 
 // Session middleware (used for CAPTCHA storage, etc.)
 app.use(session({
@@ -102,6 +108,10 @@ app.use('/api/posts', postRoutes);
 app.use('/api/connections', connectionRoutes);
 app.use('/api/chats', chatRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/meetings', meetingRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/certificates', certificateRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Socket.IO connection handling
 const onlineUsers = getOnlineUsers();

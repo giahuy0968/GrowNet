@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import ChatSidebar from '../components/ChatSidebar'
 import ChatWindow from '../components/ChatWindow'
 import ChatInfo from '../components/ChatInfo'
@@ -13,6 +14,16 @@ export default function Chat() {
   const [chatsError, setChatsError] = useState<string | null>(null)
   const [showSearch, setShowSearch] = useState(false)
   const { socket } = useSocket()
+  const location = useLocation()
+  const preferredChatRef = useRef<string | null>(null)
+  const chatFromState = (location.state as { chatId?: string } | null)?.chatId ?? null
+
+  useEffect(() => {
+    if (chatFromState) {
+      preferredChatRef.current = chatFromState
+      setSelectedChatId(chatFromState)
+    }
+  }, [chatFromState])
 
   const loadChats = useCallback(async () => {
     setLoadingChats(true)
@@ -21,6 +32,11 @@ export default function Chat() {
       const { chats: chatList } = await chatService.getAllChats()
       setChats(chatList)
       setSelectedChatId(prev => {
+        const preferred = preferredChatRef.current
+        if (preferred && chatList.some(chat => chat._id === preferred)) {
+          preferredChatRef.current = null
+          return preferred
+        }
         if (prev && chatList.some(chat => chat._id === prev)) {
           return prev
         }

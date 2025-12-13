@@ -7,7 +7,11 @@ import '../styles/Notification.css'
 
 type Tab = 'all' | 'unread'
 
-export default function Notification() {
+interface NotificationProps {
+  onUnreadCountChange?: (count: number) => void
+}
+
+export default function Notification({ onUnreadCountChange }: NotificationProps) {
   const [activeTab, setActiveTab] = useState<Tab>('all')
   const [notifications, setNotifications] = useState<NotificationItem[]>([])
   const [loading, setLoading] = useState(true)
@@ -30,6 +34,12 @@ export default function Notification() {
   useEffect(() => {
     loadNotifications()
   }, [])
+
+  useEffect(() => {
+    if (!onUnreadCountChange) return
+    const unread = notifications.filter(notification => !notification.read).length
+    onUnreadCountChange(unread)
+  }, [notifications, onUnreadCountChange])
 
   useEffect(() => {
     if (!socket) return

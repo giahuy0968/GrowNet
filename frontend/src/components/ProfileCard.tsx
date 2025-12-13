@@ -43,6 +43,7 @@ export default function ProfileCard({ profile, onSwipe, disabled }: ProfileCardP
 
   // Animation state
   const [swipeDir, setSwipeDir] = React.useState<null | 'left' | 'right'>(null)
+  const [bgFailed, setBgFailed] = React.useState(false)
 
   React.useEffect(() => {
     if (swipeDir) {
@@ -66,7 +67,7 @@ export default function ProfileCard({ profile, onSwipe, disabled }: ProfileCardP
   }
 
   const handleClick = () => {
-    navigate(`/profile/${displayUser._id}`)
+    navigate(`/profiles/${displayUser._id}`)
   }
 
   return (
@@ -81,7 +82,16 @@ export default function ProfileCard({ profile, onSwipe, disabled }: ProfileCardP
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
         <div className="profile-header">
-          <img src="/profile-bg.jpg" alt="Background" className="profile-bg" />
+          {bgFailed ? (
+            <div className="profile-bg-fallback" aria-hidden="true" />
+          ) : (
+            <img
+              src="/profile-bg.jpg"
+              alt=""
+              className="profile-bg"
+              onError={() => setBgFailed(true)}
+            />
+          )}
         </div>
 
         <div className="profile-body">

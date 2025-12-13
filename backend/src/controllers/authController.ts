@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import svgCaptcha from 'svg-captcha';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import User from '../models/User';
+import User, { LoginProvider, UserRole } from '../models/User';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
 import { sendSuccess } from '../utils/response';
@@ -44,7 +44,8 @@ export const register = async (
       fields,
       skills,
       experienceYears,
-      captcha
+      captcha,
+      role
     } = req.body;
 
     // Validate captcha
@@ -65,6 +66,13 @@ export const register = async (
       throw new AppError('Username or email already exists', 400);
     }
 
+    const normalizeRole = (value?: string): UserRole => {
+      if (value === 'mentor' || value === 'mentee') {
+        return value;
+      }
+      return 'mentee';
+    };
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -80,7 +88,8 @@ export const register = async (
       experienceYears,
       location,
       age,
-      gender
+      gender,
+      role: normalizeRole(role)
     });
 
     if (!process.env.JWT_SECRET) {
@@ -106,7 +115,8 @@ export const register = async (
           interests: user.interests,
           fields: user.fields,
           skills: user.skills,
-          experienceYears: user.experienceYears
+          experienceYears: user.experienceYears,
+          role: user.role
         }
       },
       {
@@ -126,11 +136,20 @@ export const login = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { email, password, provider, providerAccountId } = req.body as {
+      email: string;
+      password: string;
+      provider?: LoginProvider;
+      providerAccountId?: string;
+    };
 
     const user = await User.findOne({ email });
     if (!user) {
       throw new AppError('Invalid email or password', 401);
+    }
+
+    if (user.accountStatus !== 'active') {
+      throw new AppError('Tài khoản đang bị hạn chế. Vui lòng liên hệ admin.', 403);
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -138,7 +157,36 @@ export const login = async (
       throw new AppError('Invalid email or password', 401);
     }
 
-    user.lastActive = new Date();
+    const loginProvider: LoginProvider = provider || 'password';
+    const now = new Date();
+    user.lastActive = now;
+    user.lastLoginAt = now;
+    user.lastLoginProvider = loginProvider;
+
+    if (!Array.isArray(user.oauthProviders)) {
+      user.oauthProviders = [];
+    }
+
+    const providerIdentifier = providerAccountId || (loginProvider === 'password' ? user.email : undefined);
+    const existingProvider = user.oauthProviders.find((entry) => {
+      if (entry.provider !== loginProvider) return false;
+      if (!providerIdentifier) return true;
+      return entry.accountId === providerIdentifier;
+    });
+
+    if (existingProvider) {
+      existingProvider.lastLoginAt = now;
+      if (providerIdentifier) {
+        existingProvider.accountId = providerIdentifier;
+      }
+    } else {
+      user.oauthProviders.push({
+        provider: loginProvider,
+        accountId: providerIdentifier,
+        lastLoginAt: now
+      });
+    }
+
     await user.save();
 
     if (!process.env.JWT_SECRET) {
@@ -164,7 +212,15 @@ export const login = async (
         fields: user.fields,
         skills: user.skills,
         experienceYears: user.experienceYears,
-        location: user.location
+        location: user.location,
+        role: user.role,
+        accountStatus: user.accountStatus,
+        profileStatus: user.profileStatus,
+        moderationNotes: user.moderationNotes,
+        lastLoginProvider: user.lastLoginProvider,
+        lastLoginAt: user.lastLoginAt,
+        oauthProviders: user.oauthProviders,
+        isSpamSuspected: user.isSpamSuspected
       }
     }, { message: 'Login successful' });
   } catch (err) {
@@ -185,7 +241,7 @@ export const getCurrentUser = async (
       throw new AppError('User not found', 404);
     }
 
-    sendSuccess(res, user);
+    sendSuccess(res, user, { message: 'Current user fetched successfully' });
   } catch (err) {
     next(err);
   }
@@ -202,30 +258,53 @@ export const updateProfile = async (
       fullName,
       bio,
       interests,
+      fields,
+      skills,
+      experienceYears,
       location,
       age,
       gender,
       avatar,
-      fields,
-      skills,
-      experienceYears
+      role
     } = req.body;
+
+    let nextRole: UserRole | undefined;
+    if (role) {
+      if (role === 'mentor' || role === 'mentee' || role === 'admin') {
+        nextRole = role;
+      } else {
+        throw new AppError('Role không hợp lệ', 400);
+      }
+    }
+
+    const updatePayload: Record<string, unknown> = {
+      updatedAt: new Date()
+    };
+
+    if (typeof fullName !== 'undefined') updatePayload.fullName = fullName;
+    const moderatedFieldsUpdated =
+      typeof bio !== 'undefined' ||
+      typeof avatar !== 'undefined' ||
+      typeof skills !== 'undefined' ||
+      typeof fields !== 'undefined';
+
+    if (typeof bio !== 'undefined') updatePayload.bio = bio;
+    if (typeof interests !== 'undefined') updatePayload.interests = interests;
+    if (typeof fields !== 'undefined') updatePayload.fields = fields;
+    if (typeof skills !== 'undefined') updatePayload.skills = skills;
+    if (typeof experienceYears !== 'undefined') updatePayload.experienceYears = experienceYears;
+    if (typeof location !== 'undefined') updatePayload.location = location;
+    if (typeof age !== 'undefined') updatePayload.age = age;
+    if (typeof gender !== 'undefined') updatePayload.gender = gender;
+    if (typeof avatar !== 'undefined') updatePayload.avatar = avatar;
+    if (nextRole) updatePayload.role = nextRole;
+    if (moderatedFieldsUpdated) {
+      updatePayload.profileStatus = 'pending';
+    }
 
     const user = await User.findByIdAndUpdate(
       req.userId,
-      {
-        fullName,
-        bio,
-        interests,
-        fields,
-        skills,
-        experienceYears,
-        location,
-        age,
-        gender,
-        avatar,
-        updatedAt: new Date()
-      },
+      updatePayload,
       { new: true, runValidators: true }
     ).select('-password');
 
