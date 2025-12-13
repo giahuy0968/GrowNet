@@ -5,7 +5,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgb(var(--border));
   box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
@@ -20,15 +19,15 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 700;
   color: #1e40af;
   flex-shrink: 0;
 }
 
 .header-logo img {
-  width: 36px;
-  height: 36px;
+  width: 70px;
+  height: 70px;
 }
 
 .header-center {
@@ -74,18 +73,18 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   flex-shrink: 0;
 }
 
 .icon-btn {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border: none;
   background: #f1f5f9;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,12 +106,13 @@
   transition: background 0.3s;
 }
 
-.logoutAdmin-btn:hover {
-  background: #ff4d4d;
-}
-
-.icon-btn:hover {
-  background: #e2e8f0;
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  /* push the nav to the bottom of the header-center column */
+  margin-top: 12px;
 }
 
 .icon-btn:active {
@@ -125,8 +125,8 @@
 }
 
 .user-avatar img {
-  width: 40px;
-  height: 40px;
+  width: px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
   transition: transform 0.2s ease;
@@ -184,28 +184,42 @@
   background: #f5f5f5;
 }
 
-.header-nav {
+/* removed duplicate .header-nav; first declaration above handles layout */
+
+.header-nav__list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
+  gap: 7px;
+  position: relative;
+  align-items: center;
 }
 
 .header-nav__item {
-  border: 1px solid rgba(15, 23, 42, 0.15);
-  border-radius: 999px;
+  border: none;
+  height: 40px;
   padding: 6px 16px;
   background: transparent;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
+  position: relative;
 }
 
 .header-nav__item.is-active {
   background: #1d4ed8;
   color: #fff;
   border-color: #1d4ed8;
+}
+
+.header-nav__underline {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -4px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #60a5fa, #7c3aed);
+  box-shadow: 0 4px 8px rgba(124, 58, 237, 0.12);
 }
 
 @media (max-width: 960px) {

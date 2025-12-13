@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, FormEvent } from 'react'
+import { motion } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Notification from '../components/Notification'
@@ -156,20 +157,25 @@ export default function Header({ onOpenFilter }: HeaderProps) {
         </form>
         {navItems.length > 0 && (
           <nav className="header-nav" aria-label="Điều hướng nhanh">
-            {navItems.map(item => {
-              const isActive = location.pathname.startsWith(item.match)
-              return (
-                <button
-                  key={item.to}
-                  type="button"
-                  className={`header-nav__item ${isActive ? 'is-active' : ''}`}
-                  aria-current={isActive ? 'page' : undefined}
-                  onClick={() => navigate(item.to)}
-                >
-                  {item.label}
-                </button>
-              )
-            })}
+            <div className="header-nav__list">
+              {navItems.map(item => {
+                const isActive = location.pathname.startsWith(item.match)
+                return (
+                  <button
+                    key={item.to}
+                    type="button"
+                    className={`header-nav__item ${isActive ? 'is-active' : ''}`}
+                    aria-current={isActive ? 'page' : undefined}
+                    onClick={() => navigate(item.to)}
+                  >
+                    {item.label}
+                    {isActive && (
+                      <motion.span layoutId="nav-underline" className="header-nav__underline" />
+                    )}
+                  </button>
+                )
+              })}
+            </div>
           </nav>
         )}
       </div>

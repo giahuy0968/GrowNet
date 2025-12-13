@@ -30,14 +30,18 @@ export default function MyProfile() {
       <div className="profile-card">
         <div className="profile-header">
           <img src={user.avatar || '/user_avt.png'} alt={user.fullName} className="profile-avatar" />
-          <div>
-            <h1>{user.fullName || user.username}</h1>
-            <p className="profile-username">@{user.username}</p>
-            <p className="profile-location">{location}</p>
-          </div>
-          <div className="profile-actions">
-            <Link to="/settings" className="btn-primary">Cập nhật hồ sơ</Link>
-            <Link to="/dashboard" className="btn-ghost">Về Dashboard</Link>
+
+          <div className="profile-meta">
+            <div className="profile-info">
+              <h1>{user.fullName || user.username}</h1>
+              <p className="profile-username">@{user.username}</p>
+              <p className="profile-location">{location}</p>
+            </div>
+
+            <div className="profile-actions">
+              <Link to="/settings" className="btnprimary">Cập nhật hồ sơ</Link>
+              <Link to="/dashboard" className="btnghost">Về Dashboard</Link>
+            </div>
           </div>
         </div>
 
