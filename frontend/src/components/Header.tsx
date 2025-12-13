@@ -1,9 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo, FormEvent } from 'react'
 import { createPortal } from 'react-dom'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Notification from '../components/Notification'
 import '../styles/Header.css'
 import { Icon } from './ui/Icon'
+import { useAuth } from '../contexts/AuthContext'
+import { useSocket } from '../contexts/SocketContext'
+import notificationService from '../services/notification.service'
 
 
 interface HeaderProps {
@@ -11,10 +14,43 @@ interface HeaderProps {
 }
 
 export default function Header({ onOpenFilter }: HeaderProps) {
+  const location = useLocation()
   const navigate = useNavigate()
+  const { user, logout } = useAuth()
+  const { socket } = useSocket()
   const [showNotification, setShowNotification] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
+  const [searchValue, setSearchValue] = useState('')
   const dropdownRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    setSearchValue(params.get('search') || '')
+  }, [location.search])
+
+
+  const navItems = useMemo(() => {
+    const items: { label: string; to: string; match: string }[] = [
+      { label: 'Dashboard', to: '/dashboard', match: '/dashboard' }
+    ]
+
+    if (user?.role === 'mentor' || user?.role === 'admin' || user?.role === 'moderator') {
+      items.push({ label: 'Học viện Mentor', to: '/mentor-academy', match: '/mentor-academy' })
+      items.push({ label: 'Social', to: '/social', match: '/social' })
+    } else if (user) {
+      items.push({ label: 'Social', to: '/social', match: '/social' })
+    }
+
+    if (user?.role === 'mentee') {
+      items.push({ label: 'Khoá học cho bạn', to: '/courses', match: '/courses' })
+    }
+
+    if (user?.role === 'admin' || user?.role === 'moderator') {
+      items.push({ label: 'Quản trị tài khoản', to: '/admin/users', match: '/admin' })
+    }
+
+    return items
+  }, [user?.role])
 
   const handleOpenChat = () => {
     navigate('/chat')
@@ -22,9 +58,43 @@ export default function Header({ onOpenFilter }: HeaderProps) {
   const handleToggleNotification = () => {
     setShowNotification((prev) => !prev)
   }
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
   const handleToggleDropdown = () => {
     setShowDropdown(prev => !prev)
   }
+
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const { unreadCount } = await notificationService.getNotifications(1)
+        setUnreadCount(unreadCount)
+      } catch (error) {
+        console.error('Không thể tải số lượng thông báo chưa đọc:', error)
+      }
+    }
+
+    fetchUnreadCount()
+  }, [])
+
+  useEffect(() => {
+    if (!socket) return
+
+    const handleIncoming = () => {
+      setUnreadCount(prev => prev + 1)
+    }
+
+    socket.on('notification:new', handleIncoming)
+    return () => {
+      socket.off('notification:new', handleIncoming)
+    }
+  }, [socket])
+
+  const handleUnreadCountChange = useCallback((count: number) => {
+    setUnreadCount(count)
+  }, [])
 
   // Đóng dropdown khi click ra ngoài
   useEffect(() => {
@@ -48,11 +118,21 @@ export default function Header({ onOpenFilter }: HeaderProps) {
         navigate('/settings') // hoặc mở modal cài đặt
         break
       case 'logout':
-        navigate('/login') // hoặc gọi API logout
+        handleLogout()
         break
       default:
         break
     }
+  }
+
+  const handleSearchSubmit = (event?: FormEvent) => {
+    event?.preventDefault()
+    const query = searchValue.trim()
+    const target = query ? `/dashboard?search=${encodeURIComponent(query)}` : '/dashboard'
+    if (location.pathname === '/dashboard' && location.search === (query ? `?search=${encodeURIComponent(query)}` : '')) {
+      return
+    }
+    navigate(target)
   }
 
   return (
@@ -62,12 +142,36 @@ export default function Header({ onOpenFilter }: HeaderProps) {
         <span>GrowNet</span>
       </div>
 
-
-      <div className="header-search">
-        <input type="text" placeholder="Tìm mentor, kỹ năng hoặc lĩnh vực..." />
-        <button className="search-btn" aria-label="Tìm kiếm">
-          <Icon name="search" size="md" aria-hidden />
-        </button>
+      <div className="header-center">
+        <form className="header-search" onSubmit={handleSearchSubmit}>
+          <input
+            type="text"
+            placeholder="Tìm mentor, kỹ năng hoặc lĩnh vực..."
+            value={searchValue}
+            onChange={event => setSearchValue(event.target.value)}
+          />
+          <button className="search-btn" type="submit" aria-label="Tìm kiếm">
+            <Icon name="search" size="md" aria-hidden />
+          </button>
+        </form>
+        {navItems.length > 0 && (
+          <nav className="header-nav" aria-label="Điều hướng nhanh">
+            {navItems.map(item => {
+              const isActive = location.pathname.startsWith(item.match)
+              return (
+                <button
+                  key={item.to}
+                  type="button"
+                  className={`header-nav__item ${isActive ? 'is-active' : ''}`}
+                  aria-current={isActive ? 'page' : undefined}
+                  onClick={() => navigate(item.to)}
+                >
+                  {item.label}
+                </button>
+              )
+            })}
+          </nav>
+        )}
       </div>
 
       <div className="header-actions">
@@ -75,11 +179,20 @@ export default function Header({ onOpenFilter }: HeaderProps) {
           <Icon name="chat" size="md" aria-hidden />
         </button>
 
-        <button className="icon-btn" onClick={handleToggleNotification} aria-label="Thông báo">
+        <button className="icon-btn notification-btn" onClick={handleToggleNotification} aria-label="Thông báo">
           <Icon name="bell" size="md" aria-hidden />
+          {unreadCount > 0 && (
+            <span className="notification-indicator" aria-label={`Có ${unreadCount} thông báo mới`}>
+              {unreadCount > 99 ? '99+' : unreadCount}
+            </span>
+          )}
         </button>
         <div className="user-avatar" ref={dropdownRef}>
-          <img src="/user_avt.png" alt="User" onClick={handleToggleDropdown} />
+          <img
+            src={user?.avatar || '/user_avt.png'}
+            alt={user?.fullName || 'User'}
+            onClick={handleToggleDropdown}
+          />
           {showDropdown && (
             <div className="dropdown-menu">
               <button onClick={() => navigate("/my-profile")}>
@@ -105,7 +218,7 @@ export default function Header({ onOpenFilter }: HeaderProps) {
               className="notification-wrapper"
               onClick={(e) => e.stopPropagation()}
             >
-              <Notification />
+              <Notification onUnreadCountChange={handleUnreadCountChange} />
             </div>
           </div>
         ),

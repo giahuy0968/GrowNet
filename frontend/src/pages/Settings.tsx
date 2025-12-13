@@ -1,19 +1,19 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/Settings.css";
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import '../styles/Settings.css'
 
-interface SettingsProps {
-  onClose?: () => void;
-  userName?: string;
-  userAvatar?: string;
-}
+export default function Settings() {
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
 
-export default function Settings({
-  onClose,
-  userName = "Hà Anh Tứn",
-  userAvatar = "/user_avt.png",
-}: SettingsProps) {
-  const navigate = useNavigate();
+  const displayName = user?.fullName || user?.username || 'Người dùng'
+  const avatar = user?.avatar || '/user_avt.png'
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
   return (
     <div className="settings-page">
       <div className="settings-card">
@@ -27,8 +27,11 @@ export default function Settings({
 
         {/* Avatar + Name */}
         <div className="settings-user">
-          <img src={userAvatar} alt="User" className="settings-avatar" />
-          <h3>{userName}</h3>
+          <img src={avatar} alt="User" className="settings-avatar" />
+          <div>
+            <h3>{displayName}</h3>
+            {user?.email && <p className="settings-email">{user.email}</p>}
+          </div>
         </div>
 
         {/* Account Section */}
@@ -58,8 +61,8 @@ export default function Settings({
         </div>
 
         {/* Logout Button */}
-        <button className="logout-btn">ĐĂNG XUẤT</button>
+        <button className="logout-btn" onClick={handleLogout}>ĐĂNG XUẤT</button>
       </div>
     </div>
-  );
+  )
 }

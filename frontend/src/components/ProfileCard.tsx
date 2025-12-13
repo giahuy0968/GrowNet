@@ -1,46 +1,74 @@
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSwipeable } from 'react-swipeable'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useAuth } from '../contexts/AuthContext'
+import type { User } from '../services/auth.service'
+import '../styles/ProfileCard.css'
 
+interface ProfileCardProps {
+  profile?: User;
+  onSwipe?: (dir: 'left' | 'right', profile: User) => void;
+  disabled?: boolean;
+}
 
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSwipeable } from 'react-swipeable';
-import { motion, AnimatePresence } from 'framer-motion';
-import '../styles/ProfileCard.css';
+export default function ProfileCard({ profile, onSwipe, disabled }: ProfileCardProps) {
+  const navigate = useNavigate()
+  const { user: authUser } = useAuth()
+  const displayUser = profile || authUser
 
-export default function ProfileCard({ userId = 'mentor-123', onSwipe }: { userId?: string, onSwipe?: (dir: 'left' | 'right') => void }) {
-  const navigate = useNavigate();
-  const profileType = 'mentor'; // Thay bằng logic thực tế (mentor/mentee)
+  if (!displayUser) {
+    return (
+      <div className="profile-card loading">
+        <p>Không tìm thấy thông tin người dùng</p>
+      </div>
+    )
+  }
+
+  const location = [displayUser.location?.city, displayUser.location?.country]
+    .filter(Boolean)
+    .join(', ') || 'Chưa cập nhật'
+  const interests = displayUser.interests && displayUser.interests.length > 0
+    ? displayUser.interests
+    : ['Chưa cập nhật']
+  const summary = displayUser.bio || 'Thêm mô tả để mentee/mentor hiểu rõ hơn về bạn.'
 
   // Swipe handlers
   const handlers = useSwipeable({
-    onSwipedLeft: () => onSwipe?.('left'),
-    onSwipedRight: () => onSwipe?.('right'),
+    onSwipedLeft: () => !disabled && onSwipe?.('left', displayUser),
+    onSwipedRight: () => !disabled && onSwipe?.('right', displayUser),
 
     trackMouse: true,
-  });
+  })
 
   // Animation state
-  const [swipeDir, setSwipeDir] = React.useState<null | 'left' | 'right'>(null);
+  const [swipeDir, setSwipeDir] = React.useState<null | 'left' | 'right'>(null)
+  const [bgFailed, setBgFailed] = React.useState(false)
 
   React.useEffect(() => {
     if (swipeDir) {
-      setTimeout(() => setSwipeDir(null), 400);
+      setTimeout(() => setSwipeDir(null), 400)
     }
-  }, [swipeDir]);
+  }, [swipeDir])
 
   const handleAccept = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setSwipeDir('right');
-    onSwipe?.('right');
-  };
+    e.stopPropagation()
+    setSwipeDir('right')
+    if (!disabled) {
+      onSwipe?.('right', displayUser)
+    }
+  }
   const handleCancel = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setSwipeDir('left');
-    onSwipe?.('left');
-  };
+    e.stopPropagation()
+    setSwipeDir('left')
+    if (!disabled) {
+      onSwipe?.('left', displayUser)
+    }
+  }
 
   const handleClick = () => {
-    navigate(`/${profileType}-profile/${userId}`);
-  };
+    navigate(`/profiles/${displayUser._id}`)
+  }
 
   return (
     <AnimatePresence>
@@ -54,34 +82,42 @@ export default function ProfileCard({ userId = 'mentor-123', onSwipe }: { userId
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
         <div className="profile-header">
-          <img src="/profile-bg.jpg" alt="Background" className="profile-bg" />
+          {bgFailed ? (
+            <div className="profile-bg-fallback" aria-hidden="true" />
+          ) : (
+            <img
+              src="/profile-bg.jpg"
+              alt=""
+              className="profile-bg"
+              onError={() => setBgFailed(true)}
+            />
+          )}
         </div>
 
         <div className="profile-body">
           <div className="profile-info">
-            <h2>Nguyễn A</h2>
-            <p className="profile-role">Frontend Developer • TP.HCM</p>
+            <img src={displayUser.avatar || '/user_avt.png'} alt={displayUser.fullName} className="profile-avatar" />
+            <h2>{displayUser.fullName || displayUser.username}</h2>
+            <p className="profile-role">{displayUser.username} • {location}</p>
 
             <div className="profile-tags">
-              <span className="tag">ReactJS</span>
-              <span className="tag">TypeScript</span>
-              <span className="tag">UI/UX</span>
+              {interests.map(tag => (
+                <span className="tag" key={tag}>{tag}</span>
+              ))}
             </div>
 
             <div className="profile-description">
               <h3>Mô tả tóm tắt</h3>
-              <p>
-                Chuyên gia Frontend 5 năm kinh nghiệm. Đã hoàn thành hơn 10 dự án lớn nhờ sử dụng React và NextJS, tập trung vào hiệu suất và trải nghiệm người dùng...
-              </p>
+              <p>{summary}</p>
             </div>
           </div>
         </div>
 
         <div className="profile-actions" onClick={(e) => e.stopPropagation()}>
-          <button className="btn-action btn-cancel" onClick={handleCancel}>✕</button>
-          <button className="btn-action btn-accept" onClick={handleAccept}>✓</button>
+          <button className="btn-action btn-cancel" onClick={handleCancel} disabled={disabled}>✕</button>
+          <button className="btn-action btn-accept" onClick={handleAccept} disabled={disabled}>✓</button>
         </div>
       </motion.div>
     </AnimatePresence>
-  );
+  )
 }

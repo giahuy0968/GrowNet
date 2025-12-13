@@ -3,6 +3,7 @@ import Post from '../models/Post';
 import Notification from '../models/Notification';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
+import { sendSuccess } from '../utils/response';
 
 // Create post
 export const createPost = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -19,9 +20,9 @@ export const createPost = async (req: AuthRequest, res: Response): Promise<void>
 
     const populatedPost = await Post.findById(post._id).populate('authorId', '-password');
 
-    res.status(201).json({
-      message: 'Post created successfully',
-      post: populatedPost
+    sendSuccess(res, populatedPost, {
+      status: 201,
+      message: 'Post created successfully'
     });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
@@ -43,13 +44,14 @@ export const getAllPosts = async (req: AuthRequest, res: Response): Promise<void
 
     const total = await Post.countDocuments();
 
-    res.json({
-      posts,
-      pagination: {
-        page: Number(page),
-        limit: Number(limit),
-        total,
-        pages: Math.ceil(total / Number(limit))
+    sendSuccess(res, posts, {
+      meta: {
+        pagination: {
+          page: Number(page),
+          limit: Number(limit),
+          total,
+          pages: Math.ceil(total / Number(limit))
+        }
       }
     });
   } catch (error: any) {
@@ -70,7 +72,7 @@ export const getPostById = async (req: AuthRequest, res: Response): Promise<void
       throw new AppError('Post not found', 404);
     }
 
-    res.json({ post });
+    sendSuccess(res, post);
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -86,7 +88,11 @@ export const getUserPosts = async (req: AuthRequest, res: Response): Promise<voi
       .populate('comments.userId', 'username fullName avatar')
       .sort({ createdAt: -1 });
 
-    res.json({ posts, count: posts.length });
+    sendSuccess(res, posts, {
+      meta: {
+        count: posts.length
+      }
+    });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -110,10 +116,7 @@ export const updatePost = async (req: AuthRequest, res: Response): Promise<void>
 
     const updatedPost = await Post.findById(id).populate('authorId', '-password');
 
-    res.json({
-      message: 'Post updated successfully',
-      post: updatedPost
-    });
+    sendSuccess(res, updatedPost, { message: 'Post updated successfully' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -130,7 +133,7 @@ export const deletePost = async (req: AuthRequest, res: Response): Promise<void>
       throw new AppError('Post not found or unauthorized', 404);
     }
 
-    res.json({ message: 'Post deleted successfully' });
+    sendSuccess(res, null, { message: 'Post deleted successfully' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -171,9 +174,8 @@ export const toggleLike = async (req: AuthRequest, res: Response): Promise<void>
 
     await post.save();
 
-    res.json({
-      message: likeIndex > -1 ? 'Post unliked' : 'Post liked',
-      likes: post.likes.length
+    sendSuccess(res, { likes: post.likes.length }, {
+      message: likeIndex > -1 ? 'Post unliked' : 'Post liked'
     });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
@@ -215,9 +217,9 @@ export const addComment = async (req: AuthRequest, res: Response): Promise<void>
       .populate('authorId', '-password')
       .populate('comments.userId', 'username fullName avatar');
 
-    res.status(201).json({
-      message: 'Comment added successfully',
-      post: updatedPost
+    sendSuccess(res, updatedPost, {
+      status: 201,
+      message: 'Comment added successfully'
     });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
@@ -246,7 +248,7 @@ export const deleteComment = async (req: AuthRequest, res: Response): Promise<vo
     post.comments.splice(commentIndex, 1);
     await post.save();
 
-    res.json({ message: 'Comment deleted successfully' });
+    sendSuccess(res, null, { message: 'Comment deleted successfully' });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }

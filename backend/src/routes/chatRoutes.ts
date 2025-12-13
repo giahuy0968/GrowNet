@@ -4,11 +4,13 @@ import {
   getAllChats,
   getMessages,
   sendMessage,
+  sendAttachmentMessage,
   markAsRead
 } from '../controllers/chatController';
 import { authMiddleware } from '../middleware/auth';
 import { validateRequest } from '../middleware/validator';
 import { body } from 'express-validator';
+import { chatAttachmentUpload } from '../middleware/upload';
 
 const router = Router();
 
@@ -24,6 +26,7 @@ router.get('/', authMiddleware, getAllChats);
 router.get('/with/:userId', authMiddleware, getOrCreateChat);
 router.get('/:chatId/messages', authMiddleware, getMessages);
 router.post('/:chatId/messages', authMiddleware, messageValidation, validateRequest, sendMessage);
+router.post('/:chatId/attachments', authMiddleware, chatAttachmentUpload.single('file'), sendAttachmentMessage);
 router.put('/:chatId/read', authMiddleware, markAsRead);
 
 export default router;

@@ -3,6 +3,7 @@ import User from '../models/User';
 import Connection from '../models/Connection';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
+import { sendSuccess } from '../utils/response';
 
 // Get user by ID
 export const getUserById = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -15,7 +16,7 @@ export const getUserById = async (req: AuthRequest, res: Response): Promise<void
       throw new AppError('User not found', 404);
     }
 
-    res.json({ user });
+    sendSuccess(res, user);
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -26,6 +27,10 @@ export const searchUsers = async (req: AuthRequest, res: Response): Promise<void
   try {
     const { q, interests, location } = req.query;
     const query: any = {};
+
+    if (req.userId) {
+      query._id = { $ne: req.userId };
+    }
 
     if (q) {
       query.$or = [
@@ -48,7 +53,11 @@ export const searchUsers = async (req: AuthRequest, res: Response): Promise<void
       .limit(20)
       .sort({ createdAt: -1 });
 
-    res.json({ users, count: users.length });
+    sendSuccess(res, users, {
+      meta: {
+        count: users.length
+      }
+    });
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -72,7 +81,7 @@ export const getSuggestedUsers = async (req: AuthRequest, res: Response): Promis
       .limit(10)
       .sort({ lastActive: -1 });
 
-    res.json({ users: suggested });
+    sendSuccess(res, suggested);
   } catch (error: any) {
     throw new AppError(error.message, error.statusCode || 500);
   }
@@ -92,7 +101,7 @@ export const getUserStats = async (req: AuthRequest, res: Response): Promise<voi
       Promise.resolve(0)
     ]);
 
-    res.json({
+    sendSuccess(res, {
       connections: connectionCount,
       posts: postCount
     });
