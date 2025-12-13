@@ -353,7 +353,7 @@ export default function MentorAcademy() {
               <input type="date" value={courseForm.endDate} onChange={event => handleCourseFormChange('endDate', event.target.value)} />
             </label>
 
-            <div className="modules full">
+            <div className="modules">
               <div className="modules-header">
                 <h3>Modules chuyên sâu</h3>
                 <button type="button" onClick={addModule}>+ Thêm module</button>
