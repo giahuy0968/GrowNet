@@ -70,6 +70,109 @@
   gap: 8px;
 }
 
+.meeting-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #eff6ff, #e0f2fe);
+  border-bottom: 1px solid #dbeafe;
+
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.meeting-banner > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meeting-banner p {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.meeting-banner strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.meeting-banner span {
+  font-size: 12px;
+  color: #475569;
+}
+
+.meeting-banner[role="status"] {
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0369a1;
+}
+
+.meeting-banner.error {
+  background: #fef2f2;
+  border-bottom: 1px solid #fee2e2;
+  color: #b91c1c;
+}
+
+.join-btn {
+  padding: 8px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: background 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.join-btn:hover:not(:disabled) {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.join-btn:disabled {
+  background: #c7d2fe;
+  cursor: not-allowed;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  border: none;
+  background: #e0f2fe;
+  color: #0369a1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.icon-btn:hover:not(:disabled) {
+  background: #bae6fd;
+  transform: translateY(-1px);
+}
+
+.icon-btn:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+
 .messages-container {
   flex: 1;
   overflow-y: auto;
