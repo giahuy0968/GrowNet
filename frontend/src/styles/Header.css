@@ -1,7 +1,7 @@
 .dashboard-header {
   background: rgb(var(--card));
   padding: 16px 32px;
-  min-height: 72px;
+  min-height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -52,7 +52,7 @@
   padding: 10px 16px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .search-btn {
@@ -78,8 +78,8 @@
 }
 
 .icon-btn {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border: none;
   background: #f1f5f9;
   border-radius: 50%;
@@ -111,8 +111,7 @@
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
-  /* push the nav to the bottom of the header-center column */
-  margin-top: 12px;
+
 }
 
 .icon-btn:active {
@@ -195,10 +194,10 @@
 
 .header-nav__item {
   border: none;
-  height: 40px;
+  height: 25px;
   padding: 6px 16px;
   background: transparent;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
