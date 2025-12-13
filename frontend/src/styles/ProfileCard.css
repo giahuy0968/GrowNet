@@ -6,7 +6,7 @@
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  height: 100%;
+  height: fit-content;
 }
 
 .profile-card.loading {
@@ -84,7 +84,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .profile-description h3 {
@@ -95,7 +95,7 @@
 }
 
 .profile-description p {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   font-size: 14px;
   color: #475569;
   line-height: 1.6;
@@ -122,11 +122,11 @@
 /* Action Buttons Container */
 .profile-actions {
   width: 100%;
-  padding: 16px 16px 24px;
+  padding: 8px 16px 16px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 100px !important;
+  gap: 80px !important;
   box-sizing: border-box;
 }
 
