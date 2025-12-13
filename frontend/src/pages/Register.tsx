@@ -13,7 +13,6 @@ export default function Register() {
     email: '',
     password: '',
     confirmPassword: '',
-    role: '',
     captcha: ''
   })
   const [captchaSvg, setCaptchaSvg] = useState<string | null>(null)
@@ -183,30 +182,24 @@ export default function Register() {
             />
           </div>
 
-          <div className="form-group">
-            <label>Vai trò đăng ký</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Chọn vai trò của bạn</option>
-              <option value="mentor">Mentor (Hướng dẫn)</option>
-              <option value="mentee">Mentee (Học hỏi)</option>
-            </select>
-          </div>
-
           <div className="form-group captcha-group">
             <label>Xác minh CAPTCHA</label>
             <div className="captcha-wrapper">
-              <div className="captcha-display" onClick={() => setCaptchaRefreshKey(Date.now())}>
+              <div className="captcha-display">
                 {captchaSvg ? (
                   <div dangerouslySetInnerHTML={{ __html: captchaSvg }} />
                 ) : (
                   <span>Loading...</span>
                 )}
               </div>
+              <button 
+                type="button" 
+                className="btn-refresh-captcha"
+                onClick={() => setCaptchaRefreshKey(Date.now())}
+                title="Làm mới mã captcha"
+              >
+                ↻
+              </button>
               <input
                 type="text"
                 name="captcha"
@@ -215,12 +208,12 @@ export default function Register() {
                 onChange={handleChange}
                 required
               />
-              {captchaError && (
-                <div style={{ color: '#c33', marginTop: 8, fontSize: '0.9rem' }} role="alert">
-                  {captchaError}
-                </div>
-              )}
             </div>
+            {captchaError && (
+              <div style={{ color: '#c33', marginTop: 8, fontSize: '0.9rem' }} role="alert">
+                {captchaError}
+              </div>
+            )}
           </div>
 
           <button type="submit" className="btn-auth" disabled={loading}>
@@ -235,6 +228,10 @@ export default function Register() {
             <button type="button" className="btn-social btn-google">
               <img src="/google-icon.svg" alt="Google" />
               Google
+            </button>
+            <button type="button" className="btn-social btn-linkedin">
+              <img src="/linkedin-icon.svg" alt="LinkedIn" />
+              LinkedIn
             </button>
             <button type="button" className="btn-social btn-facebook">
               <img src="/facebook-icon.svg" alt="Facebook" />

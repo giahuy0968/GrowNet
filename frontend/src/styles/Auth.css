@@ -491,17 +491,33 @@
   letter-spacing: 4px;
   color: #475569;
   user-select: none;
+  max-width: 240px;
+  width: auto;
+}
+
+.btn-refresh-captcha {
+  width: 44px;
+  height: 44px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-refresh-captcha:hover {
+  background: #2563eb;
+  transform: rotate(180deg);
 }
 
 .captcha-wrapper input {
   flex: 1 1 auto;
   min-width: 0;
-  /* allow input to shrink inside flex container */
   box-sizing: border-box;
-}
-
-/* ensure captcha display doesn't force overflow */
-.captcha-display {
-  max-width: 240px;
-  width: auto;
 }
