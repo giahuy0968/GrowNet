@@ -94,27 +94,27 @@ export default function FilterModal({ onClose, onApply, initialValues }: FilterM
             <div className="filter-section">
               <h3>Vai trò</h3>
               <div className="button-group" role="group" aria-label="Chọn vai trò">
-                  {ROLE_OPTIONS.map(option => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      className={role === option.value ? 'active' : ''}
-                      aria-pressed={role === option.value}
-                      onClick={() => setRole(prev => prev === option.value ? '' : option.value)}
-                    >{option.label}</button>
-                  ))}
+                {ROLE_OPTIONS.map(option => (
                   <button
+                    key={option.value}
                     type="button"
-                    className={!role ? 'ghost active' : 'ghost'}
-                    onClick={() => setRole('')}
-                  >Không giới hạn</button>
+                    className={role === option.value ? 'active' : ''}
+                    aria-pressed={role === option.value}
+                    onClick={() => setRole(prev => (prev === option.value ? '' : option.value) as '' | 'mentor' | 'mentee')}
+                  >{option.label}</button>
+                ))}
+                <button
+                  type="button"
+                  className={!role ? 'ghost active' : 'ghost'}
+                  onClick={() => setRole('')}
+                >Không giới hạn</button>
               </div>
             </div>
 
             <div className="filter-section">
               <h3>Lĩnh vực</h3>
               <div className="button-group multi" role="group" aria-label="Chọn lĩnh vực">
-                  {FIELD_OPTIONS.map(field => (
+                {FIELD_OPTIONS.map(field => (
                   <button
                     key={field}
                     type="button"
