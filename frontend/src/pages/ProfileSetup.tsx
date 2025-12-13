@@ -84,9 +84,9 @@ export default function ProfileSetup() {
                 onChange={handleChange}
                 required
               >
-                <option value="">Mentee (Học hỏi)</option>
-                <option value="mentor">Mentor</option>
-                <option value="mentee">Mentee</option>
+                <option value="" disabled>Chưa chọn vai trò</option>
+                <option value="mentor">Mentor (Hướng dẫn)</option>
+                <option value="mentee">Mentee (Học hỏi)</option>
               </select>
             </div>
 

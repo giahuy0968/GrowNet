@@ -80,7 +80,7 @@
 }
 
 .btn-submit {
-  padding: 14px;
+  padding: 14px 32px;
   background: #10b981;
   color: white;
   border: none;
@@ -89,6 +89,8 @@
   font-weight: 600;
   cursor: pointer;
   margin-top: 8px;
+  margin-left: auto;
+  display: block;
   transition: transform 0.2s;
 }
 
