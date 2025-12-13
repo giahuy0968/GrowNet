@@ -24,7 +24,7 @@
 
 .provider-stats {
   display: flex;
-  gap: 12px;
+  gap: 20px;
   flex-wrap: wrap;
   margin-top: 12px;
   font-size: 14px;
@@ -41,7 +41,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 10px;
   align-items: stretch;
   justify-content: flex-end;
 }
@@ -52,7 +52,7 @@
   border-radius: 16px;
   padding: 18px 20px;
   text-align: center;
-  min-width: 170px;
+  min-width: 235px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -125,6 +125,7 @@
 .advanced-filters {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  width: 1600px;
   gap: 24px;
 }
 
@@ -166,7 +167,7 @@
   display: grid;
   grid-template-rows: auto auto;
   gap: 4px;
-  font-size: 18px;
+  font-size: 16px;
   color: #334155;
 }
 
@@ -238,7 +239,7 @@
 }
 
 .admin-users__table th {
-  font-size: 16px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #475569;
@@ -264,7 +265,7 @@
 .role-pill {
   padding: 4px 20px;
   border-radius: 99px;
-  font-size: 18px;
+  font-size: 14px;
   text-transform: capitalize;
 }
 
@@ -294,7 +295,7 @@
   gap: 6px;
   padding: 4px 10px;
   border-radius: 999px;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: capitalize;
   margin-right: 6px;
@@ -360,16 +361,16 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 5px;
   margin-right: 0px;
 }
 
 .actions button {
   border-radius: 99px;
-  padding: 10px 15px;
+  padding: 10px 20px;
   border: 1px solid #cbd5f5;
   background: #fff;
-  font-size: 15px;
+  font-size: 12px;
   cursor: pointer;
 }
 

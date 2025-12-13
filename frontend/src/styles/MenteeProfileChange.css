@@ -264,15 +264,18 @@ button {
 
 .mpc-modal {
     width: 100%;
-    max-width: 920px;
-    max-height: 90vh;
+    max-width: 800px;
+    max-height: 80vh;
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, .18);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    margin-top: 80px;
+    /* leave space for the sticky header to avoid being covered */
+    margin-top: 150px;
+    /* ensure modal fits within viewport when accounting for header */
+    max-height: calc(100vh - calc(72px + 16px));
 }
 
 .mentee-mpc-header {
@@ -306,6 +309,7 @@ button {
     align-items: center;
     padding: 14px 18px;
     background: transparent;
+    background-color: #ffffff;
 }
 
 .mentee-mpc-back {
@@ -349,10 +353,10 @@ button {
     margin-bottom: 8px;
 }
 
-.mpc-avatar {
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
+.mpc-avatar-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
     background: #f1f5f9;
     display: flex;
     align-items: center;

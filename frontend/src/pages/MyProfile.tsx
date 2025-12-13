@@ -39,7 +39,7 @@ export default function MyProfile() {
             </div>
 
             <div className="profile-actions">
-              <Link to="/settings" className="btnprimary">Cập nhật hồ sơ</Link>
+              <Link to="/profile-change" className="btnprimary">Cập nhật hồ sơ</Link>
               <Link to="/dashboard" className="btnghost">Về Dashboard</Link>
             </div>
           </div>
