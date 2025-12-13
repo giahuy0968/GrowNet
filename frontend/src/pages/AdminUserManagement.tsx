@@ -308,7 +308,6 @@ export default function AdminUserManagement() {
               </button>
             ))}
           </fieldset>
-
           <fieldset>
             <legend>Tài khoản</legend>
             {(['all', 'active', 'locked', 'suspended'] as StatusFilter[]).map(status => (
@@ -322,9 +321,8 @@ export default function AdminUserManagement() {
               </button>
             ))}
           </fieldset>
-
           <fieldset>
-            <legend>Đăng nhập OAuth</legend>
+            <legend>Đăng nhập Auth</legend>
             {(['all', 'password', 'google', 'linkedin'] as ProviderFilter[]).map(provider => (
               <button
                 key={provider}
@@ -338,13 +336,16 @@ export default function AdminUserManagement() {
           </fieldset>
 
           <label className="flagged-toggle">
-            <input
-              type="checkbox"
-              checked={flaggedOnly}
-              onChange={event => setFlaggedOnly(event.target.checked)}
-            />
-            Chỉ hiện hồ sơ nghi ngờ spam/fake
+            <p className="flagged-toggle__text">Chỉ hiện hồ sơ nghi ngờ spam/fake</p>
+            <div>
+              <input
+                type="checkbox"
+                checked={flaggedOnly}
+                onChange={event => setFlaggedOnly(event.target.checked)}
+              />
+            </div>
           </label>
+
         </div>
       </section>
 
@@ -407,7 +408,7 @@ export default function AdminUserManagement() {
                           {account.lastLoginProvider ? providerLabels[account.lastLoginProvider] : 'Chưa xác định'}
                         </span>
                         {account.lastLoginAt && (
-                          <small>
+                          <small >
                             {new Intl.DateTimeFormat('vi-VN', {
                               dateStyle: 'medium',
                               timeStyle: 'short'
