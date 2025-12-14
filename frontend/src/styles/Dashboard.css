@@ -1,7 +1,7 @@
 /* Dashboard Layout Styles */
 .dashboard-layout {
   min-height: 80vh;
-  background: linear-gradient(135deg, #e6fbff 0%, #d3e9ed 50%, #a2e3f2 100%);
+  background: linear-gradient(135deg, #dbf1ff 0%, #d3e5ed 50%, #66b0e5 100%);
   position: relative;
   overflow: hidden;
 }
