@@ -222,7 +222,7 @@ export default function Calendar() {
         )}
 
         <div style={{ display: 'flex', gap: 8 }}>
-          <button className="btn-view-all" onClick={() => navigate('/schedule', { state: { date: selectedDate.toISOString() } })}>
+          <button className="btn-view-all" onClick={() => navigate('/schedule/detail', { state: { date: selectedDate.toISOString() } })}>
             Xem chi tiết
           </button>
           <button className="btn-view-all" onClick={() => navigate('/mentorSchedule')}>
