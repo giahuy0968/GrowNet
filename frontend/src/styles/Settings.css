@@ -29,7 +29,7 @@
   justify-content: center;
   align-items: center;
   min-height: 80vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #dbf1ff 0%, #d3e5ed 50%, #52a1d9 100%);
   box-sizing: border-box;
   padding: 25px 16px;
   position: relative;
@@ -48,9 +48,19 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  33% { transform: translate(30px, -30px) rotate(120deg); }
-  66% { transform: translate(-20px, 20px) rotate(240deg); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  33% {
+    transform: translate(30px, -30px) rotate(120deg);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) rotate(240deg);
+  }
 }
 
 .settings-card {
@@ -71,6 +81,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -98,8 +109,17 @@
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.1); opacity: 0.3; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.3;
+  }
 }
 
 .settings-header h2 {
@@ -245,7 +265,7 @@
 }
 
 /* Căn chỉnh text và arrow */
-.settings-item > span {
+.settings-item>span {
   font-size: 15px;
   color: #2d3748;
   font-weight: 500;
@@ -318,15 +338,15 @@
     max-width: 100%;
     border-radius: 16px;
   }
-  
+
   .settings-section {
     padding: 0 16px;
   }
-  
+
   .settings-item {
     padding: 12px;
   }
-  
+
   .settings-avatar {
     width: 80px;
     height: 80px;

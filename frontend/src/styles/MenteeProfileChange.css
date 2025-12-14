@@ -9,12 +9,41 @@
 
 .profile-setup-container {
     min-height: calc(100vh - 72px);
-    background: #f1f5f9;
+    /* animated page background (base gradient provided by user) */
+    background: linear-gradient(135deg, #dbf1ff 0%, #d3e5ed 50%, #52a1d9 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 40px 16px;
     box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+/* decorative animated blurred overlays to give subtle motion */
+.profile-setup-container::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.18) 0%, transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 35%);
+    filter: blur(48px);
+    transform-origin: center;
+    z-index: 0;
+    pointer-events: none;
+    animation: mpc-bg-float 26s ease-in-out infinite;
+}
+
+.profile-setup-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+    z-index: 1;
+    pointer-events: none;
 }
 
 .profile-setup-card {
@@ -27,6 +56,8 @@
     padding: 24px;
     animation: fadeIn 240ms ease-out;
     line-height: 1.35;
+    position: relative;
+    z-index: 2;
 }
 
 @media (min-width:640px) {
@@ -169,7 +200,7 @@ textarea {
     bottom: 12px;
     width: 4px;
     border-radius: 4px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #dbf1ff 0%, #d3e5ed 50%, #52a1d9 100%);
     opacity: .8;
 }
 
@@ -293,7 +324,7 @@ button {
 /* Banner Styles for Mentee */
 .mpc-banner {
     position: relative;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #dbf1ff 0%, #d3e5ed 50%, #52a1d9 100%);
     min-height: 100px;
     display: flex;
     align-items: center;
@@ -691,6 +722,22 @@ button {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes mpc-bg-float {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    33% {
+        transform: translate(32px, -18px) rotate(30deg);
+    }
+
+    66% {
+        transform: translate(-28px, 16px) rotate(-20deg);
     }
 }
 
