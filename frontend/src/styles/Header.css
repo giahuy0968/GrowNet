@@ -1,18 +1,12 @@
 .dashboard-header {
-  background: rgb(var(--card));
-  padding: 16px 32px 0px;
-  min-height: 60px;
-  display: flex;
-  align-items: center;
-  box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 3000;
-  /* stay above page content */
-  backdrop-filter: saturate(150%) blur(4px);
+  padding: 8px 32px;
+  min-height: 60px;
+  background: rgb(var(--card));
 }
+
 
 .header-logo {
   display: flex;
