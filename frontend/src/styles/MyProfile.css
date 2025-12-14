@@ -377,3 +377,69 @@
     transform: translate(-25px, 18px) rotate(200deg);
   }
 }
+
+/* Entrance animation for My Profile page */
+.my-profile-page {
+  opacity: 0;
+  transform: translateY(10px) scale(0.998);
+  animation: profile-entrance 520ms cubic-bezier(.0, .0, .2, 1) 120ms forwards;
+}
+
+.my-profile-page>* {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: profile-child-appear 420ms ease-out forwards;
+  animation-delay: 260ms;
+}
+
+.my-profile-page>*:nth-child(1) {
+  animation-delay: 240ms;
+}
+
+.my-profile-page>*:nth-child(2) {
+  animation-delay: 300ms;
+}
+
+.my-profile-page>*:nth-child(3) {
+  animation-delay: 360ms;
+}
+
+@keyframes profile-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.998);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes profile-child-appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .my-profile-page,
+  .my-profile-page>* {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}

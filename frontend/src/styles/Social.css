@@ -524,3 +524,69 @@
     flex: 1;
   }
 }
+
+/* Entrance animation for Social page */
+.social-page {
+  opacity: 0;
+  transform: translateY(10px) scale(0.998);
+  animation: social-entrance 520ms cubic-bezier(.0, .0, .2, 1) 120ms forwards;
+}
+
+.social-page>* {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: social-child-appear 420ms ease-out forwards;
+  animation-delay: 260ms;
+}
+
+.social-page>*:nth-child(1) {
+  animation-delay: 240ms;
+}
+
+.social-page>*:nth-child(2) {
+  animation-delay: 300ms;
+}
+
+.ocial-page>*:nth-child(3) {
+  animation-delay: 360ms;
+}
+
+@keyframes social-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.998);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes social-child-appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .social-page,
+  .social-page>* {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}

@@ -319,7 +319,7 @@ button {
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
 }
 
 .mpc-banner-content {
@@ -333,7 +333,7 @@ button {
     font-size: 32px;
     font-weight: 800;
     margin: 0 0 12px 0;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     letter-spacing: -0.5px;
 }
 
@@ -342,7 +342,7 @@ button {
     font-weight: 400;
     margin: 0;
     opacity: 0.95;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .mentee-mpc-header {
@@ -569,7 +569,7 @@ button {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .mpc-group-title {
@@ -691,5 +691,82 @@ button {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Page entrance + staggered child appear for profile setup */
+.profile-setup-container {
+    opacity: 0;
+    transform: translateY(10px) scale(0.998);
+    animation: mpc-page-entrance 420ms cubic-bezier(.0, .0, .2, 1) 80ms forwards;
+}
+
+.profile-setup-card {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: mpc-child-appear 360ms ease-out forwards;
+    animation-delay: 200ms;
+}
+
+.profile-setup-card>* {
+    opacity: 0;
+    transform: translateY(6px);
+    animation: mpc-child-appear 340ms ease-out forwards;
+}
+
+.profile-setup-card>*:nth-child(1) {
+    animation-delay: 240ms;
+}
+
+.profile-setup-card>*:nth-child(2) {
+    animation-delay: 300ms;
+}
+
+.profile-setup-card>*:nth-child(3) {
+    animation-delay: 360ms;
+}
+
+.profile-setup-card>*:nth-child(4) {
+    animation-delay: 420ms;
+}
+
+@keyframes mpc-page-entrance {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.998);
+        filter: blur(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes mpc-child-appear {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+        filter: blur(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .profile-setup-container,
+    .profile-setup-card,
+    .profile-setup-card>* {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+        filter: none !important;
     }
 }

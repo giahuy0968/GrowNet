@@ -79,7 +79,7 @@
 
 .panel header h2 {
   margin: 0;
-  color:#bfc2da
+  color: #bfc2da
 }
 
 .form-grid {
@@ -258,5 +258,71 @@ button.link.danger {
 
   button.primary {
     width: 100%;
+  }
+}
+
+/* Entrance animation for Mentor Academy page */
+.mentor-academy {
+  opacity: 0;
+  transform: translateY(10px) scale(0.998);
+  animation: mentor-entrance 520ms cubic-bezier(.0, .0, .2, 1) 120ms forwards;
+}
+
+.mentor-academy>* {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: mentor-child-appear 420ms ease-out forwards;
+  animation-delay: 260ms;
+}
+
+.mentor-academy>*:nth-child(1) {
+  animation-delay: 240ms;
+}
+
+.mentor-academy>*:nth-child(2) {
+  animation-delay: 300ms;
+}
+
+.mentor-academy>*:nth-child(3) {
+  animation-delay: 360ms;
+}
+
+@keyframes mentor-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.998);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes mentor-child-appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .mentor-academy,
+  .mentor-academy>* {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
   }
 }
