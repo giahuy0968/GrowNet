@@ -67,14 +67,13 @@
 }
 
 .notification-section {
-  padding: 16px 0;
+  padding: 8px 0;
 }
 
 .section-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 24px 12px 0px;
+  padding: 0 0 4px 0;
   box-sizing: border-box;
 }
 
@@ -96,7 +95,7 @@
 }
 
 .notification-actions .link-btn {
-  padding: 0;
+  padding-top: 10px;
   background: none;
   border: none;
   font-size: 13px;
@@ -142,7 +141,7 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 12px 24px;
+  padding: 8px 16px;
   transition: background 0.2s;
   cursor: pointer;
   position: relative;
