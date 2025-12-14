@@ -214,7 +214,7 @@ export default function ScheduleMeetingModal({
         <header className="schedule-modal__header">
           <div>
             <p className="schedule-modal__eyebrow">Google Calendar</p>
-            <h2 id="schedule-modal-title">Dat lich hen</h2>
+            <h2 id="schedule-modal-title">Đặt lịch hẹn</h2>
           </div>
           <button type="button" className="schedule-modal__close" onClick={onClose} aria-label="Dong">
             &times;

@@ -12,13 +12,21 @@
 }
 
 .schedule-modal {
-  width: min(640px, 100%);
+  width: min(560px, 100%);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   background: #fdfcf9;
   border-radius: 18px;
+  padding-top: 50px;
   box-shadow: 0 30px 70px rgba(15, 23, 42, 0.25);
   border: 1px solid rgba(15, 23, 42, 0.08);
   overflow: hidden;
   animation: riseUp 0.28s ease-out;
+}
+
+#schedule-modal-title{
+  color: #e5f2ff;
 }
 
 .schedule-modal__header {
@@ -28,6 +36,7 @@
   padding: 1.5rem 2rem 1rem;
   background: linear-gradient(135deg, #0f172a, #11335c);
   color: #f8fafc;
+  flex-shrink: 0;
 }
 
 .schedule-modal__eyebrow {
@@ -64,11 +73,13 @@
   flex-direction: column;
   gap: 1.25rem;
   padding: 1.75rem 2rem 2rem;
+  overflow-y: auto;
+  flex-grow: 1;
 }
 
 .schedule-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   gap: 1.5rem;
 }
 
@@ -135,7 +146,7 @@
 
 .schedule-field.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
 }
 
@@ -250,6 +261,7 @@
   justify-content: flex-end;
   gap: 0.75rem;
   padding-top: 0.5rem;
+  flex-shrink: 0;
 }
 
 .btn {
