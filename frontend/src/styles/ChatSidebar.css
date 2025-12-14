@@ -48,25 +48,43 @@
 
 .chat-tabs {
   display: flex;
-  border-bottom: 1px solid #f1f5f9;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .chat-tabs button {
   flex: 1;
-  padding: 12px 8px;
+  padding: 12px 0;
   border: none;
   background: none;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: #64748b;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
+  position: relative;
+  transition: color 0.2s ease;
 }
 
 .chat-tabs button.active {
-  color: #3b82f6;
-  border-bottom-color: #3b82f6;
+  color: #1e40af;
+}
+
+.chat-tabs button.active::after {
+  content: '';
+  position: absolute;
+
+  left: 18%;
+  right: 18%;
+  bottom: 0;
+
+  height: 3px;
+  background: linear-gradient(90deg, #1e40af, #3b82f6);
+  border-radius: 999px;
+}
+
+.chat-tabs button:hover {
+  color: #2563eb;
 }
 
 .contacts-list {
