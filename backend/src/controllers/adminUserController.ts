@@ -31,7 +31,7 @@ const sanitizeProfileStatus = (status?: string): ProfileStatus | undefined => {
 
 const sanitizeProvider = (provider?: string): LoginProvider | undefined => {
   if (!provider) return undefined;
-  if (['password', 'google', 'linkedin'].includes(provider)) {
+  if (['password', 'google', 'linkedin', 'facebook'].includes(provider)) {
     return provider as LoginProvider;
   }
   return undefined;

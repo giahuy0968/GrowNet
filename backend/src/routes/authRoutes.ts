@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { register, login, getCurrentUser, updateProfile, changePassword, getCaptcha } from '../controllers/authController';
+import { initiateOAuth, handleOAuthCallback, listOAuthProviders } from '../controllers/oauthController';
 import { authMiddleware } from '../middleware/auth';
 import { validateRequest } from '../middleware/validator';
 import { body } from 'express-validator';
@@ -38,6 +39,9 @@ const changePasswordValidation = [
 router.get('/captcha', getCaptcha);
 router.post('/register', registerValidation, validateRequest, register);
 router.post('/login', loginValidation, validateRequest, login);
+router.get('/oauth/providers', listOAuthProviders);
+router.get('/oauth/:provider', initiateOAuth);
+router.get('/oauth/:provider/callback', handleOAuthCallback);
 router.get('/me', authMiddleware, getCurrentUser);
 router.put('/profile', authMiddleware, updateProfileValidation, validateRequest, updateProfile);
 router.put('/password', authMiddleware, changePasswordValidation, validateRequest, changePassword);

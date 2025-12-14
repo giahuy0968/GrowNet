@@ -4,7 +4,7 @@ import { User } from './auth.service';
 export type AdminRole = 'mentor' | 'mentee' | 'admin' | 'moderator';
 export type AdminAccountStatus = 'active' | 'locked' | 'suspended';
 export type AdminProfileStatus = 'pending' | 'approved' | 'rejected';
-export type AdminLoginProvider = 'password' | 'google' | 'linkedin';
+export type AdminLoginProvider = 'password' | 'google' | 'linkedin' | 'facebook';
 
 export interface AdminUser extends User {
   role: AdminRole;

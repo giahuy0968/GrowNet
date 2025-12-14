@@ -4,7 +4,7 @@ export type UserRole = 'mentor' | 'mentee' | 'admin' | 'moderator';
 
 export type AccountStatus = 'active' | 'locked' | 'suspended';
 export type ProfileStatus = 'pending' | 'approved' | 'rejected';
-export type LoginProvider = 'password' | 'google' | 'linkedin';
+export type LoginProvider = 'password' | 'google' | 'linkedin' | 'facebook';
 
 export interface IUser extends Document {
   username: string;
@@ -132,7 +132,7 @@ const UserSchema = new Schema<IUser>({
   },
   lastLoginProvider: {
     type: String,
-    enum: ['password', 'google', 'linkedin'],
+    enum: ['password', 'google', 'linkedin', 'facebook'],
     default: 'password'
   },
   lastLoginAt: {
@@ -144,7 +144,7 @@ const UserSchema = new Schema<IUser>({
       {
         provider: {
           type: String,
-          enum: ['password', 'google', 'linkedin'],
+          enum: ['password', 'google', 'linkedin', 'facebook'],
           required: true
         },
         accountId: {

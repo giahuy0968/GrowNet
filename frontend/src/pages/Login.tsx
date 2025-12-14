@@ -1,7 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { API_URL } from '../config/api'
+import authService, { SocialLoginProvider } from '../services/auth.service'
 import '../styles/Auth.css'
+
+const SOCIAL_PROVIDERS: SocialLoginProvider[] = ['google', 'linkedin', 'facebook']
+
+const SOCIAL_PROVIDER_META: Record<SocialLoginProvider, { label: string; icon: string; className: string }> = {
+  google: { label: 'Google', icon: '/google-icon.svg', className: 'btn-google' },
+  linkedin: { label: 'LinkedIn', icon: '/linkedin-icon.svg', className: 'btn-linkedin' },
+  facebook: { label: 'Facebook', icon: '/facebook-icon.svg', className: 'btn-facebook' }
+}
 
 export default function Login() {
   const navigate = useNavigate()
@@ -13,6 +23,32 @@ export default function Login() {
   })
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [availableProviders, setAvailableProviders] = useState<SocialLoginProvider[]>([])
+  const [providerLoading, setProviderLoading] = useState(true)
+
+  const handleSocialLogin = (provider: SocialLoginProvider) => {
+    const redirectUrl = `${window.location.origin}/oauth/callback`
+    const authUrl = `${API_URL}/auth/oauth/${provider}?redirect=${encodeURIComponent(redirectUrl)}`
+    window.location.href = authUrl
+  }
+
+  useEffect(() => {
+    const fetchProviders = async () => {
+      try {
+        const providers = await authService.getEnabledProviders()
+        const filtered = providers.filter((provider): provider is SocialLoginProvider =>
+          SOCIAL_PROVIDERS.includes(provider)
+        )
+        setAvailableProviders(filtered)
+      } catch {
+        setAvailableProviders(SOCIAL_PROVIDERS)
+      } finally {
+        setProviderLoading(false)
+      }
+    }
+
+    fetchProviders()
+  }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
@@ -126,20 +162,30 @@ export default function Login() {
                 <span>hoặc</span>
               </div>
 
-              <div className="social-buttons">
-                <button type="button" className="btn-social btn-google">
-                  <img src="/google-icon.svg" alt="Google" />
-                  Google
-                </button>
-                <button type="button" className="btn-social btn-linkedin">
-                  <img src="/linkedin-icon.svg" alt="LinkedIn" />
-                  LinkedIn
-                </button>
-                <button type="button" className="btn-social btn-facebook">
-                  <img src="/facebook-icon.svg" alt="Facebook" />
-                  Facebook
-                </button>
-              </div>
+              {availableProviders.length > 0 ? (
+                <div className="social-buttons">
+                  {availableProviders.map(provider => {
+                    const meta = SOCIAL_PROVIDER_META[provider]
+                    return (
+                      <button
+                        type="button"
+                        key={provider}
+                        className={`btn-social ${meta.className}`}
+                        onClick={() => handleSocialLogin(provider)}
+                      >
+                        <img src={meta.icon} alt={meta.label} />
+                        {meta.label}
+                      </button>
+                    )
+                  })}
+                </div>
+              ) : (
+                !providerLoading && (
+                  <p className="auth-footer" style={{ marginTop: 12 }}>
+                    Tính năng đăng nhập bằng mạng xã hội đang được cấu hình. Vui lòng thử lại sau.
+                  </p>
+                )
+              )}
 
               <p className="auth-footer">
                 Chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link>

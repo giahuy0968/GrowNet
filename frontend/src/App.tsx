@@ -31,12 +31,14 @@ import MentorAcademy from './pages/MentorAcademy'
 import CourseCatalog from './pages/CourseCatalog'
 import AdminUserManagement from './pages/AdminUserManagement'
 import Social from './pages/Social'
+import OAuthCallback from './pages/OAuthCallback'
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/oauth/callback" element={<OAuthCallback />} />
       <Route path="/welcome" element={<Welcome />} />
       {/* Các trang dùng chung Header qua MainLayout */}
       <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>

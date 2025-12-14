@@ -18,7 +18,8 @@ export interface LoginData {
 export type UserRole = 'mentor' | 'mentee' | 'admin' | 'moderator';
 export type AccountStatus = 'active' | 'locked' | 'suspended';
 export type ProfileStatus = 'pending' | 'approved' | 'rejected';
-export type LoginProvider = 'password' | 'google' | 'linkedin';
+export type LoginProvider = 'password' | 'google' | 'linkedin' | 'facebook';
+export type SocialLoginProvider = Extract<LoginProvider, 'google' | 'linkedin' | 'facebook'>;
 
 export interface User {
   _id: string;
@@ -81,6 +82,12 @@ class AuthService {
   async getCurrentUser(): Promise<User> {
     const response = await apiService.get<ApiResponse<User>>('/auth/me');
     return response.data;
+  }
+
+  async getEnabledProviders(): Promise<SocialLoginProvider[]> {
+    const response = await apiService.get<ApiResponse<LoginProvider[]>>('/auth/oauth/providers');
+    const providers = response.data || [];
+    return providers.filter((provider): provider is SocialLoginProvider => provider !== 'password');
   }
 
   async updateProfile(data: Partial<User>): Promise<User> {

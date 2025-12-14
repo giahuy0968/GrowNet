@@ -26,7 +26,8 @@ interface ModalState {
 const providerLabels: Record<AdminLoginProvider, string> = {
   password: 'Password',
   google: 'Google OAuth',
-  linkedin: 'LinkedIn OAuth'
+  linkedin: 'LinkedIn OAuth',
+  facebook: 'Facebook OAuth'
 };
 
 const accountStatusLabels: Record<AdminAccountStatus, string> = {
@@ -240,7 +241,7 @@ export default function AdminUserManagement() {
             Kiểm soát trạng thái đăng nhập, phân quyền, và kiểm duyệt hồ sơ dựa trên dữ liệu thật từ MongoDB.
           </p>
           <div className="provider-stats">
-            {(['password', 'google', 'linkedin'] as AdminLoginProvider[]).map((providerKey) => (
+            {(['password', 'google', 'linkedin', 'facebook'] as AdminLoginProvider[]).map((providerKey) => (
               <span key={providerKey}>
                 {providerLabels[providerKey]}: {providerStats[providerKey] || 0}
               </span>
@@ -323,7 +324,7 @@ export default function AdminUserManagement() {
           </fieldset>
           <fieldset>
             <legend>Đăng nhập Auth</legend>
-            {(['all', 'password', 'google', 'linkedin'] as ProviderFilter[]).map(provider => (
+            {(['all', 'password', 'google', 'linkedin', 'facebook'] as ProviderFilter[]).map(provider => (
               <button
                 key={provider}
                 type="button"
