@@ -1,13 +1,59 @@
 /* Dashboard Layout Styles */
 .dashboard-layout {
   min-height: 80vh;
-  background: #edf4fa;
+  /* light sea-blue diagonal gradient */
+  background: linear-gradient(135deg, #e6fbff 0%, #d3e9ed 50%, #a2e3f2 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* decorative floating radial element like Settings.css */
+.dashboard-layout::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  transform-origin: center;
+  animation: dashboardFloat 20s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* subtle overlay to keep content readable (soften gradient) */
+.dashboard-layout::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+@keyframes dashboardFloat {
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  33% {
+    transform: translate(30px, -30px) rotate(120deg);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) rotate(240deg);
+  }
 }
 
 .dashboard-content {
   display: grid;
   height: auto;
   align-items: stretch;
+  position: relative;
+  z-index: 1;
   /* make columns equal height */
   grid-template-columns: 280px 1fr 320px;
   gap: 60px;

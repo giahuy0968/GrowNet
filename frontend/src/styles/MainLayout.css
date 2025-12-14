@@ -1,0 +1,54 @@
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.main-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-body {
+    margin: 0;
+    padding: 0;
+    /* make main-body fill remaining viewport height so pages stretch to bottom */
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-body>*:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.main-body>* {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.main-body>.dashboard-layout {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.dashboard-layout {
+    margin-top: 0;
+}
+
+.main-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg-light);
+    color: var(--color-text);
+}
+
+/* ensure page content background stretches to bottom when a page uses a full-width background */
+.main-body>* {
+    flex: 1 1 auto;
+}

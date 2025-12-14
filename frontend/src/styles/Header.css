@@ -1,10 +1,9 @@
 .dashboard-header {
   background: rgb(var(--card));
-  padding: 16px 32px;
+  padding: 16px 32px 0px;
   min-height: 60px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
