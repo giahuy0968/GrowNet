@@ -5,7 +5,7 @@ import type { User } from '../services';
 import type { UserStats } from '../services/user.service';
 import { useAuth } from '../contexts/AuthContext';
 import Toast from '../components/Toast';
-import '../styles/UserProfile.css';
+import '../styles/connect.css';
 
 interface ToastState {
   open: boolean;
@@ -139,37 +139,39 @@ export default function UserProfile() {
 
   return (
     <>
-      <div className="user-profile">
-        <section className="user-profile__hero">
-          <img src="/profile-bg.jpg" alt="Background" className="hero-bg" />
-          <div className="hero-shell">
-            <div className="hero-main">
-              <img
-                src={profile.avatar || '/user_avt.png'}
-                alt={profile.fullName || profile.username}
-                className="hero-avatar"
-              />
-              <div>
-                <p className="hero-label">{profile.fields?.[0] || 'Hồ sơ GrowNet'}</p>
-                <h1>{profile.fullName || profile.username}</h1>
-                <p className="hero-meta">
-                  @{profile.username}
-                  {profile.location?.city && (
-                    <>
-                      {' · '}
-                      {[profile.location?.city, profile.location?.country].filter(Boolean).join(', ')}
-                    </>
-                  )}
-                </p>
+      <div className="uprof-user-profile">
+        <div className="profile-container">
+          <section className="user-profile__hero">
+            <img src="/profile-bg.jpg" alt="Background" className="hero-bg" />
+            <div className="hero-shell">
+              <div className="hero-main">
+                <img
+                  src={profile.avatar || '/user_avt.png'}
+                  alt={profile.fullName || profile.username}
+                  className="hero-avatar"
+                />
+                <div>
+                  <p className="hero-label">{profile.fields?.[0] || 'Hồ sơ GrowNet'}</p>
+                  <h1>{profile.fullName || profile.username}</h1>
+                  <p className="hero-meta">
+                    @{profile.username}
+                    {profile.location?.city && (
+                      <>
+                        {' · '}
+                        {[profile.location?.city, profile.location?.country].filter(Boolean).join(', ')}
+                      </>
+                    )}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="hero-side">
-              <div className="hero-tags">
-                {heroTags.map(tag => (
-                  <span key={tag} className="chip">
-                    {tag}
-                  </span>
-                ))}
+              <div className="hero-side">
+                <div className="hero-tags">
+                  {heroTags.slice(2).map(tag => (
+                    <span key={tag} className="chip">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
               <div className="hero-actions">
                 {!isOwnProfile && (
@@ -178,109 +180,114 @@ export default function UserProfile() {
                   </button>
                 )}
                 <button type="button" className="btn ghost" onClick={() => navigate('/dashboard')}>
-                  Quay lại gợi ý
+                  Quay lại
                 </button>
               </div>
             </div>
+          </section>
+
+          <div className="profile-body">
+            <main className="profile-main">
+              <section className="user-profile__sections">
+                <article className="section-card section-span-2">
+                  <header>
+                    <h2>Giới thiệu</h2>
+                    <p>Thông tin tổng quan về {profile.fullName || profile.username}</p>
+                  </header>
+                  <p className="bio">{profile.bio || 'Chưa có mô tả chi tiết.'}</p>
+                  <dl className="definition-list">
+                    <div>
+                      <dt>Chức danh</dt>
+                      <dd>{profile.fields?.[0] || 'Chưa cập nhật'}</dd>
+                    </div>
+                    <div>
+                      <dt>Kỹ năng chính</dt>
+                      <dd>
+                        {profile.skills && profile.skills.length > 0
+                          ? profile.skills.slice(0, 3).join(', ')
+                          : 'Chưa cập nhật'}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Kinh nghiệm</dt>
+                      <dd>{profile.experienceYears ? `${profile.experienceYears} năm` : 'Chưa cập nhật'}</dd>
+                    </div>
+                    <div>
+                      <dt>Độ tuổi</dt>
+                      <dd>{profile.age || 'Chưa cập nhật'}</dd>
+                    </div>
+                  </dl>
+                </article>
+
+                <article className="section-card">
+                  <header>
+                    <h2>Chuyên môn & kỹ năng</h2>
+                  </header>
+                  <div className="tags-wrap">
+                    {(profile.skills && profile.skills.length > 0 ? profile.skills : ['Chưa cập nhật']).map(skill => (
+                      <span key={skill} className="chip neutral">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+
+                <article className="section-card">
+                  <header>
+                    <h2>Lĩnh vực quan tâm</h2>
+                  </header>
+                  <div className="tags-wrap">
+                    {(profile.interests && profile.interests.length > 0 ? profile.interests : ['Chưa cập nhật']).map(tag => (
+                      <span key={tag} className="chip soft">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+
+                <article className="section-card section-span-2">
+                  <header>
+                    <h2>Thông tin khác</h2>
+                  </header>
+                  <dl className="definition-list">
+                    <div>
+                      <dt>Giới tính</dt>
+                      <dd>
+                        {profile.gender
+                          ? profile.gender === 'male'
+                            ? 'Nam'
+                            : profile.gender === 'female'
+                              ? 'Nữ'
+                              : 'Khác'
+                          : 'Chưa cập nhật'}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Ngôn ngữ</dt>
+                      <dd>{profile.languages?.join(', ') || 'Chưa cập nhật'}</dd>
+                    </div>
+                    <div>
+                      <dt>Thời gian rảnh</dt>
+                      <dd>{profile.availability || 'Chưa cập nhật'}</dd>
+                    </div>
+                  </dl>
+                </article>
+              </section>
+            </main>
+
+            <aside className="profile-side">
+              <section className="user-profile__metrics">
+                {highlightCards.map(card => (
+                  <article key={card.label} className="metric-card">
+                    <p>{card.label}</p>
+                    <strong>{card.value}</strong>
+                  </article>
+                ))}
+              </section>
+            </aside>
           </div>
-        </section>
-
-        <section className="user-profile__metrics">
-          {highlightCards.map(card => (
-            <article key={card.label} className="metric-card">
-              <p>{card.label}</p>
-              <strong>{card.value}</strong>
-            </article>
-          ))}
-        </section>
-
-        <section className="user-profile__sections">
-          <article className="section-card section-span-2">
-            <header>
-              <h2>Giới thiệu</h2>
-              <p>Thông tin tổng quan về {profile.fullName || profile.username}</p>
-            </header>
-            <p className="bio">{profile.bio || 'Chưa có mô tả chi tiết.'}</p>
-            <dl className="definition-list">
-              <div>
-                <dt>Chức danh</dt>
-                <dd>{profile.fields?.[0] || 'Chưa cập nhật'}</dd>
-              </div>
-              <div>
-                <dt>Kỹ năng chính</dt>
-                <dd>
-                  {profile.skills && profile.skills.length > 0
-                    ? profile.skills.slice(0, 3).join(', ')
-                    : 'Chưa cập nhật'}
-                </dd>
-              </div>
-              <div>
-                <dt>Kinh nghiệm</dt>
-                <dd>{profile.experienceYears ? `${profile.experienceYears} năm` : 'Chưa cập nhật'}</dd>
-              </div>
-              <div>
-                <dt>Độ tuổi</dt>
-                <dd>{profile.age || 'Chưa cập nhật'}</dd>
-              </div>
-            </dl>
-          </article>
-
-          <article className="section-card">
-            <header>
-              <h2>Chuyên môn & kỹ năng</h2>
-            </header>
-            <div className="tags-wrap">
-              {(profile.skills && profile.skills.length > 0 ? profile.skills : ['Chưa cập nhật']).map(skill => (
-                <span key={skill} className="chip neutral">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </article>
-
-          <article className="section-card">
-            <header>
-              <h2>Lĩnh vực quan tâm</h2>
-            </header>
-            <div className="tags-wrap">
-              {(profile.interests && profile.interests.length > 0 ? profile.interests : ['Chưa cập nhật']).map(tag => (
-                <span key={tag} className="chip soft">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </article>
-
-          <article className="section-card">
-            <header>
-              <h2>Thông tin khác</h2>
-            </header>
-            <dl className="definition-list">
-              <div>
-                <dt>Giới tính</dt>
-                <dd>
-                  {profile.gender
-                    ? profile.gender === 'male'
-                      ? 'Nam'
-                      : profile.gender === 'female'
-                        ? 'Nữ'
-                        : 'Khác'
-                    : 'Chưa cập nhật'}
-                </dd>
-              </div>
-              <div>
-                <dt>Ngôn ngữ</dt>
-                <dd>{profile.languages?.join(', ') || 'Chưa cập nhật'}</dd>
-              </div>
-              <div>
-                <dt>Thời gian rảnh</dt>
-                <dd>{profile.availability || 'Chưa cập nhật'}</dd>
-              </div>
-            </dl>
-          </article>
-        </section>
+        </div>
       </div>
-
       <Toast
         open={toast.open}
         message={toast.message}

@@ -267,3 +267,17 @@
     justify-content: center;
   }
 }
+
+dding */ .section-card::before,
+.section-card::after,
+.section-card *::before,
+.section-card *::after {
+  display: none !important;
+  content: none !important;
+}
+
+.section-card header h2 {
+  padding-left: 0 !important;
+  border-left: none !important;
+  box-shadow: none !important;
+}
