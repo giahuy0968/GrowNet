@@ -1,0 +1,208 @@
+/* styles/ReportModal.css */
+
+.report-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 100px;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.report-dialog {
+  width: 520px;
+  max-width: 90vw;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  font-family: inherit;
+  display: block;
+}
+
+.report-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 16px 24px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.report-dialog-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.report-dialog-close,
+.report-dialog-back {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px 8px;
+}
+
+.report-dialog-close {
+  right: 16px;
+}
+
+.report-dialog-back {
+  left: 16px;
+}
+
+.report-dialog-body {
+  padding: 10px 24px 10px;
+  overflow: visible;
+  flex: 1;
+}
+
+.report-issue-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.report-issue-item + .report-issue-item {
+  border-top: 1px solid #f2f2f2;
+}
+
+.report-issue-row {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.report-issue-row:hover {
+  background: #f7f7f7;
+}
+
+.report-issue-text {
+  text-align: left;
+  flex: 1;
+  padding-right: 12px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.report-issue-arrow {
+  flex-shrink: 0;
+  font-size: 14px;
+  color: #888888; 
+}
+
+.report-other-box {
+  margin: 8px 0 12px;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.report-other-label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.report-other-textarea {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  padding: 8px;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 60px;
+  box-sizing: border-box;
+}
+
+.report-other-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25);
+}
+
+.report-other-confirm-btn {
+  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.report-other-confirm-btn:hover {
+  opacity: 0.95;
+}
+
+.report-error {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #dc2626;
+}
+
+/* Confirm step */
+
+.report-dialog-confirm .report-dialog-body {
+  text-align: center;
+}
+
+.report-confirm-body p {
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.report-summary {
+  margin-bottom: 16px;
+  text-align: left;
+  font-size: 13px;
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.report-summary-label {
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.report-summary-label:first-child {
+  margin-top: 0;
+}
+
+.report-summary-value {
+  margin-left: 4px;
+}
+
+.report-submit-btn {
+  margin-top: 4px;
+  padding: 10px 40px;
+  border-radius: 999px;
+  border: none;
+  background: #3b82f6;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.report-submit-btn:hover {
+  opacity: 0.95;
+}

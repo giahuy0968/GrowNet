@@ -14,6 +14,9 @@ interface EducationItem {
     from: string;
     to: string;
 }
+interface MenteeProfileProps {
+    isOwner?: boolean;
+}
 
 const EXPERIENCES: ExperienceItem[] = [
     { role: 'Intern Marketing', company: 'TNHH Z', from: '06/2024', to: '10/2024', current: true },
@@ -23,7 +26,7 @@ const EDUCATIONS: EducationItem[] = [
 ];
 const STRONG_SIDE = ['Phân tích dữ liệu Marketing', 'Tư duy chiến lược Digital', 'Sửa hồ sơ và tư duy chiến lược'];
 const IMPROVE_SIDE = ['Kỹ năng thuyết trình', 'Quản lý thời gian', 'Kỹ năng làm việc nhóm'];
-export default function menteeProfile() {
+export default function menteeProfile({ isOwner = false }: MenteeProfileProps) {
     const navigate = useNavigate();
     return (
         <div className="mentee-profile-page">
@@ -38,12 +41,14 @@ export default function menteeProfile() {
                         <div className="profile-header-info">
                             <h1 className="mentee-name">Nguyễn Minh Anh</h1>
                             <p className="mentee-meta">Location: Ha Noi </p>
-                            <div className="action-row">
-                                <button className="btn-primary" type="button" onClick={() => navigate('/chat')}>🤝Kết nối ngay</button>
-                                <button className="btn-ghost" type="button" onClick={() => navigate('/chat')}>
-                                    <img src="/paper-plane.svg" alt="send" /> Gửi tin nhắn
-                                </button>
-                            </div>
+                            {!isOwner && (
+                                <div className="action-row">
+                                    <button className="btn-primary" type="button" onClick={() => navigate('/chat')}>🤝Kết nối ngay</button>
+                                    <button className="btn-ghost" type="button" onClick={() => navigate('/chat')}>
+                                        <img src="/paper-plane.svg" alt="send" /> Gửi tin nhắn
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </header>
                     <div className="profile-body-section">

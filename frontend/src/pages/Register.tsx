@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { API_URL } from '../config/api'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import '../styles/Auth.css'
@@ -15,6 +16,9 @@ export default function Register() {
     role: '',
     captcha: ''
   })
+  const [captchaSvg, setCaptchaSvg] = useState<string | null>(null)
+  const [captchaRefreshKey, setCaptchaRefreshKey] = useState<number>(Date.now())
+  const [captchaError, setCaptchaError] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -24,11 +28,12 @@ export default function Register() {
       [e.target.name]: e.target.value
     })
     setError(null)
+    setCaptchaError(null)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (formData.password !== formData.confirmPassword) {
       setError('Mật khẩu không khớp!')
       return
@@ -45,36 +50,77 @@ export default function Register() {
     }
 
     setLoading(true)
+    // safety timeout: if request doesn't finish in this time, unblock UI
+    const safetyTimeout = setTimeout(() => {
+      setLoading(false)
+      setCaptchaError('Sai mã xác minh.')
+      setCaptchaRefreshKey(Date.now())
+    }, 1000)
     setError(null)
-    
+
     try {
-      await register(formData.username, formData.email, formData.password, formData.fullName)
+      setCaptchaError(null)
+      // include captcha in register payload
+      await register(formData.username, formData.email, formData.password, formData.fullName, formData.captcha)
       navigate('/welcome')
     } catch (err: any) {
-      setError(err.message || 'Đăng ký thất bại. Vui lòng thử lại.')
+      const status = err?.status
+      const msg = err?.message || 'Đăng ký thất bại. Vui lòng thử lại.'
+      // If backend reports captcha error (400) or message contains 'captcha', show inline captcha message and refresh captcha
+      if (status === 400 && /captcha/i.test(msg)) {
+        setCaptchaError(msg)
+        // refresh captcha image immediately
+        await fetchCaptcha()
+        // clear input so user can type new captcha
+        setFormData(prev => ({ ...prev, captcha: '' }))
+      } else if (typeof msg === 'string' && /captcha/i.test(msg)) {
+        setCaptchaError(msg)
+        await fetchCaptcha()
+        setFormData(prev => ({ ...prev, captcha: '' }))
+      } else {
+        setError(msg)
+      }
     } finally {
+      clearTimeout(safetyTimeout)
       setLoading(false)
     }
   }
+
+  const fetchCaptcha = async () => {
+    try {
+      const res = await fetch(`${API_URL}/auth/captcha?ts=${Date.now()}`, {
+        method: 'GET',
+        credentials: 'include'
+      })
+      const svg = await res.text()
+      setCaptchaSvg(svg)
+    } catch (err) {
+      // ignore
+    }
+  }
+
+  React.useEffect(() => {
+    fetchCaptcha()
+  }, [captchaRefreshKey])
 
   return (
     <div className="auth-container">
       <div className="auth-card register-card">
         <h1 className="auth-title">Đăng ký</h1>
-        
+
         {error && (
-          <div style={{ 
-            padding: '12px', 
-            backgroundColor: '#fee', 
-            color: '#c33', 
-            borderRadius: '8px', 
+          <div style={{
+            padding: '12px',
+            backgroundColor: '#fee',
+            color: '#c33',
+            borderRadius: '8px',
             marginBottom: '16px',
             textAlign: 'center'
           }}>
             {error}
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label>Tên đăng nhập</label>
@@ -154,15 +200,26 @@ export default function Register() {
           <div className="form-group captcha-group">
             <label>Xác minh CAPTCHA</label>
             <div className="captcha-wrapper">
-              <div className="captcha-display">6RkH2</div>
+              <div className="captcha-display" onClick={() => setCaptchaRefreshKey(Date.now())}>
+                {captchaSvg ? (
+                  <div dangerouslySetInnerHTML={{ __html: captchaSvg }} />
+                ) : (
+                  <span>Loading...</span>
+                )}
+              </div>
               <input
                 type="text"
                 name="captcha"
-                placeholder="Nhập mã xác minh"
+                placeholder="Nhập mã"
                 value={formData.captcha}
                 onChange={handleChange}
                 required
               />
+              {captchaError && (
+                <div style={{ color: '#c33', marginTop: 8, fontSize: '0.9rem' }} role="alert">
+                  {captchaError}
+                </div>
+              )}
             </div>
           </div>
 
@@ -184,7 +241,6 @@ export default function Register() {
               Facebook
             </button>
           </div>
-
           <p className="auth-footer">
             Bạn đã có tài khoản? <Link to="/login">Đăng nhập ngay</Link>
           </p>

@@ -7,7 +7,7 @@ export default function MainLayout() {
     <div className="main-layout">
       <Header />
       <div className="main-body">
-        <Outlet /> {/* nơi các trang con (Dashboard, Chat...) sẽ hiển thị */}
+        <Outlet />
       </div>
     </div>
   )

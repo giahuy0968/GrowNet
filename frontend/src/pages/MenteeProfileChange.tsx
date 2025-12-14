@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../styles/MenteeProfileChange.css'
+import { useAuth } from '../contexts/AuthContext'
 
 type EducationEntry = {
     school: string
@@ -25,6 +26,7 @@ type FormData = {
 
 export default function ProfileSetup() {
     const navigate = useNavigate()
+    const { user, updateUser } = useAuth()
     const [formData, setFormData] = useState<FormData>({
         fullName: '',
         location: '',
@@ -38,6 +40,29 @@ export default function ProfileSetup() {
         skillsList: [],
         expertiseList: []
     })
+    const [loading, setLoading] = useState(true)
+    const [submitError, setSubmitError] = useState<string | null>(null)
+    const [avatarPreview, setAvatarPreview] = useState<string>('')
+    const [avatarFile, setAvatarFile] = useState<File | null>(null)
+    const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+    useEffect(() => {
+        if (!user) {
+            setLoading(false)
+            return
+        }
+
+        setFormData(prev => ({
+            ...prev,
+            fullName: user.fullName || user.username,
+            location: user.location?.city || '',
+            introduction: user.bio || '',
+            skillsList: user.skills || [],
+            expertiseList: user.fields || user.interests || []
+        }))
+        setAvatarPreview(user.avatar || '/user_avt.png')
+        setLoading(false)
+    }, [user])
 
     // Đóng modal: quay về trang trước hoặc dashboard nếu không có history
     const close = () => {
@@ -138,12 +163,72 @@ export default function ProfileSetup() {
         return Object.keys(newErrors).length === 0 && eduErrs.every(m => m === '')
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (!file) return
+
+        // basic validation
+        if (!file.type.startsWith('image/')) {
+            setSubmitError('Vui lòng chọn file ảnh hợp lệ (PNG/JPEG).')
+            return
+        }
+        if (file.size > 2 * 1024 * 1024) {
+            setSubmitError('Ảnh quá lớn. Giới hạn 2MB.')
+            return
+        }
+
+        setSubmitError(null)
+        setAvatarFile(file)
+
+        const reader = new FileReader()
+        reader.onloadend = () => {
+            if (typeof reader.result === 'string') {
+                setAvatarPreview(reader.result)
+            }
+        }
+        reader.readAsDataURL(file)
+    }
+
+    const handleChooseAvatar = () => {
+        fileInputRef.current?.click()
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        setSubmitError(null)
         if (!validate()) return
-        // TODO: Gửi formData tới API (POST /api/profile)
-        // console.log(formData)
-        navigate('/dashboard')
+
+        try {
+            let avatarData: string | undefined
+            if (avatarFile) {
+                const reader = new FileReader()
+                avatarData = await new Promise<string>((resolve, reject) => {
+                    reader.onloadend = () => {
+                        if (typeof reader.result === 'string') {
+                            resolve(reader.result)
+                        } else {
+                            reject(new Error('Không thể đọc file ảnh'))
+                        }
+                    }
+                    reader.onerror = () => reject(new Error('Không thể đọc file ảnh'))
+                    reader.readAsDataURL(avatarFile)
+                })
+            }
+
+            await updateUser({
+                fullName: formData.fullName,
+                bio: formData.introduction,
+                location: formData.location ? { city: formData.location } : undefined,
+                skills: formData.skillsList,
+                fields: formData.expertiseList,
+                experienceYears: Number(formData.experience) || undefined,
+                avatar: avatarData
+            })
+            navigate('/my-profile')
+        } catch (error: any) {
+            const message = error?.response?.data?.message || error?.message || 'Không thể lưu hồ sơ'
+            setSubmitError(message)
+        }
     }
 
     return (
@@ -151,9 +236,11 @@ export default function ProfileSetup() {
             <div className="mpc-modal">
 
                 {/* HEADER */}
-                <div className="mpc-header">
-                    <span className="mpc-title">Chỉnh sửa hồ sơ </span>
-                    <button className="mpc-close" aria-label="Đóng" onClick={close}>×</button>
+                <div className="mentee-mpc-header">
+                    <button className="mentee-mpc-back" aria-label="Quay lại" onClick={close}>
+                        &#8592;
+                    </button>
+                    <span className="mentee-mpc-title">Chỉnh sửa hồ sơ</span>
                 </div>
 
                 {/* BODY */}
@@ -161,8 +248,20 @@ export default function ProfileSetup() {
 
                     {/* Avatar */}
                     <div className="mpc-avatar-row">
-                        <div className="mpc-avatar">👤</div>
-                        <button type="button" className="btn-light">Đổi ảnh đại diện</button>
+                        <div className="mpc-avatar-preview">
+                            <img src={avatarPreview || '/user_avt.png'} alt="Avatar preview" />
+                        </div>
+                        <div className="mpc-avatar-actions">
+                            <button type="button" className="btn-light" onClick={handleChooseAvatar}>Đổi ảnh đại diện</button>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/png,image/jpeg,image/jpg"
+                                style={{ display: 'none' }}
+                                onChange={handleAvatarChange}
+                            />
+                            {avatarFile && <span className="mpc-avatar-filename">{avatarFile.name}</span>}
+                        </div>
                     </div>
 
                     {/* Họ tên */}
@@ -371,11 +470,12 @@ export default function ProfileSetup() {
                 {/* FOOTER */}
                 <div className="mpc-footer">
                     <button type="button" className="btn-danger" onClick={close}>HỦY</button>
-                    <button type="submit" className="btn-success" onClick={handleSubmit}>
-                        LƯU
+                    <button type="submit" className="btn-success" onClick={handleSubmit} disabled={loading}>
+                        {loading ? 'Đang lưu...' : 'LƯU'}
                     </button>
                 </div>
 
+                {submitError && <p className="mpc-error-text">{submitError}</p>}
             </div>
         </div>
     )

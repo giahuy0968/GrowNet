@@ -1,3 +1,24 @@
+.settings-back-btn {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  box-shadow: none;
+  transition: color 0.2s, transform 0.2s;
+  z-index: 2;
+}
+
+.settings-back-btn:hover {
+  color: #1565c0;
+  transform: translateX(-2px);
+}
+
 .settings-page {
   display: flex;
   justify-content: center;
@@ -9,7 +30,7 @@
 }
 
 .settings-card {
-  width: 380px;
+  width: 400px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -26,9 +47,13 @@
 }
 
 .settings-header h2 {
+  color: white;
   margin: 0;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
+  color: #fff;
+  border: none !important;
+  background: none !important;
 }
 
 .close-btn {
@@ -84,6 +109,7 @@
   padding: 10px 0;
   border-bottom: 1px solid #f3f3f3;
   cursor: pointer;
+  background: transparent;
   transition: background 0.2s;
 }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import '../styles/MentorProfile.css';
 import { Navigate, useNavigate } from 'react-router-dom';
 interface ExperienceItem {
@@ -18,6 +19,9 @@ interface WorkingFor {
     role: string,
     company: string,
 }
+interface MentorProfileProps {
+    isOwner?: boolean;
+}
 
 const EXPERIENCES: ExperienceItem[] = [
     { role: 'Senior UX/UI Designer', company: 'CreativeLab', from: '2019', to: 'Hiện tại', current: true },
@@ -34,7 +38,7 @@ const WORKING_FOR: WorkingFor[] = [
 ];
 const CORE_SKILLS = ['Figma', 'UX Research', 'UI Design', 'Teamwork', 'Prototyping', 'Mobile App Design'];
 
-export default function MentorProfile() {
+export default function MentorProfile({ isOwner = false }: MentorProfileProps) {
     const navigate = useNavigate();
     return (
         <div className="mentor-profile-page">
@@ -49,13 +53,15 @@ export default function MentorProfile() {
                         <div className="profile-header-info">
                             <h1 className="mentor-name">Nguyễn Minh Anh</h1>
                             <p className="mentor-meta">Mentor • UX/UI Designer • TP.HCM</p>
-                            <div className="action-row">
-                                <button className="btn-primary" type="button" onClick={() => navigate('/chat')}>🤝 Kết nối ngay</button>
-                                <button className="btn-ghost" type="button" onClick={() => navigate('/schedule')}>📅 Đặt lịch</button>
-                                <button className="btn-mess" type="button" onClick={() => navigate('/chat')}>
-                                    <img src="/paper-plane.svg" alt="send" />
-                                </button>
-                            </div>
+                            {!isOwner && (
+                                <div className="action-row">
+                                    <button className="btn-primary-mentor" type="button" onClick={() => navigate('/chat')}>🤝 Kết nối ngay</button>
+                                    <button className="btn-ghost" type="button" onClick={() => navigate('/schedule')}>📅 Đặt lịch</button>
+                                    <button className="btn-mess" type="button" onClick={() => navigate('/chat')}>
+                                        <PaperAirplaneIcon style={{ width: 20, height: 20, color: '#1d4ed8' }} />
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </header>
                     <div className="profile-body-section">

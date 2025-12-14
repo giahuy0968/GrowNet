@@ -1,10 +1,18 @@
 import express from 'express';
 import cors from 'cors';
+import session from 'express-session';
 import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io';
+import path from 'path';
 import connectDB from './config/database';
 import { errorHandler } from './middleware/errorHandler';
+import {
+  initSocketServer,
+  registerOnlineUser,
+  removeOnlineUserBySocket,
+  getOnlineUsers
+} from './config/socket';
 
 // Import routes
 import authRoutes from './routes/authRoutes';
@@ -13,6 +21,10 @@ import postRoutes from './routes/postRoutes';
 import connectionRoutes from './routes/connectionRoutes';
 import chatRoutes from './routes/chatRoutes';
 import notificationRoutes from './routes/notificationRoutes';
+import meetingRoutes from './routes/meetingRoutes';
+import courseRoutes from './routes/courseRoutes';
+import certificateRoutes from './routes/certificateRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -30,22 +42,57 @@ const io = new Server(server, {
   }
 });
 
+initSocketServer(io);
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://202.92.6.223:3000',
+  'http://202.92.6.223:5173',
+  'http://202.92.6.223',
+  process.env.CLIENT_URL || 'http://localhost:3000'
+];
+
+const corsOptions = {
+  origin: allowedOrigins,
+  credentials: true
+};
+
 // Middleware
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://202.92.6.223:3000',
-    'http://202.92.6.223:5173',
-    'http://202.92.6.223',
-    process.env.CLIENT_URL || 'http://localhost:3000'
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors(corsOptions));
+
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    const origin = req.headers.origin as string | undefined;
+    if (origin && allowedOrigins.includes(origin)) {
+      res.header('Access-Control-Allow-Origin', origin);
+      res.header('Access-Control-Allow-Credentials', 'true');
+    } else {
+      res.header('Access-Control-Allow-Origin', '*');
+    }
+    res.header('Vary', 'Origin');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return res.sendStatus(204);
+  }
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
+
+// Session middleware (used for CAPTCHA storage, etc.)
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'change-me',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  }
+}));
 
 // Connect to database
 connectDB();
@@ -61,16 +108,20 @@ app.use('/api/posts', postRoutes);
 app.use('/api/connections', connectionRoutes);
 app.use('/api/chats', chatRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/meetings', meetingRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/certificates', certificateRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Socket.IO connection handling
-const onlineUsers = new Map<string, string>(); // userId -> socketId
+const onlineUsers = getOnlineUsers();
 
 io.on('connection', (socket: any) => {
   console.log('User connected:', socket.id);
 
   // User joins
   socket.on('user:online', (userId: string) => {
-    onlineUsers.set(userId, socket.id);
+    registerOnlineUser(userId, socket.id);
     io.emit('user:status', { userId, status: 'online' });
   });
 
@@ -96,14 +147,11 @@ io.on('connection', (socket: any) => {
   // Disconnect
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
-    
+
     // Find and remove user from online list
-    for (const [userId, socketId] of onlineUsers.entries()) {
-      if (socketId === socket.id) {
-        onlineUsers.delete(userId);
-        io.emit('user:status', { userId, status: 'offline' });
-        break;
-      }
+    const userId = removeOnlineUserBySocket(socket.id);
+    if (userId) {
+      io.emit('user:status', { userId, status: 'offline' });
     }
   });
 });

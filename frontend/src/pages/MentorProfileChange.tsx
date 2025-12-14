@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 import '../styles/MentorProfileChange.css'
 
 type Experience = {
@@ -12,8 +13,10 @@ type Experience = {
 
 export default function MentorProfileChange() {
     const navigate = useNavigate()
+    const { user, updateUser } = useAuth()
 
-    const [fullName, setFullName] = useState('Nguyễn Minh Anh')
+    const [fullName, setFullName] = useState(user?.fullName || 'Nguyễn Minh Anh')
+    const [avatarPreview, setAvatarPreview] = useState(user?.avatar || '/user_avt.png')
     const [city, setCity] = useState('TP.HCM')
     const [title, setTitle] = useState('Senior UX/UI Designer')
     const [intro, setIntro] = useState('Tôi là một nhà thiết kế giao diện người dùng với 5 năm kinh nghiệm làm việc tại các startup công nghệ phát triển nhanh...')
@@ -45,8 +48,32 @@ export default function MentorProfileChange() {
         setExperiences(prev => prev.map((e, idx) => idx === i ? { ...e, [field]: value } : e))
     }
 
+    const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                setAvatarPreview(reader.result as string)
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+
     const close = () => navigate(-1)
-    const save = () => { navigate(-1) }
+    const save = async () => {
+        try {
+            await updateUser({
+                fullName,
+                bio: intro,
+                location: { city, country: 'Vietnam' },
+                skills: coreSkills,
+                avatar: avatarPreview
+            })
+            navigate(-1)
+        } catch (error) {
+            console.error('Failed to update profile:', error)
+        }
+    }
 
     return (
         <div className="mpc-overlay">
@@ -58,8 +85,19 @@ export default function MentorProfileChange() {
 
                 <div className="mpc-body">
                     <div className="mpc-avatar-row">
-                        <div className="mpc-avatar" aria-hidden="true">👤</div>
-                        <button type="button" className="btn-light">Đổi ảnh đại diện</button>
+                        <div className="mpc-avatar">
+                            <img src={avatarPreview} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                        </div>
+                        <label htmlFor="avatar-upload" className="btn-light" style={{ cursor: 'pointer' }}>
+                            Đổi ảnh đại diện
+                            <input
+                                id="avatar-upload"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleAvatarChange}
+                                style={{ display: 'none' }}
+                            />
+                        </label>
                     </div>
 
                     <div className="mpc-field">

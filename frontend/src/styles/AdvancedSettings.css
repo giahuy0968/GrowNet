@@ -1,7 +1,7 @@
 /* Full page background */
 .advanced-container {
   width: 100%;
-  min-height: 100vh ;
+  min-height: 80vh;
   background: #f3f6fa;
   display: flex;
   justify-content: center;
@@ -14,23 +14,25 @@
   width: 700px;
   background: white;
   border-radius: 18px;
-  padding: 32px;
+  padding: 24px;
   box-shadow: 0px 2px 14px rgba(0, 0, 0, 0.08);
 }
+
 .advanced-header {
   display: flex;
   align-items: center;
-  gap: 12px;             
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 /* Nút Back */
 .back-btn {
-  background: transparent;
-  border: none;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
   font-size: 20px;
   cursor: pointer;
-  color: #1976d2;
+  color: #1d4ed8;
   padding: 0;
   line-height: 1;
   display: flex;
@@ -39,18 +41,28 @@
 }
 
 .back-btn:hover {
-  color: #125a9c;
+  color: #1d4ed8;
   transform: translateX(-2px);
 }
+
 /* Title */
 .advanced-title {
   margin: 0;
   padding: 0;
   font-size: 20px;
   font-weight: bold;
-  color: #1976d2;
-  line-height: 1;
+  color: #1d4ed8;
+  border: none;
+  /* remove any vertical divider */
 
+
+  /* In case global h2 adds a left border, explicitly reset here */
+  .advanced-title,
+  .advanced-title::before,
+  .advanced-title::after {
+    border-left: none !important;
+    box-shadow: none;
+  }
 }
 
 
@@ -59,7 +71,7 @@
   font-size: 15px;
   font-weight: 600;
   margin-bottom: 10px;
-  color: #1976d2;
+  color: #1d4ed8;
 }
 
 /* Slider area */
@@ -83,14 +95,14 @@
 
 /* Setting rows */
 .section {
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 .setting-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #e6e8f2;
 }
 
@@ -140,11 +152,11 @@
   transition: 0.3s;
 }
 
-input:checked + .slider-toggle {
+input:checked+.slider-toggle {
   background-color: #4f7cff;
 }
 
-input:checked + .slider-toggle:before {
+input:checked+.slider-toggle:before {
   transform: translateX(22px);
 }
 
@@ -185,16 +197,16 @@ input:checked + .slider-toggle:before {
 
 /* Save button */
 .save-btn {
-  width: 70%;            
-  margin: 24px auto 0;   
+  width: 70%;
+  margin: 16px auto 0;
   display: block;
   background: #4caf50;
-  padding: 12px 0;
+  padding: 10px 0;
   color: white;
   border-radius: 12px;
   font-size: 16px;
-  font-weight: 600;      
-  border: none;         
+  font-weight: 600;
+  border: none;
   cursor: pointer;
   transition: 0.2s;
 }

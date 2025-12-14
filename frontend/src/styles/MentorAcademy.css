@@ -1,0 +1,259 @@
+.mentor-academy {
+  --gradient: radial-gradient(circle at top left, #2ec5ff 0%, #5335ff 40%, #111322 100%);
+  --panel-bg: rgba(9, 11, 24, 0.84);
+  --border: rgba(255, 255, 255, 0.08);
+  --text-muted: rgba(255, 255, 255, 0.65);
+  --accent: #70ffaf;
+  color: #f7f8ff;
+  background: var(--gradient);
+  padding: 2.5rem;
+  min-height: calc(100vh - 72px);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.mentor-academy .eyebrow {
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  margin-bottom: 0.4rem;
+  color: var(--accent);
+}
+
+.mentor-academy .lead {
+  color: var(--text-muted);
+  max-width: 30rem;
+}
+
+.academy-hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.stat-card {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.stat-card span {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.stat-card strong {
+  display: block;
+  font-size: 1.6rem;
+  margin-top: 0.4rem;
+}
+
+.academy-panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.panel {
+  background: var(--panel-bg);
+  border-radius: 1.5rem;
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  box-shadow: 0 15px 50px rgba(4, 6, 19, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.panel header h2 {
+  margin: 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: #c4c6d8;
+}
+
+.form-grid label.full {
+  grid-column: 1 / -1;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.85rem;
+  padding: 0.75rem 1rem;
+  color: #fbfbff;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.form-grid textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.form-grid input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.modules {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 1.2rem;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modules-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modules-header button {
+  background: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.module-card {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+button.primary {
+  grid-column: 1 / -1;
+  background: linear-gradient(100deg, #2ec5ff, #70ffaf);
+  color: #05060a;
+  border: none;
+  border-radius: 999px;
+  padding: 0.95rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button.primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button.primary:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(46, 197, 255, 0.35);
+}
+
+button.link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+button.link.danger {
+  color: #ff7b7b;
+}
+
+.course-list,
+.certificate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.course-list li,
+.certificate-list li {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.course-meta,
+.certificate-meta {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.certificate-meta {
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.mentor-academy small {
+  color: var(--text-muted);
+}
+
+.mentor-academy.gate {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .mentor-academy {
+    padding: 1.5rem;
+  }
+
+  .panel {
+    border-radius: 1rem;
+  }
+
+  button.primary {
+    width: 100%;
+  }
+}

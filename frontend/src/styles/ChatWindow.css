@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   background: white;
-  height: 100vh;
+  height: 100%;
 }
 
 .chat-window.empty {
@@ -19,6 +19,20 @@
   padding: 16px 24px;
   border-bottom: 1px solid #f8fafc;
   background: #f0f7ff;
+}
+
+.chat-search-bar {
+  padding: 12px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  background: #ffffff;
+}
+
+.chat-search-bar input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
 }
 
 .chat-user-info {

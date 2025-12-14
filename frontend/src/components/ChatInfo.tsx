@@ -1,27 +1,71 @@
-import React, { useState } from 'react'
+// src/components/ChatInfo.tsx
+import React, { useMemo, useState } from 'react'
+import DeleteChatModal from './DeleteChatModal'
+import ReportModal from './ReportModal'
+import { useAuth } from '../contexts/AuthContext'
+import { useSocket } from '../contexts/SocketContext'
+import type { Chat } from '../services'
 import '../styles/ChatInfo.css'
 
 interface ChatInfoProps {
-  chatName: string | null
+  chat: Chat | null;
+  onOpenSearch?: () => void;
 }
 
-export default function ChatInfo({ chatName }: ChatInfoProps) {
-  if (!chatName) return null
+export default function ChatInfo({ chat, onOpenSearch }: ChatInfoProps) {
+  const { user } = useAuth()
+  const { onlineUsers } = useSocket()
 
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isReportOpen, setIsReportOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
 
+  const resolveUserId = (entity: any) => {
+    if (!entity) return undefined
+    if (typeof entity === 'string') return entity
+    return entity._id || entity.id
+  }
+
+  const otherParticipant = useMemo(() => {
+    if (!chat?.participants?.length) return null
+    return chat.participants.find(participant => resolveUserId(participant) !== user?._id) || chat.participants[0]
+  }, [chat, user?._id])
+
+  if (!chat) return null
+
+  const participantId = resolveUserId(otherParticipant)
+  const participantName = typeof otherParticipant === 'string'
+    ? otherParticipant
+    : otherParticipant?.fullName || otherParticipant?.username || 'Người dùng'
+  const participantAvatar = typeof otherParticipant === 'string'
+    ? undefined
+    : otherParticipant?.avatar
+  const isOnline = participantId ? onlineUsers.has(participantId) : false
+
+  const handleOpenModal = () => setIsModalOpen(true)
+  const handleCloseModal = () => setIsModalOpen(false)
+
+  const handleDelete = () => {
+    // Logic xóa đoạn chat
+    console.log('Xóa đoạn chat đã được xác nhận!')
+    handleCloseModal()
+  }
+
   const handleDeleteHistory = () => {
-    // TODO: integrate real delete logic
-    // eslint-disable-next-line no-console
-    console.log('Delete chat history triggered for', chatName)
+    handleOpenModal()
     setSettingsOpen(false)
+    console.log('Delete chat history triggered for', participantName)
   }
 
   const handleReport = () => {
-    // TODO: integrate real report logic
-    // eslint-disable-next-line no-console
-    console.log('Report chat triggered for', chatName)
+    // Mở modal báo cáo
+    setIsReportOpen(true)
     setSettingsOpen(false)
+    console.log('Report chat triggered for', participantName)
+  }
+
+  const handleCloseReport = () => {
+    setIsReportOpen(false)
   }
 
   return (
@@ -37,47 +81,50 @@ export default function ChatInfo({ chatName }: ChatInfoProps) {
           aria-label="Cài đặt hội thoại"
           onClick={() => setSettingsOpen(o => !o)}
         >⚙️</button>
-        <img src="/user_avt.png" alt={chatName} className="profile-avatar" />
-        <h4>{chatName}</h4>
-        <p className="status">🟢 Đang hoạt động</p>
+        <img src={participantAvatar || '/user_avt.png'} alt={participantName} className="profile-avatar" />
+        <h4>{participantName}</h4>
+        <p className="status">{isOnline ? '🟢 Đang hoạt động' : '⚪ Ngoại tuyến'}</p>
         {settingsOpen && (
           <div className="settings-menu" role="menu" aria-label="Tùy chọn cài đặt">
-            <button
-              type="button"
+            <button 
+              type="button" 
               className="settings-item danger"
               role="menuitem"
               onClick={handleDeleteHistory}
-            >Xóa lịch sử trò chuyện</button>
+            >
+              Xóa lịch sử trò chuyện
+            </button>
             <button
               type="button"
               className="settings-item warn"
               role="menuitem"
               onClick={handleReport}
-            >Báo cáo</button>
+            >
+              Báo cáo
+            </button>
           </div>
         )}
       </div>
 
       <div className="profile-actions">
-        <button className="action-btn">
+        <button className="action-btn" onClick={() => window.location.assign('/profile')}>
           <div>
             <span>👤</span>
           </div>
           <span>Xem trang cá nhân</span>
         </button>
-        <button className="action-btn">
+        <button className="action-btn" onClick={() => onOpenSearch && onOpenSearch()}>
           <div>
             <span>🔍</span>
           </div>
           <span>Tìm kiếm tin nhắn</span>
         </button>
-        <button className="action-btn">
+        <button className="action-btn" onClick={() => window.location.assign('/settings')}>
           <div>
             <span>🎨</span>
           </div>
           <span>Giao diện thoại</span>
         </button>
-
       </div>
 
       <div className="media-section">
@@ -144,6 +191,18 @@ export default function ChatInfo({ chatName }: ChatInfoProps) {
         </div>
         <button className="view-all">Xem tất cả</button>
       </div>
+
+      <DeleteChatModal 
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleDelete}
+      />
+
+      <ReportModal
+        isOpen={isReportOpen}
+        onClose={handleCloseReport}
+        chatName={participantName}
+      />
     </div>
   )
 }
