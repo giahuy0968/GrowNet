@@ -263,3 +263,17 @@
     opacity: 1;
   }
 }
+
+/* Remove any decorative vertical bar / pseudo-element that may appear
+   at the left of the header (fixes thin blue line next to "Thông báo") */
+.notification-header::before,
+.notification-header::after,
+.notification-panel::before,
+.notification-panel::after,
+.notification-header h2::before {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border-left: none !important;
+  box-shadow: none !important;
+}

@@ -413,8 +413,8 @@
     inset: -40px -80px -40px -80px;
     z-index: -1;
     pointer-events: none;
-    background-image: radial-gradient(circle at 10% 20%, rgba(6, 166, 255, 0.10), transparent 18%),
-        radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.08), transparent 22%);
+    /* animated linear gradient specified by user */
+    background-image: linear-gradient(135deg, #dbf1ff 0%, #d3e5ed 50%, #52a1d9 100%);
     filter: blur(36px) saturate(1.05);
     opacity: 0.9;
     will-change: transform, opacity;
