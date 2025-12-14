@@ -132,7 +132,7 @@
 
 /* Action Buttons */
 .profile-card .btn-action {
-  width: 180px;
+  width:150px;
   height: 60px;
   border: none;
   border-radius: 100px;
@@ -150,6 +150,7 @@
 .profile-card .btn-action:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
 .profile-card .btn-action:disabled {
