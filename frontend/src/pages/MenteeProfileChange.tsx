@@ -235,12 +235,16 @@ export default function ProfileSetup() {
         <div className="mpc-overlay">
             <div className="mpc-modal">
 
-                {/* HEADER */}
-                <div className="mentee-mpc-header">
+                {/* Banner Section */}
+                <div className="mpc-banner">
+                    <div className="mpc-banner-overlay"></div>
+                    <div className="mpc-banner-content">
+                        <h1 className="mpc-banner-title">Chỉnh Sửa Hồ Sơ Mentee</h1>
+                        <p className="mpc-banner-subtitle">Hoàn thiện hồ sơ để kết nối với các Mentor phù hợp</p>
+                    </div>
                     <button className="mentee-mpc-back" aria-label="Quay lại" onClick={close}>
                         &#8592;
                     </button>
-                    <span className="mentee-mpc-title">Chỉnh sửa hồ sơ</span>
                 </div>
 
                 {/* BODY */}

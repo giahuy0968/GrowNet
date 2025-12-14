@@ -152,10 +152,7 @@ export default function Notification({ onUnreadCountChange }: NotificationProps)
     <div className="notification-panel">
       <div className="notification-header">
         <h2>Thông báo</h2>
-        <div className="notification-actions">
-          <button className="link-btn" onClick={handleMarkAll}>Đánh dấu tất cả đã đọc</button>
-          <button className="link-btn" onClick={loadNotifications}>Làm mới</button>
-        </div>
+
       </div>
 
       <div className="notification-tabs">
@@ -171,6 +168,10 @@ export default function Notification({ onUnreadCountChange }: NotificationProps)
         >
           CHƯA XEM
         </button>
+      </div>
+      <div className="notification-actions">
+        <button className="link-btn" onClick={handleMarkAll}>Đánh dấu tất cả đã đọc</button>
+        <button className="link-btn" onClick={loadNotifications}>Làm mới</button>
       </div>
 
       <div className="notification-list">
