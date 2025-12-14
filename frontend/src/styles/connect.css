@@ -27,6 +27,8 @@
     justify-content: center;
     align-items: center;
     min-width: 0px;
+    /* push the actions to the right inside the hero shell */
+    margin-left: auto;
 }
 
 /* Larger, more prominent hero buttons (scoped to profile only) */
@@ -139,11 +141,12 @@
 }
 
 /* reset metrics placement (will be positioned in the new side column) */
+.uprof-user-profile .user-profile__metrics {}
 
 .uprof-user-profile .metric-card {
     background: #ffffff;
     border-radius: 12px;
-    padding: 41.5px;
+    padding: 45px;
     text-align: center;
     border: 1px solid #e5e7eb;
     box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
@@ -215,8 +218,14 @@
     margin: 12px auto 0;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-    border: 4px solid rgba(59, 130, 246, 0.06);
+    /* remove outer decorative frame */
+    box-shadow: none;
+    border: none;
+}
+
+/* remove any decorative background on the section (we keep the white inner shell) */
+.uprof-user-profile .user-profile__hero {
+    background-image: none !important;
 }
 
 .uprof-user-profile .user-profile__hero .hero-shell {
@@ -225,7 +234,20 @@
     padding: 18px;
     width: 100%;
     box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+    display: flex;
+    justify-content: center;
     align-items: center;
+}
+
+/* ensure avatar is circular and overlaps the shell like the design */
+.uprof-user-profile .hero-avatar {
+    width: 120px;
+    height: 120px;
+    margin-top: -70px;
+    border: 6px solid #fff;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .uprof-user-profile .profile-body {
@@ -377,5 +399,46 @@
         transform: none !important;
         opacity: 1 !important;
         filter: none !important;
+    }
+}
+
+/* Animated, subtle background behind the profile container */
+.uprof-user-profile {
+    position: relative;
+}
+
+.uprof-user-profile::before {
+    content: '';
+    position: absolute;
+    inset: -40px -80px -40px -80px;
+    z-index: -1;
+    pointer-events: none;
+    background-image: radial-gradient(circle at 10% 20%, rgba(6, 166, 255, 0.10), transparent 18%),
+        radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.08), transparent 22%);
+    filter: blur(36px) saturate(1.05);
+    opacity: 0.9;
+    will-change: transform, opacity;
+    animation: uprof-bg-move 14s ease-in-out infinite;
+}
+
+@keyframes uprof-bg-move {
+    0% {
+        transform: translateX(0) translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateX(28px) translateY(-8px) scale(1.02);
+    }
+
+    100% {
+        transform: translateX(0) translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .uprof-user-profile::before {
+        animation: none !important;
+        transform: none !important;
+        filter: blur(14px) !important;
     }
 }

@@ -142,7 +142,6 @@ export default function UserProfile() {
       <div className="uprof-user-profile">
         <div className="profile-container">
           <section className="user-profile__hero">
-            <img src="/profile-bg.jpg" alt="Background" className="hero-bg" />
             <div className="hero-shell">
               <div className="hero-main">
                 <img
