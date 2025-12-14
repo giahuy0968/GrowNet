@@ -78,8 +78,13 @@ export default function MentorProfileChange() {
     return (
         <div className="mpc-overlay">
             <div className="mpc-modal">
-                <div className="mpc-header">
-                    <span className="mpc-title">Chỉnh Sửa Hồ Sơ</span>
+                {/* Banner Section */}
+                <div className="mpc-banner">
+                    <div className="mpc-banner-overlay"></div>
+                    <div className="mpc-banner-content">
+                        <h1 className="mpc-banner-title">Chỉnh Sửa Hồ Sơ Mentor</h1>
+                        <p className="mpc-banner-subtitle">Cập nhật thông tin và nâng cao chất lượng hồ sơ của bạn</p>
+                    </div>
                     <button className="mpc-close" aria-label="Đóng" onClick={close}>×</button>
                 </div>
 
