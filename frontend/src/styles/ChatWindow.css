@@ -4,6 +4,7 @@
   flex-direction: column;
   background: rgb(201, 218, 236);
   height: 100%;
+  height: 84vh;
 }
 
 .chat-window.empty {
