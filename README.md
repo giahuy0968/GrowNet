@@ -55,6 +55,43 @@ NODE_ENV=development
 PORT=4000
 CLIENT_URL=http://202.92.6.223:3000
 # CLIENT_URL=http://localhost:5173
+SERVER_BASE_URL=http://localhost:4000
+
+# OAuth Providers
+GOOGLE_OAUTH_CLIENT_ID=your-google-client-id
+GOOGLE_OAUTH_CLIENT_SECRET=your-google-client-secret
+LINKEDIN_CLIENT_ID=your-linkedin-client-id
+LINKEDIN_CLIENT_SECRET=your-linkedin-client-secret
+FACEBOOK_CLIENT_ID=your-facebook-app-id
+FACEBOOK_CLIENT_SECRET=your-facebook-app-secret
+# Legacy fallbacks (optional)
+# GOOGLE_CLIENT_ID=
+# GOOGLE_CLIENT_SECRET=
+# LINKEDIN_APP_ID=
+# LINKEDIN_APP_SECRET=
+# FACEBOOK_APP_ID=
+# FACEBOOK_APP_SECRET=
+
+### Cấu hình đăng nhập Google / LinkedIn / Facebook
+
+1. **Tạo OAuth app** tại Google Cloud Console, LinkedIn Developer Portal, và Meta for Developers.
+2. **Thêm Redirect URI** cho từng nhà cung cấp:
+	- Google: `https://<BACKEND_DOMAIN>/api/auth/oauth/google/callback`
+	- LinkedIn: `https://<BACKEND_DOMAIN>/api/auth/oauth/linkedin/callback`
+	- Facebook: `https://<BACKEND_DOMAIN>/api/auth/oauth/facebook/callback`
+	(thay `<BACKEND_DOMAIN>` bằng domain hoặc `http://localhost:4000` khi chạy local)
+3. **Cập nhật file `backend/.env`** với các cặp biến sau:
+
+| Provider  | ID/Client Key                  | Secret                                   |
+|-----------|--------------------------------|-------------------------------------------|
+| Google    | `GOOGLE_OAUTH_CLIENT_ID`       | `GOOGLE_OAUTH_CLIENT_SECRET`              |
+| LinkedIn  | `LINKEDIN_CLIENT_ID`           | `LINKEDIN_CLIENT_SECRET`                  |
+| Facebook  | `FACEBOOK_CLIENT_ID`           | `FACEBOOK_CLIENT_SECRET`                  |
+
+> Có thể dùng các biến fallback (`GOOGLE_CLIENT_ID`, `LINKEDIN_APP_ID`, `FACEBOOK_APP_ID`, ...). Server tự nhận giá trị phù hợp nên bạn không cần sửa frontend.
+
+4. **Khởi động lại backend** (`npm run dev` hoặc `npm start`). Endpoint `GET /api/auth/oauth/providers` sẽ trả về danh sách các provider đã cấu hình; frontend tự động hiển thị nút tương ứng cùng icon.
+
 
 # Database
 MONGODB_URI=mongodb://admin:changethispassword123@202.92.6.223:27017/grownet?authSource=admin
@@ -170,6 +207,8 @@ docker-compose down
 - `POST /api/auth/register` - Đăng ký tài khoản
 - `POST /api/auth/login` - Đăng nhập
 - `POST /api/auth/logout` - Đăng xuất
+- `GET /api/auth/oauth/:provider` - Khởi tạo đăng nhập Google/LinkedIn/Facebook
+- `GET /api/auth/oauth/:provider/callback` - Nhận mã xác thực từ nhà cung cấp
 
 ### Users
 - `GET /api/users/profile` - Lấy thông tin profile

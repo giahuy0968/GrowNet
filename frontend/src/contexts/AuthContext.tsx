@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import authService, { User } from '../services/auth.service';
+import { setAuthToken } from '../config/api';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string, fullName: string, captcha?: string) => Promise<void>;
+  completeSocialLogin: (token: string) => Promise<void>;
   logout: () => void;
   updateUser: (data: Partial<User>) => Promise<void>;
   isAuthenticated: boolean;
@@ -66,6 +68,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const completeSocialLogin = async (token: string) => {
+    try {
+      setAuthToken(token);
+      const currentUser = await authService.getCurrentUser();
+      setUser(currentUser);
+    } catch (error) {
+      authService.logout();
+      throw error;
+    }
+  };
+
   const logout = () => {
     authService.logout();
     setUser(null);
@@ -85,6 +98,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loading,
     login,
     register,
+    completeSocialLogin,
     logout,
     updateUser,
     isAuthenticated: !!user
