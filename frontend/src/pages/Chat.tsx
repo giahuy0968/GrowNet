@@ -74,27 +74,62 @@ export default function Chat() {
     return chats.find(chat => chat._id === selectedChatId) ?? null
   }, [chats, selectedChatId])
 
+  const [mobileTab, setMobileTab] = useState<'sidebar' | 'chat'>('chat');
+  const isMobile = window.innerWidth <= 768;
+
   return (
-    <div className="chat-layout">
-      <ChatSidebar
-        chats={chats}
-        loading={loadingChats}
-        error={chatsError}
-        selectedChatId={selectedChatId}
-        onSelectChat={setSelectedChatId}
-        onRefresh={loadChats}
-      />
-
-      <ChatWindow
-        chat={selectedChat}
-        showSearch={showSearch}
-        onChatUpdated={loadChats}
-      />
-
-      <ChatInfo
-        chat={selectedChat}
-        onOpenSearch={() => setShowSearch(prev => !prev)}
-      />
+    <div className={isMobile ? 'chat-mobile-layout' : 'chat-layout'}>
+      {isMobile ? (
+        <>
+          <div className="chat-mobile-tabs">
+            <button
+              className={mobileTab === 'sidebar' ? 'active' : ''}
+              onClick={() => setMobileTab('sidebar')}
+            >Danh sách</button>
+            <button
+              className={mobileTab === 'chat' ? 'active' : ''}
+              onClick={() => setMobileTab('chat')}
+            >Trò chuyện</button>
+          </div>
+          {mobileTab === 'sidebar' && (
+            <ChatSidebar
+              chats={chats}
+              loading={loadingChats}
+              error={chatsError}
+              selectedChatId={selectedChatId}
+              onSelectChat={setSelectedChatId}
+              onRefresh={loadChats}
+            />
+          )}
+          {mobileTab === 'chat' && (
+            <ChatWindow
+              chat={selectedChat}
+              showSearch={showSearch}
+              onChatUpdated={loadChats}
+            />
+          )}
+        </>
+      ) : (
+        <>
+          <ChatSidebar
+            chats={chats}
+            loading={loadingChats}
+            error={chatsError}
+            selectedChatId={selectedChatId}
+            onSelectChat={setSelectedChatId}
+            onRefresh={loadChats}
+          />
+          <ChatWindow
+            chat={selectedChat}
+            showSearch={showSearch}
+            onChatUpdated={loadChats}
+          />
+          <ChatInfo
+            chat={selectedChat}
+            onOpenSearch={() => setShowSearch(prev => !prev)}
+          />
+        </>
+      )}
     </div>
   )
 }
