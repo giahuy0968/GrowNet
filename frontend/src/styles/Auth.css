@@ -10,16 +10,18 @@
 
 /* Login page - fixed height, no scroll */
 .auth-container:has(.auth-wrapper) {
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   padding: 0;
-  overflow: hidden;
+  overflow: initial;
 }
 
 .auth-wrapper {
   display: flex;
   width: 100%;
   max-width: 1200px;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   background: white;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -313,12 +315,17 @@
 @media (max-width: 968px) {
   .auth-wrapper {
     flex-direction: column;
-    max-width: 100%;
+    /* max-width: 100%; */
   }
 
   .auth-banner {
+    flex: 0 0 auto;
     min-height: 300px;
     padding: 40px 24px;
+  }
+
+  .banner-features {
+    display: none; 
   }
 
   .banner-title {
@@ -356,6 +363,7 @@
   }
 
   .banner-logo img {
+    margin-bottom: 15px;
     width: 36px;
     height: 36px;
   }
@@ -393,8 +401,56 @@
 
   .social-buttons {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .btn-social {
+    padding: 14px;
+    font-size: 16px;
+  }
+  .auth-form-section {
+    padding: 24px 16px;
+  }
+  .form-group input {
+    font-size: 16px; 
+  }
+  .captcha-wrapper {
+    display: grid !important;
+    grid-template-columns: 1fr auto; 
+    gap: 12px;
+    align-items: center;
+  }
+
+  .captcha-wrapper input {
+    grid-column: 1 / span 2;
+    width: 100% !important;
+    box-sizing: border-box;
+    margin-top: 8px; 
+    padding: 16px;     
+    font-size: 18px; 
+    height: 56px;      
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: 600;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+  }
+
+  .captcha-display {
+    grid-column: 1;
+    width: 100%;
+    max-width: none;
+    display: flex;
+    justify-content: center;
+    background: #f1f5f9;
+  }
+
+  .btn-refresh-captcha {
+    grid-column: 2;
+    margin: 0; 
   }
 }
+
+
 
 /* Keep old register styles for compatibility */
 .auth-card {
@@ -495,6 +551,11 @@
   width: auto;
 }
 
+.captcha-display svg {
+  width: 100%;
+  height: auto;
+}
+
 .btn-refresh-captcha {
   width: 44px;
   height: 44px;
@@ -513,11 +574,19 @@
 
 .btn-refresh-captcha:hover {
   background: #2563eb;
-  transform: rotate(180deg);
 }
 
 .captcha-wrapper input {
-  flex: 1 1 auto;
-  min-width: 0;
-  box-sizing: border-box;
-}
+    grid-column: 1 / span 2;
+    width: 100% !important;
+    box-sizing: border-box;
+    margin-top: 8px; 
+    padding: 16px;     
+    font-size: 18px; 
+    height: 56px;      
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: 600;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+  }

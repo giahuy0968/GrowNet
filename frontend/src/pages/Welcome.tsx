@@ -75,7 +75,6 @@ export default function Welcome() {
             onClick={handlePrevious}
             disabled={step === 1}
           >
-            <span className="btn-icon">←</span>
             <span>Trước</span>
           </button>
           <button 
@@ -84,7 +83,6 @@ export default function Welcome() {
             style={{ background: `linear-gradient(90deg, ${content[step - 1].color} 0%, ${content[step - 1].color}dd 100%)` }}
           >
             <span>{step === 3 ? 'Bắt đầu' : 'Tiếp theo'}</span>
-            <span className="btn-icon">→</span>
           </button>
         </div>
 
