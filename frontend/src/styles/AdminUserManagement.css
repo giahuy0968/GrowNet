@@ -38,7 +38,6 @@
 }
 
 .admin-users__summary {
-  /* show summary boxes horizontally, wrap on small screens */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -126,27 +125,25 @@
 .advanced-filters {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  width: 1600px;
+  width: 100%;
   gap: 24px;
 }
-
-
 
 .advanced-filters fieldset {
   border: 1px dashed #cbd5f5;
   border-radius: 20px;
   padding: 10px;
-  /* layout buttons as responsive grid so each button can fill its cell */
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
   gap: 6px;
   align-items: center;
 }
 
-/* Force buttons/chips inside each fieldset to fill the grid cell (smaller) */
 .advanced-filters fieldset .chip,
 .advanced-filters fieldset button {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -164,7 +161,6 @@
 }
 
 .flagged-toggle {
-  /* place checkbox in the first row (right) and text in the second row (left) */
   display: grid;
   grid-template-rows: auto auto;
   gap: 4px;
@@ -173,7 +169,6 @@
 }
 
 .flagged-toggle input {
-  /* align checkbox to the right in the top row */
   justify-self: end;
   width: 20px;
   padding-bottom: 10px;
@@ -181,13 +176,11 @@
 }
 
 .flagged-toggle__text {
-  /* place the text on the bottom-left */
   justify-self: start;
   margin-top: 50px;
 }
 
 .role-chips {
-  /* make chips smaller and more compact */
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   gap: 6px;
@@ -229,14 +222,28 @@
 
 .admin-users__table table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
 }
 
 .admin-users__table th,
 .admin-users__table td {
-  text-align: center;
-  padding: 16px;
-  border-bottom: 1px solid #f1f5f9;
+  font-size: 15px;
+  padding: 14px 8px;
+  word-break: break-word;
+  white-space: nowrap;
+}
+
+.role-pill,
+.status-pill,
+.profile-pending,
+.profile-approved,
+.profile-rejected,
+.provider-password,
+.provider-google,
+.provider-linkedin {
+  font-size: 15px;
+  padding: 6px 18px;
 }
 
 .admin-users__table th {
@@ -358,20 +365,18 @@
   gap: 8px;
 }
 
-
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  margin-right: 0px;
 }
 
 .actions button {
   border-radius: 99px;
-  padding: 10px 20px;
+  padding: 10px 14px;
   border: 1px solid #cbd5f5;
   background: #fff;
-  font-size: 12px;
+  font-size: 14px;
   cursor: pointer;
 }
 
@@ -504,25 +509,168 @@
   gap: 12px;
 }
 
-@media (max-width: 768px) {
+/* Responsive */
+@media (max-width: 600px) {
+  .admin-users {
+    padding: 8px 2vw;
+    gap: 12px;
+  }
+
   .admin-users__hero {
+    padding: 16px;
+    gap: 16px;
+    border-radius: 14px;
+  }
+
+  .admin-users__summary {
     flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .admin-users__summary div {
+    min-width: 0;
+    width: 100%;
+    padding: 10px 8px;
+    border-radius: 10px;
+  }
+
+  .admin-users__filters {
+    padding: 10px;
+    border-radius: 10px;
+    gap: 8px;
   }
 
   .admin-users__filters form {
-    flex-direction: column;
-    align-items: stretch;
+    gap: 8px;
   }
 
-  .role-chips {
-    justify-content: flex-start;
+  .admin-users__filters label {
+    min-width: 0;
+    width: 100%;
   }
 
   .advanced-filters {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .advanced-filters fieldset {
+    grid-template-columns: 1fr;
+    padding: 6px;
+    border-radius: 10px;
+    gap: 4px;
+  }
+
+  .advanced-filters legend {
+    font-size: 15px;
+    padding: 0 2px;
+  }
+
+  .flagged-toggle {
+    font-size: 13px;
+  }
+
+  .flagged-toggle__text {
+    margin-top: 10px;
+  }
+
+  .admin-users__table {
+    border-radius: 10px;
+    padding: 0;
+  }
+
+  .table-wrapper {
+    padding-bottom: 8px;
+  }
+
+  .admin-users__table table {
+    min-width: 700px;
+    font-size: 15px;
+  }
+
+  .admin-users__table th,
+  .admin-users__table td {
+    padding: 10px 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .role-pill,
+  .status-pill,
+  .profile-pending,
+  .profile-approved,
+  .profile-rejected,
+  .provider-password,
+  .provider-google,
+  .provider-linkedin {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+
+  .identity {
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .identity img {
+    width: 32px;
+    height: 32px;
   }
 
   .actions {
     flex-direction: column;
+    gap: 4px;
+  }
+
+  .actions button {
+    padding: 8px 8px;
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .admin-modal__panel {
+    padding: 10px;
+    border-radius: 10px;
+    width: 98vw;
+    max-width: 98vw;
+  }
+
+  .admin-modal__form {
+    gap: 8px;
+  }
+
+  .admin-modal__form button {
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+
+  .reset-block {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 10px;
+  }
+
+  .reset-block code {
+    font-size: 15px;
+  }
+
+  .admin-users__summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .admin-users__summary div {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 }
