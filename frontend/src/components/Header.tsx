@@ -138,11 +138,67 @@ export default function Header({ onOpenFilter }: HeaderProps) {
 
   return (
     <header className="dashboard-header">
-      <div className="header-logo" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
-        <img src="/GrowNet_icon.png" alt="GrowNet" />
-        <span>GrowNet</span>
-      </div>
+      <div className="header-top">
+        <div className='header-left'>
+          <div className="header-logo" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
+            <img src="/GrowNet_icon.png" alt="GrowNet" />
 
+            <span>GrowNet</span>
+          </div>
+        </div>
+        <div className='header-right'>
+          <div className="header-actions">
+            <button className="icon-btn" onClick={handleOpenChat} aria-label="Chat">
+              <Icon name="chat" size="md" aria-hidden />
+            </button>
+
+            <button className="icon-btn notification-btn" onClick={handleToggleNotification} aria-label="Thông báo">
+              <Icon name="bell" size="md" aria-hidden />
+              {unreadCount > 0 && (
+                <span className="notification-indicator" aria-label={`Có ${unreadCount} thông báo mới`}>
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </button>
+            <div className="user-avatar" ref={dropdownRef}>
+              <img
+                src={user?.avatar || '/user_avt.png'}
+                alt={user?.fullName || 'User'}
+                onClick={handleToggleDropdown}
+              />
+              {showDropdown && (
+                <div className="dropdown-menu">
+                  <button onClick={() => navigate("/my-profile")}>
+                    <Icon name="user" size="md" className="mr-2" aria-hidden /> Thông tin cá nhân
+                  </button>
+                  <button onClick={() => handleSelect('settings')}>
+                    <Icon name="settings" size="md" className="mr-2" aria-hidden /> Cài đặt
+                  </button>
+                  <button onClick={() => handleSelect('logout')}>
+                    <Icon name="logout" size="md" className="mr-2" aria-hidden /> Đăng xuất
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      {showNotification && createPortal(
+        (
+          <div
+            className="notification-overlay"
+            onClick={() => setShowNotification(false)}
+          >
+            <div
+              className="notification-wrapper"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Notification onUnreadCountChange={handleUnreadCountChange} />
+            </div>
+          </div>
+        ),
+        document.body
+      )}
       <div className="header-center">
         <form className="header-search" onSubmit={handleSearchSubmit}>
           <input
@@ -180,56 +236,7 @@ export default function Header({ onOpenFilter }: HeaderProps) {
         )}
       </div>
 
-      <div className="header-actions">
-        <button className="icon-btn" onClick={handleOpenChat} aria-label="Chat">
-          <Icon name="chat" size="md" aria-hidden />
-        </button>
 
-        <button className="icon-btn notification-btn" onClick={handleToggleNotification} aria-label="Thông báo">
-          <Icon name="bell" size="md" aria-hidden />
-          {unreadCount > 0 && (
-            <span className="notification-indicator" aria-label={`Có ${unreadCount} thông báo mới`}>
-              {unreadCount > 99 ? '99+' : unreadCount}
-            </span>
-          )}
-        </button>
-        <div className="user-avatar" ref={dropdownRef}>
-          <img
-            src={user?.avatar || '/user_avt.png'}
-            alt={user?.fullName || 'User'}
-            onClick={handleToggleDropdown}
-          />
-          {showDropdown && (
-            <div className="dropdown-menu">
-              <button onClick={() => navigate("/my-profile")}>
-                <Icon name="user" size="md" className="mr-2" aria-hidden /> Thông tin cá nhân
-              </button>
-              <button onClick={() => handleSelect('settings')}>
-                <Icon name="settings" size="md" className="mr-2" aria-hidden /> Cài đặt
-              </button>
-              <button onClick={() => handleSelect('logout')}>
-                <Icon name="logout" size="md" className="mr-2" aria-hidden /> Đăng xuất
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-      {showNotification && createPortal(
-        (
-          <div
-            className="notification-overlay"
-            onClick={() => setShowNotification(false)}
-          >
-            <div
-              className="notification-wrapper"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Notification onUnreadCountChange={handleUnreadCountChange} />
-            </div>
-          </div>
-        ),
-        document.body
-      )}
     </header>
   )
 }
