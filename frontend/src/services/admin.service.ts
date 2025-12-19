@@ -7,6 +7,7 @@ export type AdminProfileStatus = 'pending' | 'approved' | 'rejected';
 export type AdminLoginProvider = 'password' | 'google' | 'linkedin' | 'facebook';
 
 export interface AdminUser extends User {
+
   role: AdminRole;
   accountStatus: AdminAccountStatus;
   profileStatus: AdminProfileStatus;
