@@ -35,9 +35,18 @@ export default function ProfileCard({ profile, onSwipe, disabled }: ProfileCardP
 
   // Swipe handlers
   const handlers = useSwipeable({
-    onSwipedLeft: () => !disabled && onSwipe?.('left', displayUser),
-    onSwipedRight: () => !disabled && onSwipe?.('right', displayUser),
-
+    onSwipedLeft: () => {
+      if (!disabled) {
+        setSwipeDir('left');
+        onSwipe?.('left', displayUser);
+      }
+    },
+    onSwipedRight: () => {
+      if (!disabled) {
+        setSwipeDir('right');
+        onSwipe?.('right', displayUser);
+      }
+    },
     trackMouse: true,
   })
 
@@ -71,14 +80,21 @@ export default function ProfileCard({ profile, onSwipe, disabled }: ProfileCardP
   }
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div
         className="profile-card"
         onClick={handleClick}
         {...handlers}
+        style={{ touchAction: 'pan-y' }} // Giúp cuộn trang mượt mà trên mobile khi vuốt dọc
         initial={{ x: 0, opacity: 1 }}
-        animate={swipeDir === 'left' ? { x: -400, opacity: 0 } : swipeDir === 'right' ? { x: 400, opacity: 0 } : { x: 0, opacity: 1 }}
-        exit={{ opacity: 0 }}
+        animate={
+          swipeDir === 'left' 
+            ? { x: -400, opacity: 0, rotate: -20 } 
+            : swipeDir === 'right' 
+            ? { x: 400, opacity: 0, rotate: 20 } 
+            : { x: 0, opacity: 1, rotate: 0 }
+        }
+        exit={{ opacity: 0, scale: 0.9 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
         <div className="profile-header">
@@ -96,13 +112,19 @@ export default function ProfileCard({ profile, onSwipe, disabled }: ProfileCardP
 
         <div className="profile-body">
           <div className="profile-info">
-            <img src={displayUser.avatar || '/user_avt.png'} alt={displayUser.fullName} className="profile-avatar" />
+            <img 
+              src={displayUser.avatar || '/user_avt.png'} 
+              alt={displayUser.fullName} 
+              className="profile-avatar" 
+            />
             <h2>{displayUser.fullName || displayUser.username}</h2>
-            <p className="profile-role">{displayUser.username} • {location}</p>
+            <p className="profile-role">
+              {displayUser.username} • {location}
+            </p>
 
             <div className="profile-tags">
-              {interests.map(tag => (
-                <span className="tag" key={tag}>{tag}</span>
+              {interests.map((tag, index) => (
+                <span className="tag" key={`${tag}-${index}`}>{tag}</span>
               ))}
             </div>
 
@@ -113,9 +135,24 @@ export default function ProfileCard({ profile, onSwipe, disabled }: ProfileCardP
           </div>
         </div>
 
+        {/* Ngăn sự kiện nổi bọt (bubbling) để không kích hoạt handleClick của card khi bấm nút */}
         <div className="profile-actions" onClick={(e) => e.stopPropagation()}>
-          <button className="btn-action btn-cancel" onClick={handleCancel} disabled={disabled}>✕</button>
-          <button className="btn-action btn-accept" onClick={handleAccept} disabled={disabled}>✓</button>
+          <button 
+            className="btn-action btn-cancel" 
+            onClick={handleCancel} 
+            disabled={disabled}
+            aria-label="Từ chối"
+          >
+            ✕
+          </button>
+          <button 
+            className="btn-action btn-accept" 
+            onClick={handleAccept} 
+            disabled={disabled}
+            aria-label="Chấp nhận"
+          >
+            ✓
+          </button>
         </div>
       </motion.div>
     </AnimatePresence>

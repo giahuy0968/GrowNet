@@ -171,5 +171,56 @@
   background: #6fc3e4;
   color: #fff;
   border: 1px solid #6fc3e4;
-  margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+    height: 100px; 
+  }
+
+  .profile-info .profile-avatar {
+    width: 80px;
+    height: 80px;
+    margin-top: -50px;
+    border-width: 3px;
+  }
+
+  .profile-info h2 {
+    font-size: 20px;
+  }
+
+  .profile-role {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .profile-body {
+    padding: 12px;
+    gap: 4px;
+  }
+
+  .profile-actions {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: center;
+    gap: 110px !important;
+    padding: 16px;
+  }
+
+  .profile-card .btn-action {
+    width: 72px;
+    height: 72px;
+    font-size: 24px;
+    padding: 0;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)
+  }  
+
+  .profile-description p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 13px;
+  }
 }

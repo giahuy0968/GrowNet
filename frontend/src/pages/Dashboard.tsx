@@ -90,6 +90,8 @@ export default function Dashboard() {
   const [filters, setFilters] = useState<FilterState>({ fields: [], location: '', experienceYears: 0 })
   const [advancedFilters, setAdvancedFilters] = useState<AdvancedFilterState>({ role: '', fields: [], skills: [], locations: [] })
   const [searchTerm, setSearchTerm] = useState('')
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const navigate = useNavigate()
   const routerLocation = useLocation()
 
@@ -232,47 +234,59 @@ export default function Dashboard() {
   return (
     <div className="dashboard-layout">
       <div className="dashboard-content">
-        <Sidebar
-          onOpenFilter={() => setShowFilterModal(true)}
-          selectedFields={filters.fields}
-          selectedLocation={filters.location}
-          experienceYears={filters.experienceYears}
-          onToggleField={handleToggleField}
-          onSelectLocation={handleSelectLocation}
-          onExperienceChange={handleExperienceChange}
-        />
-
+        <div className={`mobile-drawer ${isSidebarOpen ? 'open' : ''}`}>
+          <div className="drawer-overlay" onClick={() => setIsSidebarOpen(false)} />
+          <Sidebar
+            onOpenFilter={() => setShowFilterModal(true)}
+            selectedFields={filters.fields}
+            selectedLocation={filters.location}
+            experienceYears={filters.experienceYears}
+            onToggleField={handleToggleField}
+            onSelectLocation={handleSelectLocation}
+            onExperienceChange={handleExperienceChange}
+          />
+        </div>
         <main className="main-content">
-          {loadingSuggestions && (
+          <div className="mobile-action-bar">
+            <button className="btn-mobile-toggle" onClick={() => setIsSidebarOpen(true)}>
+              <span>🔍 Bộ lọc</span>
+            </button>
+            <button className="btn-mobile-toggle" onClick={() => setIsCalendarOpen(true)}>
+              <span>📅 Lịch trình</span>
+            </button>
+          </div>
+          {loadingSuggestions ? (
             <div className="profile-card loading">
               <p>Đang tải các mentor/mentee gợi ý...</p>
             </div>
-          )}
+          ): suggestionError ? (
+          <div className="profile-card loading">
+            <p>{suggestionError}</p>
+            <button type="button" className="btn-read-more" onClick={fetchSuggestions}>Thử lại</button>
+          </div>
+        ) : currentProfile ? (
+          <ProfileCard
+            profile={currentProfile}
+            onSwipe={handleSwipeDecision}
+            disabled={processingDecision}
+          />
+        ) : (
+          <div className="profile-card loading">
+            <p>Đã hết gợi ý phù hợp. Hãy điều chỉnh bộ lọc hoặc thử lại sau.</p>
+            <button type="button" className="btn-read-more" onClick={fetchSuggestions}>Tải lại danh sách</button>
+          </div>
+        )}
+      </main>
 
-          {!loadingSuggestions && suggestionError && (
-            <div className="profile-card loading">
-              <p>{suggestionError}</p>
-              <button type="button" className="btn-read-more" onClick={fetchSuggestions}>Thử lại</button>
-            </div>
-          )}
+        <div className={`mobile-bottom-sheet ${isCalendarOpen ? 'open' : ''}`}>
+          <div className="sheet-overlay" onClick={() => setIsCalendarOpen(false)} />
+          <div className="sheet-content">
+            <div className="sheet-handle" onClick={() => setIsCalendarOpen(false)} />
+            <Calendar />
+          </div>
+        </div>
 
-          {!loadingSuggestions && !suggestionError && currentProfile && (
-            <ProfileCard
-              profile={currentProfile}
-              onSwipe={handleSwipeDecision}
-              disabled={processingDecision}
-            />
-          )}
-
-          {!loadingSuggestions && !suggestionError && !currentProfile && (
-            <div className="profile-card loading">
-              <p>Đã hết gợi ý phù hợp. Hãy điều chỉnh bộ lọc hoặc thử lại sau.</p>
-              <button type="button" className="btn-read-more" onClick={fetchSuggestions}>Tải lại danh sách</button>
-            </div>
-          )}
-        </main>
-
-        <aside className="right-sidebar">
+        <aside className="right-sidebar desktop-only">
           <Calendar />
         </aside>
       </div>
