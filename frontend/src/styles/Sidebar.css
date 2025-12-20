@@ -5,12 +5,14 @@
   border-radius: 12px;
   border: 1px solid rgb(var(--border));
   box-shadow: var(--shadow-sm);
+  -webkit-overflow-scrolling: touch;
 }
 
 .sidebar-section {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-bottom: 40px;
 }
 
 /* === Section Header === */

@@ -270,10 +270,14 @@
     top: 0;
     bottom: 0;
     width: 300px;
+    background: #fff;
     border-radius: 0 16px 16px 0;
     transform: translateX(-100%);
     transition: transform 0.3s ease-out;
     overflow-y: auto;
+    height: 100vh;
+    display: block;
+    z-index: 101;
   }
 
   .mobile-drawer.open .sidebar { transform: translateX(0); }
