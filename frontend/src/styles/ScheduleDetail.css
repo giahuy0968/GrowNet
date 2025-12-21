@@ -19,11 +19,12 @@
 
 /* === Page Container === */
 .schedule-detail-page {
-    min-height: calc(100vh - 72px);
+    min-height: 80vh;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 120px 20px 40px;
+    padding: 90px 20px 20px;
     box-sizing: border-box;
-    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .schedule-detail-page::before {
@@ -49,12 +50,12 @@
 /* === Page Header === */
 .page-header {
     display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 32px;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
     background: white;
-    padding: 24px;
-    border-radius: 16px;
+    padding: 12px 20px;
+    border-radius: 12px;
     box-shadow: var(--shadow-lg);
 }
 
@@ -90,7 +91,7 @@
 
 .page-title {
     margin: 0;
-    font-size: 26px;
+    font-size: 20px;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.2;
@@ -105,9 +106,9 @@
 /* === Tabs Section === */
 .tabs-section {
     background: white;
-    padding: 8px;
-    border-radius: 16px;
-    margin-bottom: 24px;
+    padding: 6px;
+    border-radius: 12px;
+    margin-bottom: 15px;
     box-shadow: var(--shadow-md);
 }
 
@@ -122,11 +123,11 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 14px 20px;
+    padding: 10px 16px;
     background: transparent;
     border: none;
     border-radius: 12px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--text-secondary);
     cursor: pointer;
@@ -240,8 +241,10 @@
 .appointments-section {
     background: white;
     border-radius: 16px;
-    padding: 24px;
+    padding: 16px;
     box-shadow: var(--shadow-lg);
+    height: auto; 
+    flex-grow: 1;
 }
 
 .appointments-list {
@@ -254,8 +257,8 @@
 .appointment-card {
     display: flex;
     align-items: flex-start;
-    gap: 20px;
-    padding: 20px;
+    gap: 16px;
+    padding: 12px 16px;
     background: var(--bg-gray);
     border: 2px solid var(--border);
     border-radius: 12px;
@@ -416,8 +419,8 @@
 }
 
 .btn-icon {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -451,7 +454,7 @@
 
 .btn-icon.danger:hover {
     border-color: var(--danger);
-    color: var(--danger);
+    color: var(--text-primary);
     box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2);
 }
 
@@ -506,23 +509,122 @@
 
 @media (max-width: 768px) {
     .schedule-detail-page {
-        padding: 100px 16px 32px;
+        padding: 850px 12px 20px;
+        min-height: 100vh;
+        height: auto;
+        display: block;
+    }
+
+    .schedule-detail-container {
+        width: 100%;
+        max-width: 100%;
     }
 
     .page-header {
-        padding: 20px;
+        padding: 12px;
+        margin-bottom: 12px;
+        gap: 10px;
+        border-radius: 12px;
     }
 
     .page-title {
-        font-size: 22px;
+        font-size: 20px;
+    }
+
+    .tabs-section {
+        padding: 4px;
+        margin-bottom: 12px;
     }
 
     .tab-buttons {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
     }
 
     .tab-btn {
-        justify-content: flex-start;
+        padding: 8px 4px;
+        font-size: 12px;
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+    }
+    .tab-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .tab-count {
+        min-width: 16px;
+        height: 16px;
+        font-size: 10px;
+        padding: 0 4px;
+    }
+
+    .appointments-section {
+        padding: 12px;
+        height: auto;
+    }
+
+    .appointment-card {
+        flex-direction: column;
+        padding: 12px;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .card-left {
+        width: 100%;
+        min-width: 0;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 8px;
+    }
+
+    .partner-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .card-middle {
+        gap: 8px;
+    }
+
+    .note-section {
+        padding: 8px;
+    }
+
+    .note-text {
+        font-size: 12px;
+        word-break: break-word;
+    }
+
+    .card-right {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px dashed var(--border);
+        padding-top: 10px;
+        gap: 8px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 3px;
+        flex-wrap: nowrap;
+    }
+
+    .btn-icon {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+    }
+
+    .status-badge {
+        font-size: 10px;
+        padding: 4px 8px;
+        white-space: nowrap;
     }
 }
 
