@@ -137,106 +137,131 @@ export default function Header({ onOpenFilter }: HeaderProps) {
   }
 
   return (
-    <header className="dashboard-header">
-      <div className="header-top">
-        <div className='header-left'>
-          <div className="header-logo" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
-            <img src="/GrowNet_icon.png" alt="GrowNet" />
+  <header className="dashboard-header">
+    {/* BÊN TRÁI: LOGO */}
+    <div className="header-left">
+      <div
+        className="header-logo"
+        onClick={() => navigate('/dashboard')}
+        style={{ cursor: 'pointer' }}
+      >
+        <img src="/GrowNet_icon.png" alt="GrowNet" />
+        <span>GrowNet</span>
+      </div>
+    </div>
 
-            <span>GrowNet</span>
+    {/* GIỮA: NAVIGATION */}
+    <div className="header-center">
+      {navItems.length > 0 && (
+        <nav className="header-nav" aria-label="Điều hướng nhanh">
+          <div className="header-nav__list">
+            {navItems.map(item => {
+              const isActive = location.pathname.startsWith(item.match)
+              return (
+                <button
+                  key={item.to}
+                  type="button"
+                  className={`header-nav__item ${isActive ? 'is-active' : ''}`}
+                  aria-current={isActive ? 'page' : undefined}
+                  onClick={() => navigate(item.to)}
+                >
+                  {item.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="header-nav__underline"
+                    />
+                  )}
+                </button>
+              )
+            })}
           </div>
-        </div>
-        <div className='header-right'>
-          <div className="header-actions">
-            <button className="icon-btn" onClick={handleOpenChat} aria-label="Chat">
-              <Icon name="chat" size="md" aria-hidden />
-            </button>
+        </nav>
+      )}
+    </div>
 
-            <button className="icon-btn notification-btn" onClick={handleToggleNotification} aria-label="Thông báo">
-              <Icon name="bell" size="md" aria-hidden />
-              {unreadCount > 0 && (
-                <span className="notification-indicator" aria-label={`Có ${unreadCount} thông báo mới`}>
-                  {unreadCount > 99 ? '99+' : unreadCount}
-                </span>
-              )}
-            </button>
-            <div className="user-avatar" ref={dropdownRef}>
-              <img
-                src={user?.avatar || '/user_avt.png'}
-                alt={user?.fullName || 'User'}
-                onClick={handleToggleDropdown}
-              />
-              {showDropdown && (
-                <div className="dropdown-menu">
-                  <button onClick={() => navigate("/my-profile")}>
-                    <Icon name="user" size="md" className="mr-2" aria-hidden /> Thông tin cá nhân
-                  </button>
-                  <button onClick={() => handleSelect('settings')}>
-                    <Icon name="settings" size="md" className="mr-2" aria-hidden /> Cài đặt
-                  </button>
-                  <button onClick={() => handleSelect('logout')}>
-                    <Icon name="logout" size="md" className="mr-2" aria-hidden /> Đăng xuất
-                  </button>
-                </div>
-              )}
+    {/* BÊN PHẢI: SEARCH + ACTIONS */}
+    <div className="header-right">
+      <form className="header-search" onSubmit={handleSearchSubmit}>
+        <input
+          type="text"
+          placeholder="Tìm kiếm..."
+          value={searchValue}
+          onChange={event => setSearchValue(event.target.value)}
+        />
+        <button className="search-btn" type="submit" aria-label="Tìm kiếm">
+          <Icon name="search" size="md" aria-hidden />
+        </button>
+      </form>
+
+      <div className="header-actions">
+        <button
+          className="icon-btn"
+          onClick={handleOpenChat}
+          aria-label="Chat"
+        >
+          <Icon name="chat" size="md" aria-hidden />
+        </button>
+
+        <button
+          className="icon-btn notification-btn"
+          onClick={handleToggleNotification}
+          aria-label="Thông báo"
+        >
+          <Icon name="bell" size="md" aria-hidden />
+          {unreadCount > 0 && (
+            <span
+              className="notification-indicator"
+              aria-label={`Có ${unreadCount} thông báo mới`}
+            >
+              {unreadCount > 99 ? '99+' : unreadCount}
+            </span>
+          )}
+        </button>
+
+        <div className="user-avatar" ref={dropdownRef}>
+          <img
+            src={user?.avatar || '/user_avt.png'}
+            alt={user?.fullName || 'User'}
+            onClick={handleToggleDropdown}
+          />
+          {showDropdown && (
+            <div className="dropdown-menu">
+              <button onClick={() => navigate('/my-profile')}>
+                <Icon name="user" size="md" className="mr-2" aria-hidden />
+                Thông tin cá nhân
+              </button>
+              <button onClick={() => handleSelect('settings')}>
+                <Icon name="settings" size="md" className="mr-2" aria-hidden />
+                Cài đặt
+              </button>
+              <button onClick={() => handleSelect('logout')}>
+                <Icon name="logout" size="md" className="mr-2" aria-hidden />
+                Đăng xuất
+              </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
-      {showNotification && createPortal(
-        (
+    </div>
+
+    {/* NOTIFICATION PORTAL */}
+    {showNotification &&
+      createPortal(
+        <div
+          className="notification-overlay"
+          onClick={() => setShowNotification(false)}
+        >
           <div
-            className="notification-overlay"
-            onClick={() => setShowNotification(false)}
+            className="notification-wrapper"
+            onClick={e => e.stopPropagation()}
           >
-            <div
-              className="notification-wrapper"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Notification onUnreadCountChange={handleUnreadCountChange} />
-            </div>
+            <Notification onUnreadCountChange={handleUnreadCountChange} />
           </div>
-        ),
+        </div>,
         document.body
       )}
-      <div className="header-center">
-        <form className="header-search" onSubmit={handleSearchSubmit}>
-          <input
-            type="text"
-            placeholder="Tìm mentor, kỹ năng hoặc lĩnh vực..."
-            value={searchValue}
-            onChange={event => setSearchValue(event.target.value)}
-          />
-          <button className="search-btn" type="submit" aria-label="Tìm kiếm">
-            <Icon name="search" size="md" aria-hidden />
-          </button>
-        </form>
-        {navItems.length > 0 && (
-          <nav className="header-nav" aria-label="Điều hướng nhanh">
-            <div className="header-nav__list">
-              {navItems.map(item => {
-                const isActive = location.pathname.startsWith(item.match)
-                return (
-                  <button
-                    key={item.to}
-                    type="button"
-                    className={`header-nav__item ${isActive ? 'is-active' : ''}`}
-                    aria-current={isActive ? 'page' : undefined}
-                    onClick={() => navigate(item.to)}
-                  >
-                    {item.label}
-                    {isActive && (
-                      <motion.span layoutId="nav-underline" className="header-nav__underline" />
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-          </nav>
-        )}
-      </div>
+  </header>
+)
 
-
-    </header>
-  )
 }
