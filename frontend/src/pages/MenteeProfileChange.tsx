@@ -239,8 +239,8 @@ export default function ProfileSetup() {
                 <div className="mpc-banner">
                     <div className="mpc-banner-overlay"></div>
                     <div className="mpc-banner-content">
-                        <h1 className="mpc-banner-title">Chỉnh Sửa Hồ Sơ Mentee</h1>
-                        <p className="mpc-banner-subtitle">Hoàn thiện hồ sơ để kết nối với các Mentor phù hợp</p>
+                        <h1 className="mpc-banner-title">Chỉnh Sửa Hồ Sơ</h1>
+                        <p className="mpc-banner-subtitle">Hoàn thiện hồ sơ để kết nối phù hợp</p>
                     </div>
                     <button className="mentee-mpc-back" aria-label="Quay lại" onClick={close}>
                         &#8592;
@@ -473,8 +473,8 @@ export default function ProfileSetup() {
 
                 {/* FOOTER */}
                 <div className="mpc-footer">
-                    <button type="button" className="btn-danger" onClick={close}>HỦY</button>
-                    <button type="submit" className="btn-success" onClick={handleSubmit} disabled={loading}>
+                    <button type="button" className="mentee-btn-danger" onClick={close}>HỦY</button>
+                    <button type="submit" className="mentee-btn-success" onClick={handleSubmit} disabled={loading}>
                         {loading ? 'Đang lưu...' : 'LƯU'}
                     </button>
                 </div>
