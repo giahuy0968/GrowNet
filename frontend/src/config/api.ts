@@ -1,7 +1,7 @@
 // API Configuration
 const isDev = import.meta.env.DEV;
-const DEFAULT_API_URL = isDev ? 'http://localhost:4000/api' : 'http://202.92.6.223:4000/api';
-const DEFAULT_SOCKET_URL = isDev ? 'http://localhost:4000' : 'http://202.92.6.223:4000';
+const DEFAULT_API_URL = isDev ? 'http://localhost:4000/api' : 'https://grownet.io.vn/api';
+const DEFAULT_SOCKET_URL = isDev ? 'http://localhost:4000' : 'https://grownet.io.vn';
 
 export const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API_URL;
 export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || DEFAULT_SOCKET_URL;
