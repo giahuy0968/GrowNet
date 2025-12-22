@@ -559,7 +559,7 @@ input:checked+.switch:hover .slider-toggle {
 .modal-content {
   background: white;
   border-radius: 16px;
-  padding: 32px;
+  padding: 40px;
   max-width: 450px;
   width: 100%;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -653,57 +653,52 @@ input:checked+.switch:hover .slider-toggle {
 
 /* === Responsive === */
 @media (max-width: 640px) {
-  .advanced-container {
-    padding: 60px 16px 32px;
-  }
 
-  .advanced-title {
-    font-size: 20px;
-  }
-
-  .advanced-subtitle {
-    font-size: 13px;
-  }
-
-  .section-title {
-    font-size: 16px;
-  }
-
-  .slider-header {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .slider-value-badge {
-    align-self: flex-start;
-  }
-
+  /* Giữ layout 1 hàng */
   .setting-item {
-    padding: 16px;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row !important;
+    align-items: center !important;
     gap: 12px;
+    padding: 14px 16px;
   }
 
+  /* Cho phép text co lại */
+  .setting-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Label: 1 dòng */
+  .setting-label {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Description: 1 dòng */
+  .setting-description {
+    font-size: 12px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Switch & button luôn bên phải */
   .setting-item .switch,
   .setting-item .btn-outline,
   .setting-item .btn-danger {
-    align-self: flex-end;
+    margin-left: auto;
+    flex-shrink: 0;
   }
 
-  .actions-footer {
-    justify-content: stretch;
-  }
-
-  .save-btn {
-    width: 100%;
-  }
-
-  .modal-content {
-    padding: 24px;
-  }
-
-  .modal-actions {
-    flex-direction: column;
+  /* Không cho button làm lệch layout */
+  .setting-item button {
+    white-space: nowrap;
   }
 }
