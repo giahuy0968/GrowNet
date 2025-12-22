@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { useLocation } from 'react-router-dom'
 import ChatSidebar from '../components/ChatSidebar'
 import ChatWindow from '../components/ChatWindow'
@@ -6,6 +12,7 @@ import ChatInfo from '../components/ChatInfo'
 import { chatService, type Chat as ChatType } from '../services'
 import { useSocket } from '../contexts/SocketContext'
 import '../styles/Chat.css'
+import {Icon} from '../components/ui/Icon'
 
 export default function Chat() {
   const [chats, setChats] = useState<ChatType[]>([])
@@ -13,10 +20,18 @@ export default function Chat() {
   const [loadingChats, setLoadingChats] = useState(true)
   const [chatsError, setChatsError] = useState<string | null>(null)
   const [showSearch, setShowSearch] = useState(false)
+
+  const [showMobileInfo, setShowMobileInfo] = useState(false)
+
   const { socket } = useSocket()
   const location = useLocation()
   const preferredChatRef = useRef<string | null>(null)
-  const chatFromState = (location.state as { chatId?: string } | null)?.chatId ?? null
+
+  const isMobile = window.innerWidth <= 768
+
+  const chatFromState =
+    (location.state as { chatId?: string } | null)?.chatId ?? null
+
 
   useEffect(() => {
     if (chatFromState) {
@@ -31,13 +46,14 @@ export default function Chat() {
     try {
       const { chats: chatList } = await chatService.getAllChats()
       setChats(chatList)
+
       setSelectedChatId(prev => {
         const preferred = preferredChatRef.current
-        if (preferred && chatList.some(chat => chat._id === preferred)) {
+        if (preferred && chatList.some(c => c._id === preferred)) {
           preferredChatRef.current = null
           return preferred
         }
-        if (prev && chatList.some(chat => chat._id === prev)) {
+        if (prev && chatList.some(c => c._id === prev)) {
           return prev
         }
         return chatList[0]?._id ?? null
@@ -56,9 +72,7 @@ export default function Chat() {
   useEffect(() => {
     if (!socket) return
 
-    const handleRefresh = () => {
-      loadChats()
-    }
+    const handleRefresh = () => loadChats()
 
     socket.on('message:new', handleRefresh)
     socket.on('chat:updated', handleRefresh)
@@ -69,47 +83,19 @@ export default function Chat() {
     }
   }, [socket, loadChats])
 
-  const selectedChat = useMemo(() => {
-    if (!selectedChatId) return null
-    return chats.find(chat => chat._id === selectedChatId) ?? null
-  }, [chats, selectedChatId])
+  const selectedChat = useMemo(
+  () => chats.find(c => c._id === selectedChatId) || null,
+  [chats, selectedChatId]
+)
 
-  const [mobileTab, setMobileTab] = useState<'sidebar' | 'chat'>('chat');
-  const isMobile = window.innerWidth <= 768;
+  useEffect(() => {
+    setShowMobileInfo(false)
+  }, [selectedChatId])
 
   return (
-    <div className={isMobile ? 'chat-mobile-layout' : 'chat-layout'}>
-      {isMobile ? (
-        <>
-          <div className="chat-mobile-tabs">
-            <button
-              className={mobileTab === 'sidebar' ? 'active' : ''}
-              onClick={() => setMobileTab('sidebar')}
-            >Danh sách</button>
-            <button
-              className={mobileTab === 'chat' ? 'active' : ''}
-              onClick={() => setMobileTab('chat')}
-            >Trò chuyện</button>
-          </div>
-          {mobileTab === 'sidebar' && (
-            <ChatSidebar
-              chats={chats}
-              loading={loadingChats}
-              error={chatsError}
-              selectedChatId={selectedChatId}
-              onSelectChat={setSelectedChatId}
-              onRefresh={loadChats}
-            />
-          )}
-          {mobileTab === 'chat' && (
-            <ChatWindow
-              chat={selectedChat}
-              showSearch={showSearch}
-              onChatUpdated={loadChats}
-            />
-          )}
-        </>
-      ) : (
+    <div className={isMobile ? 'chat-mobile-container' : 'chat-layout'}>
+      {/* ========== DESKTOP: 3 COLUMNS ========== */}
+      {!isMobile && (
         <>
           <ChatSidebar
             chats={chats}
@@ -119,16 +105,64 @@ export default function Chat() {
             onSelectChat={setSelectedChatId}
             onRefresh={loadChats}
           />
+
           <ChatWindow
             chat={selectedChat}
             showSearch={showSearch}
             onChatUpdated={loadChats}
           />
+
           <ChatInfo
             chat={selectedChat}
             onOpenSearch={() => setShowSearch(prev => !prev)}
           />
         </>
+      )}
+
+      {/* ========== MOBILE: STACK LOGIC ========== */}
+      {isMobile && (
+        <div className="chat-mobile-wrapper">
+          {/* 1. HIỂN THỊ DANH SÁCH (SIDEBAR) */}
+          {!selectedChatId && (
+            <ChatSidebar
+              chats={chats}
+              loading={loadingChats}
+              error={chatsError}
+              selectedChatId={selectedChatId}
+              onSelectChat={setSelectedChatId}
+              onRefresh={loadChats}
+            />
+          )}
+
+          {/* 2. HIỂN THỊ CỬA SỔ CHAT */}
+          {selectedChatId && !showMobileInfo && (
+            <ChatWindow
+              chat={selectedChat}
+              showSearch={showSearch}
+              onChatUpdated={loadChats}
+              onBack={() => setSelectedChatId(null)} // Quay về danh sách
+              onShowInfo={() => setShowMobileInfo(true)} // Mở Info
+            />
+          )}
+
+          {/* 3. HIỂN THỊ THÔNG TIN (INFO) */}
+          {selectedChatId && showMobileInfo && (
+            <div className="mobile-info-view">
+              <div className="mobile-info-header-bar">
+                <button className="back-btn" onClick={() => setShowMobileInfo(false)}>
+                  <Icon name="arrow-left" size="md" /> Quay lại
+                </button>
+              </div>
+              <ChatInfo 
+                chat={selectedChat} 
+                onOpenSearch={() => {
+                  setShowSearch(true);
+                  setShowMobileInfo(false);
+                }}
+              />
+            </div>
+          )}
+        </div>
       )}
     </div>
   )

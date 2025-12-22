@@ -12,9 +12,11 @@ interface ChatWindowProps {
   chat: Chat | null;
   showSearch?: boolean;
   onChatUpdated?: () => void;
+  onBack?: () => void;
+  onShowInfo?: () => void;
 }
 
-export default function ChatWindow({ chat, showSearch = false, onChatUpdated }: ChatWindowProps) {
+export default function ChatWindow({ chat, showSearch = false, onChatUpdated, onBack, onShowInfo }: ChatWindowProps) {
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
@@ -274,8 +276,14 @@ export default function ChatWindow({ chat, showSearch = false, onChatUpdated }: 
     <div className="chat-window">
       <div className="chat-header">
         <div className="chat-user-info">
-          <img src={participantAvatar || '/user_avt.png'} alt={participantName} className="chat-avatar" />
-          <div>
+          {onBack && (
+            <button className="mobile-back-btn" onClick={onBack} aria-label="Quay lại">
+               <Icon name="arrow-left" size="md" /> 
+            </button>
+          )}
+
+          <img src={participantAvatar || '/user_avt.png'} alt={participantName} className="chat-avatar" onClick={onShowInfo} style={{ cursor: 'pointer' }}/>
+          <div onClick={onShowInfo} style={{ cursor: onShowInfo ? 'pointer' : 'default' }}>
             <h3>{participantName}</h3>
             <span className="last-seen">
               Cập nhật lần cuối {chat.updatedAt ? format(new Date(chat.updatedAt), 'HH:mm dd/MM', { locale: vi }) : 'N/A'}

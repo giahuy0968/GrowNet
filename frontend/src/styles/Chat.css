@@ -5,54 +5,56 @@
   background: #f8fafc;
 }
 
-.chat-mobile-layout {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #f8fafc;
-}
-
-.chat-mobile-tabs {
-  display: flex;
-  width: 100%;
-  background: #fff;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.chat-mobile-tabs button {
-  flex: 1;
-  padding: 14px 0;
-  border: none;
-  background: none;
-  font-size: 15px;
-  font-weight: 700;
-  color: #64748b;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.chat-mobile-tabs button.active {
-  color: #1e40af;
-  border-bottom: 2px solid #3b82f6;
-}
-
-
 @media (max-width: 1280px) {
   .chat-layout {
     grid-template-columns: 280px 1fr;
   }
-
-  .chat-info {
-    display: none;
-  }
 }
 
 @media (max-width: 768px) {
-  .chat-layout {
-    display: none;
+  .chat-mobile-container {
+    height: 78vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    position: relative;
+    z-index: 999;
   }
 
-  .chat-mobile-layout {
+  /* Đảm bảo Sidebar chiếm full màn hình mobile khi chưa chọn chat */
+  .chat-sidebar {
+    width: 100%;
+    height: 100%;
+    border-right: none;
+  }
+
+  .mobile-info-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 1000;
     display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .mobile-info-header-bar {
+    padding: 12px;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .back-btn {
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #3b82f6;
+    font-weight: 600;
   }
 }

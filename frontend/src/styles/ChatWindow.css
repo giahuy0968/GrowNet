@@ -175,6 +175,13 @@
   cursor: not-allowed;
 }
 
+.message {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  max-width: 80%;
+  margin-bottom: 4px;
+}
 
 .messages-container {
   flex: 1 1 0;
@@ -187,24 +194,14 @@
   gap: 16px;
 }
 
-@media (max-width: 768px) {
-  .chat-window {
-    height: 100vh;
-    min-height: 0;
-    flex: 1;
-  }
-
-  .messages-container {
-    max-height: 100%;
-    min-height: 0;
-    flex: 1 1 0;
-  }
-}
-
-.message {
-  display: flex;
-  gap: 8px;
-  max-width: 70%;
+.mobile-back-btn {
+  display: none;
+  background: none;
+  border: none;
+  padding: 8px;
+  margin-right: 8px;
+  cursor: pointer;
+  color: #1e293b;
 }
 
 .message.sent {
@@ -302,4 +299,98 @@
 
 .chat-footer .icon-btn.warning {
   color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .chat-window {
+    height: 100%; 
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-header {
+    padding: 10px 12px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    gap: 8px;
+  }
+
+  .mobile-back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 8px;
+    color: #475569;
+    cursor: pointer;
+  }
+
+  .chat-user-info {
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .last-seen {
+    font-size: 11px;
+  }
+
+  .messages-container {
+    padding: 12px 10px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: 60vh;
+    gap: 12px;
+    -webkit-overflow-scrolling: touch; 
+  }
+
+  .message {
+    max-width: 90%;
+  }
+
+  .message-bubble {
+    padding: 8px 12px;
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  .message-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .chat-input-container {
+    padding: 12px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    background: #fff;
+    border-top: 1px solid #f1f5f9;
+    position: sticky;
+    bottom: 0;
+  }
+
+  .chat-input-container input {
+    font-size: 16px; 
+    padding: 8px 12px;
+  }
+
+  .chat-input-container .icon-btn, 
+  .chat-input-container .send-btn {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+
+  .meeting-banner {
+    padding: 8px 12px;
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+
+  .join-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
 }
