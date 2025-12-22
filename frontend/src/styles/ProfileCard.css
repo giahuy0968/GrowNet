@@ -201,19 +201,21 @@
 
   .profile-actions {
     display: flex;
-    flex-direction: row !important;
-    justify-content: center;
-    gap: 110px !important;
-    padding: 16px;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+    padding: 20px 30px;
   }
 
   .profile-card .btn-action {
     width: 72px;
     height: 72px;
     font-size: 24px;
+    flex: 1; 
+    border-radius: 50%;
     padding: 0;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }  
 
   .profile-description p {

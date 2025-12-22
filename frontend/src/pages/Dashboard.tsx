@@ -7,6 +7,7 @@ import FilterModal, { type AdvancedFilterValues } from '../components/FilterModa
 import Toast from '../components/Toast'
 import { userService, connectionService } from '../services'
 import type { User } from '../services'
+import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/Dashboard.css'
 
 interface FilterState {
@@ -277,19 +278,49 @@ export default function Dashboard() {
           </div>
         )}
       </main>
-
-        <div className={`mobile-bottom-sheet ${isCalendarOpen ? 'open' : ''}`}>
-          <div className="sheet-overlay" onClick={() => setIsCalendarOpen(false)} />
-          <div className="sheet-content">
-            <div className="sheet-handle" onClick={() => setIsCalendarOpen(false)} />
-            <Calendar />
-          </div>
-        </div>
-
-        <aside className="right-sidebar desktop-only">
-          <Calendar />
-        </aside>
+      <aside className="right-sidebar desktop-only">
+        <Calendar />
+      </aside>
       </div>
+
+      <AnimatePresence>
+      {isCalendarOpen && (
+        <div className="mobile-bottom-sheet-wrapper">
+          {/* Overlay có hiệu ứng mờ dần */}
+          <motion.div 
+            className="sheet-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsCalendarOpen(false)}
+          />
+          
+          <motion.div 
+            className="sheet-content"
+            initial={{ y: "100%" }} // Bắt đầu từ dưới cùng
+            animate={{ y: 0 }}      // Trượt lên
+            exit={{ y: "100%" }}    // Trượt xuống khi đóng
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            drag="y"                // Chỉ cho phép kéo theo chiều dọc
+            dragConstraints={{ top: 0 }} // Không cho kéo lên quá cao
+            dragElastic={0.2}
+            onDragEnd={(_, info) => {
+              // Nếu vận tốc kéo nhanh hoặc quãng đường kéo xuống > 100px thì đóng sheet
+              if (info.offset.y > 100 || info.velocity.y > 500) {
+                setIsCalendarOpen(false);
+              }
+            }}
+          >
+            <div className="sheet-handle-container">
+              <div className="sheet-handle" />
+            </div>
+            <div className="sheet-inner-content">
+               <Calendar />
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
 
       {showFilterModal && (
         <FilterModal

@@ -24,6 +24,7 @@ export default function Header({ onOpenFilter }: HeaderProps) {
   const [unreadCount, setUnreadCount] = useState(0)
   const [searchValue, setSearchValue] = useState('')
   const dropdownRef = useRef<HTMLDivElement | null>(null)
+  const [isShaking, setIsShaking] = useState(false);
   useEffect(() => {
     const params = new URLSearchParams(location.search)
     setSearchValue(params.get('search') || '')
@@ -85,6 +86,8 @@ export default function Header({ onOpenFilter }: HeaderProps) {
 
     const handleIncoming = () => {
       setUnreadCount(prev => prev + 1)
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
     }
 
     socket.on('notification:new', handleIncoming)
@@ -208,7 +211,9 @@ export default function Header({ onOpenFilter }: HeaderProps) {
           onClick={handleToggleNotification}
           aria-label="Thông báo"
         >
-          <Icon name="bell" size="md" aria-hidden />
+          <div className={isShaking ? 'shake-animation' : ''} style={{ display: 'flex' }}>
+            <Icon name="bell" size="md" aria-hidden />
+          </div>
           {unreadCount > 0 && (
             <span
               className="notification-indicator"
