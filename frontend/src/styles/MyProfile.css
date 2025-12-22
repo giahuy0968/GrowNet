@@ -302,41 +302,73 @@
 }
 
 @media (max-width: 768px) {
+  /* Giảm padding của trang để card rộng hơn */
+  .my-profile-page {
+    padding: 12px;
+  }
+
   .profile-card {
-    padding: 20px;
+    margin: 10px 0;
+    padding: 20px 16px;
+    gap: 20px; /* Thu hẹp khoảng cách giữa các section */
   }
 
+  /* Làm nhỏ Header để tiết kiệm diện tích */
   .profile-header {
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
+    padding: 20px 16px;
+    margin: -20px -16px 0 -16px;
   }
 
-  .profile-meta {
-    flex-direction: column;
-    gap: 12px;
-    align-items: center;
-    width: 100%;
+  .profile-avatar {
+    width: 70px;
+    height: 70px;
+    border-width: 3px;
+  }
+
+  .profile-info {
+    min-width: 120px;
+    margin-left: 12px;
+  }
+
+  .profile-info h1 {
+    font-size: 1.5rem; /* Chỉnh cỡ chữ tên nhỏ lại cho cân đối */
   }
 
   .profile-actions {
+    flex-direction: row;
     width: 100%;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 8px;
-    gap: 10px;
+    padding-left: 10px;
   }
 
-  .profile-actions .btnprimary,
+  .profile-actions .btnprimary {
+    flex: 2; /* Nút chính rộng hơn */
+    min-height: 48px;
+    font-size: 16px;
+    padding: 10px;
+  }
+
   .profile-actions .btnghost {
-    width: 260px;
-    max-width: 95%;
-    min-height: 64px;
-    padding: 12px 24px;
-    font-size: 17px;
+    display: none;
+  }
+
+  /* Biến Tag List thành cuộn ngang nếu quá dài */
+  .tag-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tag {
+    white-space: nowrap; /* Không cho tag xuống dòng */
+  }
+
+  /* Ẩn bớt các nhãn (dt) nếu cần để tiết kiệm diện tích */
+  .profile-grid dt {
+    font-size: 11px;
   }
 }
-
 /* Animated decorative elements for the page background */
 .my-profile-page::before {
   content: "";
