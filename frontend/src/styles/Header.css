@@ -95,6 +95,10 @@
   transform: scale(0.96);
 }
 
+.icon-btn.notification-btn {
+  position: relative; /* Thêm dòng này */
+}
+
 /* ===============================
    NOTIFICATION BADGE
 ================================ */
