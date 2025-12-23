@@ -19,17 +19,18 @@
 
 /* === Page Container === */
 .schedule-detail-page {
-    min-height: 80vh;
+    min-height: 100vh;
+    height: auto;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 90px 20px 20px;
+    padding: 90px 20px 40px;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
 }
 
 .schedule-detail-page::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -38,11 +39,13 @@
         radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.3) 0%, transparent 50%);
     pointer-events: none;
+    z-index: -1;
 }
 
 .schedule-detail-container {
     max-width: 1200px;
     margin: 0 auto;
+    width: 100%;
     position: relative;
     z-index: 1;
 }
@@ -57,6 +60,8 @@
     padding: 12px 20px;
     border-radius: 12px;
     box-shadow: var(--shadow-lg);
+    position: relative;
+    z-index: 2;
 }
 
 .back-button {
@@ -110,6 +115,8 @@
     border-radius: 12px;
     margin-bottom: 15px;
     box-shadow: var(--shadow-md);
+    position: relative;
+    z-index: 2;
 }
 
 .tab-buttons {
@@ -243,14 +250,18 @@
     border-radius: 16px;
     padding: 16px;
     box-shadow: var(--shadow-lg);
-    height: auto; 
-    flex-grow: 1;
+    height: auto;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 20px;
+    overflow: visible;
 }
 
 .appointments-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 100%;
 }
 
 /* === Appointment Card === */
@@ -466,6 +477,8 @@
     justify-content: center;
     padding: 60px 20px;
     text-align: center;
+    min-height: 300px;
+    height: auto;
 }
 
 .empty-state svg {
