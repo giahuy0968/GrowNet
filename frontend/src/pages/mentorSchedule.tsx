@@ -1,108 +1,195 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { meetingService, type Meeting } from '../services';
+import { useAuth } from '../contexts';
 import '../styles/MentorSchedule.css';
 
-interface TimeSlot {
-  time: string;
-  available: boolean;
-}
+type AppointmentStatus = 'confirmed' | 'pending' | 'warning';
 
-interface ScheduleEvent {
-  id: number;
-  mentor: string;
-  avatar: string;
-  subject: string;
-  time: string;
-  location: string;
-  status: 'confirmed' | 'pending' | 'warning';
-}
+const WEEKDAY_LABELS = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+
+const formatMonthLabel = (date: Date) => `Tháng ${date.getMonth() + 1}, ${date.getFullYear()}`;
+
+const formatDateKey = (date: Date) => date.toISOString().split('T')[0];
+
+const formatDateLabel = (date: Date) => new Intl.DateTimeFormat('vi-VN', {
+  weekday: 'long',
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric'
+}).format(date);
+
+const formatTimeRange = (start: Date, end: Date) => new Intl.DateTimeFormat('vi-VN', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false
+}).format(start) + ' - ' + new Intl.DateTimeFormat('vi-VN', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false
+}).format(end);
+
+const categorizeStatus = (meeting: Meeting): AppointmentStatus => {
+  const now = Date.now();
+  const start = new Date(meeting.startTime).getTime();
+  const hasPending = meeting.attendees?.some(att => {
+    if (!att.responseStatus) {
+      return false;
+    }
+    const normalized = att.responseStatus.toLowerCase();
+    return normalized === 'needsaction' || normalized === 'tentative';
+  });
+
+  if (hasPending) {
+    return 'pending';
+  }
+  if (start < now) {
+    return 'warning';
+  }
+  return 'confirmed';
+};
+
+const getAvatarColor = (index: number) => {
+  const colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
+  return colors[index % colors.length];
+};
 
 const MentorSchedule: React.FC = () => {
   const navigate = useNavigate();
-  const [currentMonth, setCurrentMonth] = useState(new Date(2025, 9)); // October 2025
-  const [selectedDate, setSelectedDate] = useState(22);
-  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([
-    { time: '07:30 - 8:30', available: true },
-    { time: '10:00 - 11:30', available: false },
-    { time: '14:00 - 15:30', available: false },
-    { time: '17:30 - 19:00', available: true },
-    { time: '20:00 - 21:30', available: false },
-  ]);
+  const { user } = useAuth();
+  const [currentMonth, setCurrentMonth] = useState(() => new Date());
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
-  const [scheduleEvents] = useState<ScheduleEvent[]>([
-    {
-      id: 1,
-      mentor: 'Vũ Anh',
-      avatar: 'VA',
-      subject: 'Sinh viên năm cuối, Chuyên ngành Marketing',
-      time: '10:00 - 11:30',
-      location: 'Online',
-      status: 'confirmed',
-    },
-    {
-      id: 2,
-      mentor: 'Minh Anh',
-      avatar: 'MA',
-      subject: 'Sinh viên năm cuối, Chuyên ngành Truyền thông',
-      time: '14:00 - 15:30',
-      location: 'Highland Coffee',
-      status: 'confirmed',
-    },
-    {
-      id: 3,
-      mentor: 'Gia Huy',
-      avatar: 'GH',
-      subject: 'Sinh viên năm nhất, Chuyên ngành AI nâng cao',
-      time: '20:00 - 21:30',
-      location: 'Online',
-      status: 'warning',
-    },
-  ]);
+  useEffect(() => {
+    let active = true;
+    const fetchMeetings = async () => {
+      try {
+        setLoading(true);
+        const start = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+        const end = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0, 23, 59, 59, 999);
 
-  // Generate calendar days
-  const getDaysInMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-  };
+        const { meetings: data } = await meetingService.listMine({
+          start: start.toISOString(),
+          end: end.toISOString()
+        });
 
-  const getFirstDayOfMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-  };
+        if (!active) {
+          return;
+        }
 
-  const daysInMonth = getDaysInMonth(currentMonth);
-  const firstDay = getFirstDayOfMonth(currentMonth);
+        setMeetings(data);
+        setError(null);
+      } catch (err) {
+        if (active) {
+          setError('Không thể tải lịch hẹn. Vui lòng thử lại.');
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
 
-  const calendarDays: (number | null)[] = Array(firstDay)
-    .fill(null)
-    .concat(Array.from({ length: daysInMonth }, (_, i) => i + 1));
+    fetchMeetings();
+
+    return () => {
+      active = false;
+    };
+  }, [currentMonth, reloadKey]);
+
+  useEffect(() => {
+    const sameMonth =
+      selectedDate.getFullYear() === currentMonth.getFullYear() &&
+      selectedDate.getMonth() === currentMonth.getMonth();
+
+    if (!sameMonth) {
+      setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1));
+    }
+  }, [currentMonth, selectedDate]);
+
+  const meetingsByDate = useMemo(() => {
+    return meetings.reduce<Record<string, Meeting[]>>((acc, meeting) => {
+      const key = formatDateKey(new Date(meeting.startTime));
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(meeting);
+      return acc;
+    }, {});
+  }, [meetings]);
+
+  const selectedMeetings = useMemo(() => {
+    const key = formatDateKey(selectedDate);
+    const items = meetingsByDate[key] || [];
+    return [...items].sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+  }, [meetingsByDate, selectedDate]);
+
+  const upcomingMeetings = useMemo(() => {
+    return [...meetings].sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+  }, [meetings]);
+
+  const firstDay = useMemo(() => new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1), [currentMonth]);
+  const daysInMonth = useMemo(() => new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate(), [currentMonth]);
+  const leadingEmptyCells = useMemo(() => firstDay.getDay(), [firstDay]);
+  const calendarDays = useMemo(() => Array.from({ length: daysInMonth }, (_, i) => i + 1), [daysInMonth]);
 
   const handlePrevMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
+    setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
+    setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1));
   };
 
   const handleDateClick = (day: number) => {
-    setSelectedDate(day);
-  };
-
-  const handleAddTimeSlot = () => {
-    console.log('Add time slot for date:', selectedDate);
+    setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day));
   };
 
   const handleToggleNotification = () => {
-    setIsNotificationEnabled(!isNotificationEnabled);
+    setIsNotificationEnabled(prev => !prev);
   };
 
   const handleClose = () => {
     navigate(-1);
   };
 
-  const getAvatarColor = (index: number) => {
-    const colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
-    return colors[index % colors.length];
+  const handleRetry = () => setReloadKey(prev => prev + 1);
+
+  const handleViewMeeting = (meeting: Meeting) => {
+    if (meeting.videoLink) {
+      window.open(meeting.videoLink, '_blank', 'noopener');
+      return;
+    }
+    if (meeting.chatId) {
+      navigate(`/chat/${meeting.chatId}`, { state: { chatId: meeting.chatId } });
+    }
+  };
+
+  const handleMessage = (meeting: Meeting) => {
+    if (meeting.chatId) {
+      navigate(`/chat/${meeting.chatId}`, { state: { chatId: meeting.chatId } });
+    }
+  };
+
+  const handleCancelMeeting = async (meetingId: string) => {
+    if (cancellingId) {
+      return;
+    }
+    try {
+      setCancellingId(meetingId);
+      await meetingService.cancel(meetingId);
+      setMeetings(prev => prev.filter(meeting => meeting._id !== meetingId));
+    } catch (err) {
+      setError('Không thể hủy cuộc hẹn. Vui lòng thử lại.');
+    } finally {
+      setCancellingId(null);
+    }
   };
 
   return (
@@ -129,9 +216,7 @@ const MentorSchedule: React.FC = () => {
                     <polyline points="15 18 9 12 15 6"></polyline>
                   </svg>
                 </button>
-                <span className="month-title">
-                  Tháng {currentMonth.getMonth() + 1}, {currentMonth.getFullYear()}
-                </span>
+                <span className="month-title">{formatMonthLabel(currentMonth)}</span>
                 <button onClick={handleNextMonth} className="nav-btn">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -140,7 +225,7 @@ const MentorSchedule: React.FC = () => {
               </div>
 
               <div className="weekdays">
-                {['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'].map((day) => (
+                {WEEKDAY_LABELS.map(day => (
                   <div key={day} className="weekday">
                     {day}
                   </div>
@@ -148,38 +233,30 @@ const MentorSchedule: React.FC = () => {
               </div>
 
               <div className="calendar-days">
-                {calendarDays.map((day, index) => (
-                  <div
-                    key={index}
-                    className={`calendar-day ${day === selectedDate ? 'selected' : ''} ${
-                      day === null ? 'empty' : ''
-                    } ${day === 22 || day === 23 || day === 24 ? 'has-event' : ''}`}
-                    onClick={() => day && handleDateClick(day)}
-                  >
-                    {day && (
-                      <>
-                        <span className="day-number">{day}</span>
-                        {(day === 22 || day === 23 || day === 24) && (
-                          <div className="day-indicators">
-                            {day === 22 && (
-                              <>
-                                <span className="indicator green"></span>
-                                <span className="indicator green"></span>
-                              </>
-                            )}
-                            {day === 23 && <span className="indicator green"></span>}
-                            {day === 24 && (
-                              <>
-                                <span className="indicator green"></span>
-                                <span className="indicator orange"></span>
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
+                {Array.from({ length: leadingEmptyCells }).map((_, index) => (
+                  <div key={`empty-${index}`} className="calendar-day empty" />
                 ))}
+
+                {calendarDays.map(day => {
+                  const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+                  const key = formatDateKey(date);
+                  const hasEvents = Boolean(meetingsByDate[key]?.length);
+                  const isSelected = selectedDate.getDate() === day &&
+                    selectedDate.getMonth() === currentMonth.getMonth() &&
+                    selectedDate.getFullYear() === currentMonth.getFullYear();
+
+                  return (
+                    <button
+                      type="button"
+                      key={day}
+                      className={`calendar-day ${isSelected ? 'selected' : ''} ${hasEvents ? 'has-event' : ''}`}
+                      onClick={() => handleDateClick(day)}
+                    >
+                      <span className="day-number">{day}</span>
+                      {hasEvents && <span className="indicator green"></span>}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -190,38 +267,57 @@ const MentorSchedule: React.FC = () => {
                   <circle cx="12" cy="12" r="10"></circle>
                   <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
-                <h3>Khung giờ ngày {selectedDate}/10</h3>
+                <h3>Buổi hẹn ngày {selectedDate.getDate()}/{selectedDate.getMonth() + 1}</h3>
               </div>
 
               <div className="time-slots">
-                {timeSlots.map((slot, idx) => (
-                  <button
-                    key={idx}
-                    className={`time-slot ${slot.available ? 'available' : 'unavailable'}`}
-                    onClick={() => slot.available && console.log('Select slot:', slot.time)}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    <span>{slot.time}</span>
-                    {!slot.available && (
-                      <svg className="lock-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                      </svg>
-                    )}
-                  </button>
-                ))}
-              </div>
+                {loading && (
+                  <div className="empty-state">
+                    <h3>Đang tải...</h3>
+                  </div>
+                )}
 
-              <button className="add-time-btn" onClick={handleAddTimeSlot}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                Thêm khung giờ
-              </button>
+                {!loading && error && (
+                  <div className="empty-state">
+                    <h3>Không thể tải lịch</h3>
+                    <button className="action-btn view" onClick={handleRetry}>Thử lại</button>
+                  </div>
+                )}
+
+                {!loading && !error && selectedMeetings.length === 0 && (
+                  <div className="empty-state">
+                    <h3>Chưa có cuộc hẹn</h3>
+                    <p>Bạn có thể tạo cuộc hẹn mới từ màn hình chat.</p>
+                  </div>
+                )}
+
+                {!loading && !error && selectedMeetings.length > 0 && (
+                  selectedMeetings.map(meeting => {
+                    const start = new Date(meeting.startTime);
+                    const end = new Date(meeting.endTime);
+                    const isPast = end.getTime() < Date.now();
+                    return (
+                      <button
+                        key={meeting._id}
+                        className={`time-slot ${isPast ? 'unavailable' : 'available'}`}
+                        onClick={() => handleViewMeeting(meeting)}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>{formatTimeRange(start, end)}</span>
+                        {isPast && (
+                          <svg className="lock-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                          </svg>
+                        )}
+                      </button>
+                    );
+                  })
+                )}
+              </div>
             </div>
           </div>
 
@@ -238,34 +334,62 @@ const MentorSchedule: React.FC = () => {
             </div>
 
             <div className="appointments-list">
-              {scheduleEvents.map((event, idx) => (
-                <div key={event.id} className="appointment-card">
+              {loading && (
+                <div className="empty-state">
+                  <h3>Đang tải lịch hẹn...</h3>
+                </div>
+              )}
+
+              {!loading && error && (
+                <div className="empty-state">
+                  <h3>Không thể tải lịch hẹn</h3>
+                  <p>{error}</p>
+                  <button className="action-btn view" onClick={handleRetry}>Thử lại</button>
+                </div>
+              )}
+
+              {!loading && !error && upcomingMeetings.length === 0 && (
+                <div className="empty-state">
+                  <h3>Chưa có cuộc hẹn nào</h3>
+                  <p>Tạo cuộc hẹn mới từ màn hình chat để hiển thị tại đây.</p>
+                </div>
+              )}
+
+              {!loading && !error && upcomingMeetings.length > 0 && (
+                upcomingMeetings.map((meeting, idx) => {
+                  const start = new Date(meeting.startTime);
+                  const end = new Date(meeting.endTime);
+                  const status = categorizeStatus(meeting);
+                  const attendeeLabel = meeting.attendees?.map(att => att.email).join(', ') || 'Không có thông tin người tham dự';
+
+                  return (
+                    <div key={meeting._id} className="appointment-card">
                   <div className="appointment-header">
                     <div className="mentor-info">
                       <div
                         className="mentor-avatar"
                         style={{ backgroundColor: getAvatarColor(idx) }}
                       >
-                        {event.avatar}
+                            {meeting.title?.[0]?.toUpperCase() || 'G'}
                       </div>
                       <div className="mentor-details">
-                        <h4>{event.mentor}</h4>
-                        <p>{event.subject}</p>
+                            <h4>{meeting.title || 'Cuộc hẹn GrowNet'}</h4>
+                            <p>{attendeeLabel}</p>
                       </div>
                     </div>
-                    <div className={`status-badge ${event.status}`}>
-                      {event.status === 'confirmed' && (
+                        <div className={`status-badge ${status}`}>
+                          {status === 'confirmed' && (
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                       )}
-                      {event.status === 'pending' && (
+                          {status === 'pending' && (
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <circle cx="12" cy="12" r="10"></circle>
                           <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
                       )}
-                      {event.status === 'warning' && (
+                          {status === 'warning' && (
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
                           <line x1="12" y1="9" x2="12" y2="13"></line>
@@ -273,9 +397,9 @@ const MentorSchedule: React.FC = () => {
                         </svg>
                       )}
                       <span>
-                        {event.status === 'confirmed' && 'Đã xác nhận'}
-                        {event.status === 'pending' && 'Chờ xác nhận'}
-                        {event.status === 'warning' && 'Cần xác nhận'}
+                            {status === 'confirmed' && 'Đã xác nhận'}
+                            {status === 'pending' && 'Chờ phản hồi'}
+                            {status === 'warning' && 'Đã kết thúc'}
                       </span>
                     </div>
                   </div>
@@ -286,32 +410,36 @@ const MentorSchedule: React.FC = () => {
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
                       </svg>
-                      <span>{event.time}</span>
+                          <span>{formatTimeRange(start, end)}</span>
                     </div>
                     <div className="detail-item">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                         <circle cx="12" cy="10" r="3"></circle>
                       </svg>
-                      <span>{event.location}</span>
+                          <span>{meeting.provider === 'custom' ? 'Địa điểm tùy chỉnh' : 'Online'}</span>
                     </div>
                   </div>
 
                   <div className="appointment-actions">
-                    <button className="action-btn view">
+                        <button className="action-btn view" onClick={() => handleViewMeeting(meeting)}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                         <circle cx="12" cy="12" r="3"></circle>
                       </svg>
                       Chi tiết
                     </button>
-                    <button className="action-btn message">
+                        <button className="action-btn message" onClick={() => handleMessage(meeting)}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                       </svg>
                       Nhắn tin
                     </button>
-                    <button className="action-btn cancel">
+                        <button
+                          className="action-btn cancel"
+                          disabled={cancellingId === meeting._id}
+                          onClick={() => handleCancelMeeting(meeting._id)}
+                        >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -319,8 +447,10 @@ const MentorSchedule: React.FC = () => {
                       Hủy
                     </button>
                   </div>
-                </div>
-              ))}
+                    </div>
+                  );
+                })
+              )}
             </div>
 
             {/* Settings */}

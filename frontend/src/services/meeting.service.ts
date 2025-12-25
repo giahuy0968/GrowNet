@@ -8,7 +8,7 @@ export interface Meeting {
   description?: string;
   startTime: string;
   endTime: string;
-  attendees: { userId?: string; email: string }[];
+  attendees: { userId?: string; email: string; responseStatus?: string }[];
   videoLink?: string;
   provider: 'google_meet' | 'zoom' | 'custom';
   calendarEventId: string;
