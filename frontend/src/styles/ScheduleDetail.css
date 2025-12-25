@@ -19,17 +19,18 @@
 
 /* === Page Container === */
 .schedule-detail-page {
-    min-height: 80vh;
+    min-height: 100vh;
+    height: auto;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 90px 20px 20px;
+    padding: 90px 20px 40px;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
 }
 
 .schedule-detail-page::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -38,11 +39,13 @@
         radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.3) 0%, transparent 50%);
     pointer-events: none;
+    z-index: -1;
 }
 
 .schedule-detail-container {
     max-width: 1200px;
     margin: 0 auto;
+    width: 100%;
     position: relative;
     z-index: 1;
 }
@@ -57,6 +60,8 @@
     padding: 12px 20px;
     border-radius: 12px;
     box-shadow: var(--shadow-lg);
+    position: relative;
+    z-index: 2;
 }
 
 .back-button {
@@ -110,6 +115,8 @@
     border-radius: 12px;
     margin-bottom: 15px;
     box-shadow: var(--shadow-md);
+    position: relative;
+    z-index: 2;
 }
 
 .tab-buttons {
@@ -243,14 +250,18 @@
     border-radius: 16px;
     padding: 16px;
     box-shadow: var(--shadow-lg);
-    height: auto; 
-    flex-grow: 1;
+    height: auto;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 20px;
+    overflow: visible;
 }
 
 .appointments-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 100%;
 }
 
 /* === Appointment Card === */
@@ -466,6 +477,8 @@
     justify-content: center;
     padding: 60px 20px;
     text-align: center;
+    min-height: 300px;
+    height: auto;
 }
 
 .empty-state svg {
@@ -488,7 +501,17 @@
 }
 
 /* === Responsive === */
+
+/* Tablet and smaller desktops (max-width: 1024px) */
 @media (max-width: 1024px) {
+    .schedule-detail-page {
+        padding: 80px 16px 20px;
+    }
+
+    .schedule-detail-container {
+        max-width: 100%;
+    }
+
     .appointment-card {
         flex-direction: column;
         gap: 16px;
@@ -499,6 +522,10 @@
         min-width: auto;
     }
 
+    .card-middle {
+        width: 100%;
+    }
+
     .card-right {
         width: 100%;
         flex-direction: row;
@@ -507,12 +534,11 @@
     }
 }
 
+/* Tablet (max-width: 768px) */
 @media (max-width: 768px) {
     .schedule-detail-page {
-        padding: 850px 12px 20px;
+        padding: 75px 12px 16px;
         min-height: 100vh;
-        height: auto;
-        display: block;
     }
 
     .schedule-detail-container {
@@ -521,14 +547,133 @@
     }
 
     .page-header {
-        padding: 12px;
-        margin-bottom: 12px;
-        gap: 10px;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+        gap: 12px;
         border-radius: 12px;
     }
 
     .page-title {
-        font-size: 20px;
+        font-size: 18px;
+    }
+
+    .page-subtitle {
+        font-size: 13px;
+    }
+
+    .back-button {
+        padding: 8px;
+    }
+
+    .tabs-section {
+        padding: 5px;
+        margin-bottom: 16px;
+    }
+
+    .tab-buttons {
+        gap: 6px;
+    }
+
+    .tab-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+        gap: 6px;
+    }
+
+    .tab-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tab-count {
+        min-width: 20px;
+        height: 20px;
+        font-size: 11px;
+        padding: 0 6px;
+    }
+
+    .appointments-section {
+        padding: 16px;
+    }
+
+    .appointment-card {
+        padding: 14px;
+        gap: 14px;
+    }
+
+    .partner-avatar {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+    }
+
+    .partner-name {
+        font-size: 15px;
+    }
+
+    .time-label {
+        font-size: 14px;
+    }
+
+    .date-label {
+        font-size: 12px;
+    }
+
+    .note-text {
+        font-size: 12px;
+    }
+
+    .btn-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .btn-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .empty-state {
+        padding: 40px 20px;
+    }
+
+    .empty-state h3 {
+        font-size: 18px;
+    }
+
+    .empty-state p {
+        font-size: 13px;
+    }
+}
+
+/* Mobile devices (max-width: 640px) */
+@media (max-width: 640px) {
+    .schedule-detail-page {
+        padding: 70px 10px 16px;
+    }
+
+    .page-header {
+        padding: 12px 14px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+    }
+
+    .page-title {
+        font-size: 16px;
+    }
+
+    .page-subtitle {
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .back-button {
+        padding: 7px;
+    }
+
+    .back-button svg {
+        width: 18px;
+        height: 18px;
     }
 
     .tabs-section {
@@ -537,33 +682,41 @@
     }
 
     .tab-buttons {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
         gap: 4px;
     }
 
     .tab-btn {
-        padding: 8px 4px;
+        padding: 10px 8px;
         font-size: 12px;
         flex-direction: column;
         gap: 4px;
         text-align: center;
     }
+
+    .tab-btn span:not(.tab-count) {
+        display: block;
+        line-height: 1.2;
+    }
+
     .tab-btn svg {
         width: 18px;
         height: 18px;
     }
 
     .tab-count {
-        min-width: 16px;
-        height: 16px;
+        min-width: 18px;
+        height: 18px;
         font-size: 10px;
-        padding: 0 4px;
+        padding: 0 5px;
     }
 
     .appointments-section {
         padding: 12px;
-        height: auto;
+        border-radius: 12px;
+    }
+
+    .appointments-list {
+        gap: 12px;
     }
 
     .appointment-card {
@@ -571,31 +724,64 @@
         padding: 12px;
         gap: 12px;
         align-items: stretch;
+        border-radius: 10px;
     }
 
     .card-left {
         width: 100%;
         min-width: 0;
         border-bottom: 1px solid var(--border);
-        padding-bottom: 8px;
+        padding-bottom: 10px;
     }
 
     .partner-avatar {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         font-size: 16px;
     }
 
+    .partner-name {
+        font-size: 14px;
+    }
+
+    .role-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+
     .card-middle {
+        gap: 10px;
+    }
+
+    .time-info {
         gap: 8px;
     }
 
+    .time-info svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .time-label {
+        font-size: 13px;
+    }
+
+    .date-label {
+        font-size: 11px;
+    }
+
     .note-section {
-        padding: 8px;
+        padding: 8px 10px;
+    }
+
+    .note-section svg {
+        width: 14px;
+        height: 14px;
     }
 
     .note-text {
-        font-size: 12px;
+        font-size: 11px;
+        line-height: 1.4;
         word-break: break-word;
     }
 
@@ -609,33 +795,294 @@
         gap: 8px;
     }
 
+    .status-badge {
+        font-size: 10px;
+        padding: 4px 10px;
+        white-space: nowrap;
+        border-radius: 12px;
+    }
+
     .action-buttons {
         display: flex;
-        gap: 3px;
+        gap: 6px;
         flex-wrap: nowrap;
     }
 
     .btn-icon {
-        width: 30px;
-        height: 30px;
+        width: 32px;
+        height: 32px;
         padding: 0;
+        border-radius: 6px;
     }
 
-    .status-badge {
-        font-size: 10px;
-        padding: 4px 8px;
-        white-space: nowrap;
+    .btn-icon svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .empty-state {
+        padding: 50px 16px;
+    }
+
+    .empty-state svg {
+        width: 56px;
+        height: 56px;
+    }
+
+    .empty-state h3 {
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+
+    .empty-state p {
+        font-size: 12px;
     }
 }
 
+/* Small mobile devices (max-width: 480px) */
 @media (max-width: 480px) {
+    .schedule-detail-page {
+        padding: 65px 8px 12px;
+    }
+
+    .page-header {
+        padding: 10px 12px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+
+    .page-title {
+        font-size: 15px;
+    }
+
+    .page-subtitle {
+        font-size: 11px;
+    }
+
+    .back-button {
+        padding: 6px;
+    }
+
+    .back-button svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tabs-section {
+        padding: 3px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
+
+    .tab-buttons {
+        gap: 3px;
+    }
+
+    .tab-btn {
+        padding: 8px 4px;
+        font-size: 11px;
+        gap: 3px;
+        border-radius: 8px;
+    }
+
+    .tab-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tab-count {
+        min-width: 16px;
+        height: 16px;
+        font-size: 9px;
+        padding: 0 4px;
+        border-radius: 8px;
+    }
+
+    .appointments-section {
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .appointments-list {
+        gap: 10px;
+    }
+
+    .appointment-card {
+        padding: 10px;
+        gap: 10px;
+        border-radius: 8px;
+    }
+
     .card-left {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        padding-bottom: 8px;
+        gap: 10px;
+    }
+
+    .partner-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 15px;
+    }
+
+    .partner-name {
+        font-size: 13px;
+    }
+
+    .role-badge {
+        font-size: 9px;
+        padding: 3px 7px;
+    }
+
+    .card-middle {
+        gap: 8px;
+    }
+
+    .time-info {
+        gap: 6px;
+    }
+
+    .time-info svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .time-label {
+        font-size: 12px;
+    }
+
+    .date-label {
+        font-size: 10px;
+    }
+
+    .note-section {
+        padding: 7px 8px;
+        border-radius: 6px;
+    }
+
+    .note-section svg {
+        width: 13px;
+        height: 13px;
+    }
+
+    .note-text {
+        font-size: 10px;
+        line-height: 1.3;
+    }
+
+    .card-right {
+        padding-top: 8px;
+        gap: 6px;
+    }
+
+    .status-badge {
+        font-size: 9px;
+        padding: 3px 8px;
+        border-radius: 10px;
     }
 
     .action-buttons {
-        width: 100%;
-        justify-content: flex-end;
+        gap: 4px;
+    }
+
+    .btn-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+    }
+
+    .btn-icon svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .empty-state {
+        padding: 40px 12px;
+    }
+
+    .empty-state svg {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+    }
+
+    .empty-state h3 {
+        font-size: 15px;
+        margin-bottom: 6px;
+    }
+
+    .empty-state p {
+        font-size: 11px;
+    }
+}
+
+/* Extra small mobile devices (max-width: 375px) */
+@media (max-width: 375px) {
+    .schedule-detail-page {
+        padding: 60px 6px 10px;
+    }
+
+    .page-header {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .page-title {
+        font-size: 14px;
+    }
+
+    .page-subtitle {
+        font-size: 10px;
+    }
+
+    .tab-btn {
+        padding: 7px 3px;
+        font-size: 10px;
+    }
+
+    .tab-btn svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .appointment-card {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .partner-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .partner-name {
+        font-size: 12px;
+    }
+
+    .time-label {
+        font-size: 11px;
+    }
+
+    .date-label {
+        font-size: 9px;
+    }
+
+    .note-text {
+        font-size: 9px;
+    }
+
+    .btn-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    .btn-icon svg {
+        width: 13px;
+        height: 13px;
+    }
+
+    .action-buttons {
+        gap: 3px;
     }
 }
