@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import mongoose from 'mongoose';
 import User from '../models/User';
 import Connection from '../models/Connection';
 import { AuthRequest } from '../middleware/auth';
@@ -66,16 +67,36 @@ export const searchUsers = async (req: AuthRequest, res: Response): Promise<void
 // Get suggested users (based on interests)
 export const getSuggestedUsers = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    if (!req.userId) {
+      throw new AppError('Unauthorized', 401);
+    }
+
     const currentUser = await User.findById(req.userId);
 
     if (!currentUser) {
       throw new AppError('User not found', 404);
     }
 
+    const connections = await Connection.find({
+      status: 'accepted',
+      $or: [{ userId1: req.userId }, { userId2: req.userId }]
+    }).select('userId1 userId2');
+
+    const excludedIds = new Set<string>([req.userId]);
+    connections.forEach(conn => {
+      excludedIds.add(conn.userId1.toString());
+      excludedIds.add(conn.userId2.toString());
+    });
+
+    const excludedObjectIds = Array.from(excludedIds).map(id => new mongoose.Types.ObjectId(id));
+    const interestFilter = currentUser.interests?.length
+      ? { $in: currentUser.interests }
+      : { $exists: true };
+
     // Get users with similar interests
     const suggested = await User.find({
-      _id: { $ne: req.userId },
-      interests: { $in: currentUser.interests }
+      _id: { $nin: excludedObjectIds },
+      interests: interestFilter
     })
       .select('-password')
       .limit(10)
