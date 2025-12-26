@@ -261,7 +261,10 @@ export default function Header({ onOpenFilter }: HeaderProps) {
             className="notification-wrapper"
             onClick={e => e.stopPropagation()}
           >
-            <Notification onUnreadCountChange={handleUnreadCountChange} />
+            <Notification
+              onUnreadCountChange={handleUnreadCountChange}
+              onClose={() => setShowNotification(false)}
+            />
           </div>
         </div>,
         document.body

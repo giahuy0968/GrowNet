@@ -159,6 +159,11 @@
   line-height: 1.6;
 }
 
+.helper-text.compact {
+  padding: 12px 8px 16px;
+  text-align: left;
+}
+
 .helper-text.error {
   color: #ef4444;
   font-weight: 600;
@@ -221,6 +226,123 @@
 
 .notif-action:hover {
   opacity: 1;
+}
+
+.notif-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.notif-secondary-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.notif-connect-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.notif-connect-btn {
+  border: 1px solid #cbd5f5;
+  background: #fff;
+  color: #1e3a8a;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.notif-connect-btn.primary {
+  background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+  color: #fff;
+  border: none;
+}
+
+.notif-connect-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.notif-connect-btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+}
+
+.pending-requests {
+  padding: 16px 20px 8px;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.pending-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.pending-header h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.pending-header p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.pending-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  margin-bottom: 10px;
+}
+
+.pending-info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.pending-info img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pending-info strong {
+  display: block;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.pending-info span {
+  display: block;
+  font-size: 13px;
+  color: #475569;
+}
+
+.pending-info small {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.pending-actions {
+  display: flex;
+  gap: 8px;
 }
 
 /* thêm từ đây */
